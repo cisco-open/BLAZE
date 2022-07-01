@@ -2,14 +2,38 @@
 
 > NOTE: Curently only supports Elasticsearch, ColBERT (unstable)
 
-The goal of ASKI is to make the lives of data scientists easier, filling in a required-niche. 
+The goal of ASKI is to make the lives of data scientists easier, filling-in a required niche. 
 ASKI will allow plug-and-play for models, datasets, tasks, and other parameters. Users can 
 quickly see how their model performs, identify what works and what doesn't, and compare their 
-model to other models. Over the coming weeks, this dashboard will be further fleshed out. 
+model to other models. Here's ASKI's current functionalities:
+
+- Custom Question-Answering (ColBERT, Elasticsearch) 
+- - Can use SQUAD texts (ex. 1973 Oil Crisis) or upload custom files (`.txt` support)
+- - Allows users to enter questions, displays model's output
+- - Gives latency, still need to update accuracy card (bottom right) 
+
+
+- Solo SQUAD Benchmarking (ColBERT, Elasticsearch) 
+- - Can only use SQUAD texts (goes through ALL questions of chosen dataset) 
+- - Gives latency (avg time/question, as well as generates real-time graph)
+- - Gives accuracy (num correct, num total, % correct, % progress) 
+- - Displays incorrect questions 
+
+- Model Comparison on SQUAD (ColBERT, Elasticsearch)
+- - Goes through all questions of chosen dataset on both models
+- - Gives latency, accuracy, incorrect questions for both 
+- - Allows for side-by-side comparison of performance 
+
+> NOTE: Solo SQUAD Benchmarking and Model Comparison are a little unstable. Will be fixed in next commit! 
+
+
+Over the coming weeks, this dashboard will be further fleshed out with more exciting features 😄. 
 
 &nbsp;&nbsp;
 
 ![Custom](./auxmedia/custom_qna.PNG)
+
+&nbsp;&nbsp;
 
 ![Comparison](./auxmedia/model_comparison.png)
 
@@ -17,7 +41,7 @@ model to other models. Over the coming weeks, this dashboard will be further fle
 
 > Solo Benchmarking and Model Comparison are unstable! (will be fixed in next commit)
 
-&nbsp;!nbsp;
+&nbsp;&nbsp;
 
 ## Installation & Usage 
 
