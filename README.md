@@ -7,13 +7,13 @@ ASKI will allow plug-and-play for models, datasets, tasks, and other parameters.
 quickly see how their model performs, identify what works and what doesn't, and compare their 
 model to other models. Over the coming weeks, this dashboard will be further fleshed out. 
 
-&nbsp;!nbsp;
+&nbsp;&nbsp;
 
-![Custom](./auxmedia/custom-qna.PNG)
+![Custom](./auxmedia/custom_qna.PNG)
 
-![Comparison](./model_comparison.png)
+![Comparison](./auxmedia/model_comparison.png)
 
-&nbsp;!nbsp;
+&nbsp;&nbsp;
 
 > Solo Benchmarking and Model Comparison are unstable! (will be fixed in next commit)
 
