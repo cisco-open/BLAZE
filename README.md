@@ -2,29 +2,29 @@
 
 > NOTE: Curently only supports Elasticsearch, ColBERT (unstable)
 
-The goal of ASKI is to make the lives of data scientists easier, filling-in a required niche. 
-ASKI will allow plug-and-play for models, datasets, tasks, and other parameters. Users can 
+The goal of ASKI is to **make the lives of data scientists easier**, filling-in a required niche. 
+ASKI will allow plug-and-play for *models, datasets, tasks, and other parameters*. Users can 
 quickly see how their model performs, identify what works and what doesn't, and compare their 
 model to other models. Here's ASKI's current functionalities:
 
-- Custom Question-Answering (ColBERT, Elasticsearch) 
-- - Can use SQUAD texts (ex. 1973 Oil Crisis) or upload custom files (`.txt` support)
-- - Allows users to enter questions, displays model's output
-- - Gives latency, still need to update accuracy card (bottom right) 
+- **Custom Question-Answering** (ColBERT, Elasticsearch) 
+  - Can use SQUAD texts (ex. 1973 Oil Crisis) or upload custom files (`.txt` support)
+  - Allows users to enter questions, displays model's output
+  - Gives latency, still need to update accuracy card (bottom right) 
 
 
-- Solo SQUAD Benchmarking (ColBERT, Elasticsearch) 
-- - Can only use SQUAD texts (goes through ALL questions of chosen dataset) 
-- - Gives latency (avg time/question, as well as generates real-time graph)
-- - Gives accuracy (num correct, num total, % correct, % progress) 
-- - Displays incorrect questions 
+- **Solo SQUAD Benchmarking** (ColBERT, Elasticsearch) 
+  - Can only use SQUAD texts (goes through ALL questions of chosen dataset) 
+  - Gives latency (avg time/question, as well as generates real-time graph)
+  - Gives accuracy (num correct, num total, % correct, % progress) 
+  - Displays incorrect questions 
 
-- Model Comparison on SQUAD (ColBERT, Elasticsearch)
-- - Goes through all questions of chosen dataset on both models
-- - Gives latency, accuracy, incorrect questions for both 
-- - Allows for side-by-side comparison of performance 
+- **Model Comparison on SQUAD** (ColBERT, Elasticsearch)
+  - Goes through all questions of chosen dataset on both models
+  - Gives latency, accuracy, incorrect questions for both 
+  - Allows for side-by-side comparison of performance 
 
-> NOTE: Solo SQUAD Benchmarking and Model Comparison are a little unstable. Will be fixed in next commit! 
+> NOTE: Solo SQUAD Benchmarking and Model Comparison are a *little unstable*. Will be fixed in next commit! 
 
 
 Over the coming weeks, this dashboard will be further fleshed out with more exciting features 😄. 
@@ -39,7 +39,7 @@ Over the coming weeks, this dashboard will be further fleshed out with more exci
 
 &nbsp;&nbsp;
 
-> Solo Benchmarking and Model Comparison are unstable! (will be fixed in next commit)
+> As a reminder, Solo Benchmarking and Model Comparison are unstable! (will be fixed in next commit)
 
 &nbsp;&nbsp;
 
@@ -58,9 +58,9 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Cli
 
 &nbsp;&nbsp;
 
-A few heads up, there are several edge-cases that are currently being ironed out! 
+A few heads up, there are **several edge-cases** that are currently being ironed out! 
 - If something stops working, try restarting the dashboard and navigating to that page from fresh
-- Make sure to check the outputs of cmd (helpful debugging info that might not be shown on the Dash)
+- Make sure to **check the outputs of cmd** (helpful debugging info that might not be shown on the Dash)
 
 
 &nbsp;&nbsp;
@@ -69,8 +69,10 @@ A few heads up, there are several edge-cases that are currently being ironed out
 
 ***Installing Elasticsearch***
 
-Navigate to [Elasticsearch Installation](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html) and 
+Navigate to [Elasticsearch Installation](https://www.elastic.co/downloads/past-releases/elasticsearch-7-0-0) and 
 follow the instructions according to your specific setup. 
+
+> NOTE: ASKI does **not currently support** Elasticsearch 8 or higher! 
 
 In order to launch elasticsearch, open a new terminal, navigate to the elasticsearch directory, and run either of the following: 
 - `./bin/elasticsearch` (Linux/Mac)
