@@ -57,20 +57,11 @@ Next, switch branches and choose the stable branch by running:
 
 `conda env create -f aski_env.yml`
 
-Then, acivate your conda environment with `conda activate aski-benchmark`
+Then, activate your conda environment with 
 
-Now, go the following link (https://www.elastic.co/downloads/elasticsearch) and download the correct version of
-Elastic search for your platform. Next, put the folder in the ASKI folder, start a new terminal window and cd into
-that repository. 
+`conda activate aski-benchmark`
 
-If you are on Mac or Linux, run:
-
-`bin/elasticsearch`
-
-If you are on Windows, run:
-
-`bin\elasticsearch.bat`
-
+Ensure that your elasticsearch client is up and running. For more information, see "Supported Models" section. 
 Wait for ElasticSearch to load and ensure that your elasticsearch client is up and running. For more information, see 
 "Supported Models" section. Finally, run the dashboard with: 
 
