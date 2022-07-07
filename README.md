@@ -45,16 +45,38 @@ Over the coming weeks, this dashboard will be further fleshed out with more exci
 
 ## Installation & Usage 
 
-First, clone this repository. Next, create your conda environment with 
+First, clone this repository by running:
+
+`git clone https://github.com/jsrinivasa/ASKI.git`
+
+Next, switch branches and choose the stable branch by running:
+
+`git checkout custom-stable`
+
+ Next, create your conda environment with 
 
 `conda env create -f aski_env.yml`
 
 Then, acivate your conda environment with `conda activate aski-benchmark`
 
-Ensure that your elasticsearch client is up and running. For more information, see 
-"Supported Models" section. Finally, run the dashboard with `python app_callbacks.py`.
+Now, go the following link (https://www.elastic.co/downloads/elasticsearch) and download the correct version of
+Elastic search for your platform. Next, put the folder in the ASKI folder, start a new terminal window and cd into
+that repository. 
 
-Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Click on it to open the dashboard! 
+If you are on Mac or Linux, run:
+
+`bin/elasticsearch`
+
+If you are on Windows, run:
+
+`bin\elasticsearch.bat`
+
+Wait for ElasticSearch to load and ensure that your elasticsearch client is up and running. For more information, see 
+"Supported Models" section. Finally, run the dashboard with: 
+
+`python app_callbacks.py`
+
+Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Run this link in your browser to open the dashboard! 
 
 &nbsp;&nbsp;
 
