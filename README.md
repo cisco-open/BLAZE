@@ -53,6 +53,10 @@ Next, switch branches and choose the stable branch by running:
 
 `git checkout custom-stable`
 
+Install faiss-gpu with
+
+`conda install -c pytorch faiss-gpu`
+
  Next, create your conda environment with 
 
 `conda env create -f aski_env.yml`
