@@ -31,7 +31,7 @@ def get_list_models(list_models_str):
 
 def call_model_class_from_name(model_name):
 
-	model_class = import_module("aski_summarization.models." + model_name) \
+	model_class = import_module("aski.models." + model_name) \
 							.__getattribute__(model_name) 
 
 	model = model_class()

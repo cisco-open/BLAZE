@@ -1,28 +1,9 @@
 """
-
-This file is what starts the ASKI Dashboard! In order to run, simply: 
-
-- Create your conda environment with "conda env create -f aski_env.yml" 
-- Activate your conda environment with "conda activate aski-benchmark" 
-- Run this file with "python app_callbacks.py" and a link should appear! 
-
-
-This file contains ten callbacks, which are what make the Dashboard 
-dymanic. All callbacks (as well as their descriptions) are listed below: 
-
-    determine_which_page(m_chosen, b_chosen, f_contents, f_name) - high-level, which page 
-    render_custom_content(m_chosen, b_chosen, f_contents, f_chosen, i_button, q_button, f_name, q_text) - only callback for custom Q/A
-
-    render_squad_content(s_chosen, s_bench_button) - for solo benchmarking page 
-    render_progress_content(n, existing_state) - for updating the progress bar 
-
-    render_compare_content(s_chosen, s_bench_button) - for model comparison page 
-    render_compare_progress_content0(n, existing_state) - for starting model0 
-    render_compare_progress_content1(n, existing_state) - for starting model1
-
-    render_progress_content(n, existing_state) - update incorrect answers, solo bench
-    render_progress_content0(n, existing_state) - update incorrect answers, model0
-    render_progress_content1(n, existing_state) - update incorrect answers, model1
+====================================================
+App callbacks
+====================================================
+This module define the app callbacks, which allow the dashboard to be 
+interactive. 
 
 """
 
@@ -35,13 +16,22 @@ import base64
 import multiprocessing
 from multiprocessing import Queue
 
+from aski.dash_files.app import app
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_elements import *
 from aski.dash_files.app_helpers import *
 from aski.models.model_search import Model_Search
 from aski.models.ElasticSearch import *
-from aski.models.ColbertSearch import *
+from aski.models.ColBERT import *
 from aski.model_helpers.helpers_benchmark import *
+from aski.params.parameters import Parameters
+from aski.model_helpers.helpers_summarization import get_list_models
+
+
+# ==============================================================================
+# ============================ MODEL CALLBACKS =================================
+# ==============================================================================
+
 
 def str_to_class(classname):
     return getattr(sys.modules[__name__], classname)
@@ -49,14 +39,17 @@ def str_to_class(classname):
 
 def run_app(data=None):
 
+    params = Parameters(data)
+    params._dump_params()
+
+    models = params._data_dict['models']
+
+    print(models)
+    
+    list_models = get_list_models(models)
+
     # Data is a dictionary used extensively throughout the app
     data = initialize_data(data)
-
-    # Definiting our app, its styles, and its layout
-    app = Dash(
-        __name__,
-        external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_QUICKSAND],
-    )
 
     content = html.Div([get_content(data)], id="page-content")
 
@@ -78,8 +71,9 @@ def run_app(data=None):
     # === (01) Callback for determining which page === #
 
     @app.callback(Output("page-content", "children"),
-                  [Input("input-radioitems-model", "value"), Input("input-switches-data",
-                                                                   "value"), Input("input-button-file", "contents")],
+                  [Input("input-radioitems-model", "value"), 
+                  Input("input-switches-data","value"), 
+                  Input("input-button-file", "contents")],
                   [State("input-button-file", "filename")])
     def determine_which_page(m_chosen, b_chosen, f_contents, f_name):
 

@@ -21,6 +21,9 @@ model:
   l_repo: https://github.com/stanford-futuredata/ColBERT
   name: ColBERT
   title: ColBERT - Scalable BERT-Based Search
+models:
+- ColBERT
+- ElasticSearch
 states:
   a_placeholder: '... and the output will be shown here!'
   chosen_name: null

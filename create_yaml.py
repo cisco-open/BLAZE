@@ -4,6 +4,7 @@ data = {
     'Function': 'Search',
     'benchmarking': False,
     'comparing': False,
+    'models' : ['ColBERT','ElasticSearch'],
     'model': {
         'name': "ColBERT",
         'title': "ColBERT - Scalable BERT-Based Search",

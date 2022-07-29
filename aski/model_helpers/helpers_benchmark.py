@@ -14,7 +14,7 @@ NOTE: ASKI's solo benchmarking feature may not work at the moment
    
 """
 
-from aski.models.ColbertSearch import *
+from aski.models.ColBERT import *
 from aski.models.ElasticSearch import *
 #from app_constants import *
 import os

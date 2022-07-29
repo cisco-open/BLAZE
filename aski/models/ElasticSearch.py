@@ -14,12 +14,12 @@ from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 from transformers import pipeline
 import time
 
-from aski.models.model_search import Model_Search
+from aski.models.model import Model
 from aski.model_helpers.helpers_semantic import answer_question
 from aski.model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
 
 
-class ElasticSearch(Model_Search):
+class ElasticSearch(Model):
 
     """
     This function initializes the Elastic search. Make sure to have Elasticsearch 

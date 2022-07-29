@@ -38,7 +38,7 @@ import torch
 import textract
 import shutil
 
-from aski.models.model_search import Model_Search
+from aski.models.model import Model
 from aski.model_helpers.helpers_general import segment_documents
 from aski.model_helpers.helpers_semantic import answer_question
 
@@ -53,7 +53,7 @@ sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
 sys.path.insert(0, f"{os.getcwd()}/")
 
 
-class ColbertSearch(Model_Search):
+class ColBERT(Model):
 
     """
     This function initializes the ColBERT search.
