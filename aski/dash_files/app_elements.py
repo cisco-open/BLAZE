@@ -24,8 +24,8 @@ Custom Q/A Functions:
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 
-from dash_files.app_constants import *
-from dash_files.app_helpers import *
+from aski.dash_files.app_constants import *
+from aski.dash_files.app_helpers import *
 
 
 """

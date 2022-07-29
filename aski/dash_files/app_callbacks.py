@@ -29,22 +29,19 @@ dymanic. All callbacks (as well as their descriptions) are listed below:
 
 import importlib
 from dash import Dash, html, dcc, Input, Output, State
-from Interfaces.Model_interface_Search import Model_Search
 import dash_bootstrap_components as dbc
-
-from dash_files.app_constants import *
-from dash_files.app_elements import *
-from dash_files.app_helpers import *
-
-from model_helpers.helpers_benchmark import *
-
 import os
 import base64
 import multiprocessing
 from multiprocessing import Queue
-from Models.ElasticSearch import *
-from Models.ColbertSearch import *
 
+from aski.dash_files.app_constants import *
+from aski.dash_files.app_elements import *
+from aski.dash_files.app_helpers import *
+from aski.models.model_search import Model_Search
+from aski.models.ElasticSearch import *
+from aski.models.ColbertSearch import *
+from aski.model_helpers.helpers_benchmark import *
 
 def str_to_class(classname):
     return getattr(sys.modules[__name__], classname)

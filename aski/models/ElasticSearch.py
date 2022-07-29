@@ -10,14 +10,13 @@ If on Windows, you will need to type ".\bin\elasticsearch.bat"
 
 """
 
-from Interfaces.Model_interface_Search import Model_Search
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 from transformers import pipeline
-
 import time
 
-from model_helpers.helpers_semantic import answer_question
-from model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
+from aski.models.model_search import Model_Search
+from aski.model_helpers.helpers_semantic import answer_question
+from aski.model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
 
 
 class ElasticSearch(Model_Search):

@@ -1,6 +1,6 @@
 import argparse
 import yaml
-from dash_files.app_callbacks import *
+from aski.dash_files.app_callbacks import *
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

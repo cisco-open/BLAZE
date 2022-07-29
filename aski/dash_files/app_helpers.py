@@ -31,12 +31,11 @@ Miscellaneous Helpers
 
 import dash_bootstrap_components as dbc
 from dash import html, dcc
-
 import plotly.express as px
 import numpy as np
 import os
 
-from dash_files.app_constants import *
+from aski.dash_files.app_constants import *
 
 
 """

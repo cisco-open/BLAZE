@@ -30,9 +30,6 @@ Heads up, this portion might be a little finnicky to setup!
 """
 
 
-from Interfaces.Model_interface_Search import Model_Search
-from model_helpers.helpers_general import segment_documents
-from model_helpers.helpers_semantic import answer_question
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import os
 import sys
@@ -40,6 +37,10 @@ import time
 import torch
 import textract
 import shutil
+
+from aski.models.model_search import Model_Search
+from aski.model_helpers.helpers_general import segment_documents
+from aski.model_helpers.helpers_semantic import answer_question
 
 sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
 
