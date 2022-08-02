@@ -8,7 +8,7 @@ dashboard to use.
 """
 
 
-from aski_summarization.models.model import Model
+from aski.models.model import Model
 
 
 # ==============================================================================

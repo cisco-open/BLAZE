@@ -5,11 +5,13 @@ BART
 This module loads a BART model and makes it available for the 
 dashboard to use.
 
+https://huggingface.co/docs/transformers/model_doc/bart
+
 """
 
 
-from aski_summarization.models.model import Model
-
+from aski.models.model import Model
+from transformers import BartTokenizer, BartForConditionalGeneration
 
 # ==============================================================================
 # =========================== AUXILIARY FUNCTIONS ==============================
@@ -33,4 +35,24 @@ def get_bart_info():
 class BartRXF(Model):
 
 	def __init__(self):
-		self._info = get_bart_info()
+
+		self._info      = get_bart_info()
+		self._model     = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
+		self._tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-cnn")
+
+
+	def _summarize_text(self, text_to_summarize):
+
+		inputs = self._tokenizer([text_to_summarize], 
+								  return_tensors="pt")
+
+		summary_ids = self._model.generate(inputs["input_ids"], 
+										   num_beams=4)
+
+		print(self._tokenizer.batch_decode(summary_ids, 
+									 skip_special_tokens=True, 
+									 clean_up_tokenization_spaces=False))
+		
+	def _summarize_dataset(self, inputs):
+
+		summary_ids = self._model.generate(inputs["input_ids"], num_beams=4)

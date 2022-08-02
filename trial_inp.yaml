@@ -22,8 +22,8 @@ model:
   name: ColBERT
   title: ColBERT - Scalable BERT-Based Search
 models:
-- ColBERT
-- ElasticSearch
+- BartRXF
+- Muppet
 states:
   a_placeholder: '... and the output will be shown here!'
   chosen_name: null
