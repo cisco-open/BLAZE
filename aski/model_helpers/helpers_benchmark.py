@@ -14,7 +14,7 @@ NOTE: ASKI's solo benchmarking feature may not work at the moment
    
 """
 
-#from app_constants import *
+from aski.dash_files.app_constants import * 
 import os
 import json
 
@@ -31,46 +31,39 @@ Runs the inputted model (either ColBERT or Elastic) on a SQUAD dataset
 """
 
 
-def squad_benchmark(pQueue, name, dir, m_name):
-    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+def squad_benchmark(queue, file_name, file_path, model_obj):
 
-    f = open(dir, "r")
+
+    # Load all questions/files for associated dataset (SQUAD)
+
+    f = open(file_path, "r")
     lines = f.readlines()[1:]
     f.close()
-    f_content = "".join(lines)
+    file_content = "".join(lines)
 
-    q_dir = "/".join(dir.split("/")[:-1]) + "/"
+    q_dir = "/".join(file_path.split("/")[:-1]) + "/"
     files = [files[2] for files in os.walk(q_dir)][0]
     questions = [file for file in files if file[:3] == "qas"]
 
-    results = {
-        "m_name": m_name,
-        "name": name,
-        "root": q_dir,
-        "questions": {
-            "num_qf": len(questions),
-            "num_qs": 0,
-            "all_qs": questions,
-            "tot_qs": 0,
-        },
-        "times": {
-            "avg_ts": 0,
-            "all_ts": [],
-        },
-        "metrics": {
-            "correct_arr": [],
-            "incorrect_d": {},
-            "accuracy_num": 0,
-            "accuracy_prc": 0,
-        }
-    }
 
-    if m_name == "ColBERT":
-        model = ColbertSearch(name, f_content)
-    else:
-        model = ElasticSearch(name, f_content)
+    # Creating results dictionary (use to store/dump in queue)
 
-    pQueue.put_nowait(results)
+    results = CONST_RESULTS
+
+    results['m_name'] = model_obj.get_name()
+    results['f_name'] = file_name 
+    results['root'] = q_dir 
+
+    results['questions']['num_qf'] = len(questions) 
+    results['questions']['all_qs'] = questions 
+
+
+
+    model_obj.load_model(file_name, file_content)
+    queue.put_nowait(results)
+
+
+    # Find number of answerable questions (some are impossible)
 
     tot_q = 0
     for q_file in questions:
@@ -85,6 +78,9 @@ def squad_benchmark(pQueue, name, dir, m_name):
             tot_q = tot_q + 1
 
     results["questions"]["num_qs"] = tot_q
+
+
+    # Start iterating through all answerable questions
 
     for q_file in questions:
 
@@ -102,16 +98,16 @@ def squad_benchmark(pQueue, name, dir, m_name):
                 if len(q_ansl) == 0:
                     break
 
-                print(f"QUESTION: {q_text}")
-                print(f"POSS ANS: {q_ansl}")
+                print(f"(squad_benchmark) > Question: {q_text}")
+                print(f"(squad_benchmark) > Valid ans: {q_ansl}")
 
-                res, time = model.file_search(q_text)
+                res, time = model_obj.file_search(q_text)
                 m_ans = res[0]['res']
 
                 valid = was_correct(m_ans, q_ansl)
 
-                print(f"TIME TAK: {time}")
-                print(f"CORRECT?: {valid}")
+                print(f"(squad_benchmark) > Time Taken: {time}")
+                print(f"(squad_benchmark) > Corect?: {valid}")
 
                 results["questions"]["tot_qs"] = results["questions"]["tot_qs"] + 1
                 results["times"]["all_ts"].append(time)
@@ -121,23 +117,19 @@ def squad_benchmark(pQueue, name, dir, m_name):
                     results["metrics"]["incorrect_d"][q_text] = [
                         m_ans, q_ansl, q_data['context']]
 
-                pQueue.put_nowait(results)
+                queue.put_nowait(results)
 
             except:
-                print("EXITED PREMATURELY")
-                logging.debug('A debug message!')
+                print(f"(squad_benchmark) > Exited prematurely, skipping question.")
                 pass
 
-        print("========================")
+
 
     results["times"]["avg_ts"] = np.mean(results["times"]["all_ts"])
-    results["metrics"]["accuracy_num"] = results["metrics"]["correct_arr"].count(
-        1)
-    results["metrics"]["accuracy_prc"] = np.mean(
-        results["metrics"]["correct_arr"])
+    results["metrics"]["accuracy_num"] = results["metrics"]["correct_arr"].count(1)
+    results["metrics"]["accuracy_prc"] = np.mean(results["metrics"]["correct_arr"])
 
-    print(results)
-    pQueue.put("DONE")
+    queue.put("DONE")
 
 
 """

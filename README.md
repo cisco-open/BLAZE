@@ -31,11 +31,11 @@ Over the coming weeks, this dashboard will be further fleshed out with more exci
 
 &nbsp;&nbsp;
 
-![Custom](./auxmedia/custom_qna.PNG)
+![Custom](./docs/custom_qna.PNG)
 
 &nbsp;&nbsp;
 
-![Comparison](./auxmedia/model_comparison.png)
+![Comparison](./docs/model_comparison.png)
 
 &nbsp;&nbsp;
 

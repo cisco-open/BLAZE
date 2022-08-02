@@ -23,7 +23,8 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem 2rem 1rem",
     "background-color": "#222222",
     'font': {'family': 'Quicksand'},
-    "overflow": "scroll"
+    "overflow": "scroll",
+    "height" : "60rem"
 }
 
 SIDEBAR_STYLE = {
@@ -44,6 +45,28 @@ WHITE = "#FFFFFF"
 CREAM = "#FFE5B4"
 BLACK = "#000000"
 TEAL = "#049FD9"
+
+CONST_RESULTS = {
+                    "m_name": "",
+                    "f_name": "",
+                    "root": "",
+                    "questions": {
+                        "num_qf": 0,
+                        "num_qs": 0,
+                        "all_qs": [],
+                        "tot_qs": 0,
+                    },
+                    "times": {
+                        "avg_ts": 0,
+                        "all_ts": [],
+                    },
+                    "metrics": {
+                        "correct_arr": [],
+                        "incorrect_d": {},
+                        "accuracy_num": 0,
+                        "accuracy_prc": 0,
+                    }
+                }
 
 SEARCH_BOX_PLACEHOLDER = "Once the input has been indexed, ask away..."
 ANSWER_BOX_PLACEHOLDER = "... and the output will be shown here!"

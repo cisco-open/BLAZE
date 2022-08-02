@@ -14,7 +14,6 @@ class SearchInterface():
 
 
     def get_page(self): 
-
         return self.get_page_custom(self.params)
 
     def get_page_custom(self, params): 
@@ -51,20 +50,19 @@ class SearchInterface():
         return html.Div(html.Div([
             dbc.Row([
                 dbc.Col([
-                    get_squadTitleCard(data),
-                    html.Div(get_squadMetricsCard(
-                        data, pQueue), id="progress-content")
+                    self.get_bench_TitleCard(params),
+                    html.Div(self.get_bench_MetricsCard(params), id="search-bench-metrics-content")
                 ], width=4),
                 dbc.Col([
-                    html.Div(get_squadIncorrectCard(data), id="incorrect-content")
+                    html.Div(self.get_bench_IncorrectCard(params), id="search-bench-incorrect-content")
                 ]),
                 dcc.Interval(
-                    id='interval-component',
+                    id='search-bench-interval-component',
                     interval=1*1000,  # in milliseconds
                     n_intervals=0,
                 )
             ])
-        ], style=CONTENT_STYLE), id="squad-content")
+        ], style=CONTENT_STYLE), id="bench-content")
 
 
     def get_page_comparison(self, params): 
@@ -292,12 +290,16 @@ class SearchInterface():
         if not model: 
             link = ""
             repo = "" 
+
+            model_text = "<>"
         
         else: 
             model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x.get_name()) in model]
             print(model_obj)
             link = model_obj[0]._info['link']
             repo = model_obj[0]._info['repo']
+
+            model_text = model[0]
 
         row21 = html.Tr(
             [html.Td("% Correct"), html.Td(f"{metrics['accuracy'][0]} %")])
@@ -316,9 +318,9 @@ class SearchInterface():
                                 "font-family": "Quicksand", "color": WHITE, "padding": "0rem 0rem 1rem 0rem"})),
                     table2,
                     html.Br(),
-                    html.Center(html.H5(html.A(f"Learn more about {model}.", href=link, target="_blank", style={
+                    html.Center(html.H5(html.A(f"Learn more about {model_text}.", href=link, target="_blank", style={
                                 "font-family": "Quicksand", "color": WHITE}))),
-                    html.Center(html.H5(html.A(f"View {model} Github Repo.", href=repo, target="_blank", style={
+                    html.Center(html.H5(html.A(f"View {model_text} Github Repo.", href=repo, target="_blank", style={
                                 "font-family": "Quicksand", "color": WHITE})))
 
                 ]),
@@ -326,6 +328,324 @@ class SearchInterface():
         ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
         )
         return accuracyCard
+
+
+
+
+    """
+
+    The following four functions are for the Solo Benchmark page.
+
+
+    """
+
+
+    # === (Solo Bench) Returns the top model/data choosing card === #
+
+    def get_bench_TitleCard(self, params):
+
+        default = params._data_dict['states']['chosen_data']
+        if default is None:
+            default = "Please select an input file"
+
+        if len(params._data_dict['states']['model_active']) == 0: 
+            begin_text = "Please select a model"
+        else: 
+            begin_text = f"Begin {params._data_dict['states']['model_active'][0]} Benchmarking"
+
+
+        return dbc.Card([
+            html.Div(
+                [
+                    html.Center(html.H5(default, style={
+                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
+                    dbc.Row([
+                        dbc.Col([
+                            html.H6
+                            (
+                                "Please choose a valid dataset:",
+                                style={"font-family": "Quicksand", "color": WHITE,
+                                    'font-size': "22px", "padding": "1rem"}
+                            ),
+                        ], width=6),
+                        dbc.Col([
+                            dbc.Select(
+                                id="search-bench-choose-file",
+                                options=gen_inputOptions(params),
+                                style={"background": "#888888",
+                                    "color": WHITE, "font-family": "Quicksand"},
+                                placeholder=default
+                            ),
+                        ])
+                    ], align="center", style={'margin-bottom': "10px"}),
+                    html.Center(dbc.Button(begin_text, color="info", outline=True,
+                                id="search-bench-begin-index", style={'font-size': "26px", 'font-family': "Quicksand"}))
+
+
+                ]),
+
+        ],  outline=True,
+            color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"}
+        )
+
+
+    # === (Solo Bench) Returns the progress, accuracy, latency, graph(s) === #
+
+    def get_bench_MetricsCard(self, params):
+
+        # If no model selected, say we must select a model to proceed. 
+
+        if len(params._data_dict['states']['model_active']) == 0: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please select a model from the left",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
+            )
+
+        m_name = params._data_dict['states']['model_active'][0]
+        print(f"(get_bench_MetricsCard) > {params._data_dict['states']['processes']}")
+
+
+        # If we haven't started our process, say so 
+
+        if m_name not in params._data_dict['states']['processes']: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please begin indexing the model",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
+            )
+
+
+
+        # If we're starting up, say that we are
+
+
+        if params._data_dict['states']['has_input_file'] and not params._data_dict['states']['begun_queue'] and params._data_dict['states']['processes'][m_name][1].empty():
+
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Starting {params._data_dict['states']['model_active'][-1]} model...",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
+            )
+        elif params._data_dict['states']['has_input_file'] and not params._data_dict['states']['processes'][m_name][1].empty(): 
+             params._data_dict['states']['begun_queue'] = True
+
+
+        # Try getting results, if not, show old results 
+
+        try:
+            results = params._data_dict['states']['processes'][m_name][1].get_nowait()
+            params._data_dict['states']['processes'][m_name][2] = results
+
+        except:
+            results = params._data_dict['states']['processes'][m_name][2]
+
+
+        # Compute the necessary metrics to be displayed 
+
+        percent_correct = round(
+            100 * np.mean(results["metrics"]["correct_arr"]), 2)
+        num_correct = results["metrics"]["correct_arr"].count(1)
+        num_total = results["questions"]["num_qs"]
+        num_curr = results["questions"]["tot_qs"]
+        avg_time = round(np.mean(results["times"]["all_ts"]), 2)
+        progress = round(100.0 * num_curr / (num_total+0.001), 2)
+
+        return dbc.Card([
+            html.Div(
+                [
+                        html.Br(),
+                        dbc.Progress(
+                            label=f"Progress: {progress}%", value=progress, id="animated-progress", animated=False, striped=True
+                        ),
+                        html.Br(),
+                        dbc.Col([
+                            html.Br(),
+                            dbc.Row
+                            ([
+                                dbc.Col(html.H6
+                                        (
+                                            "Percent Questions Correct (%):",
+                                            style={"font-family": "Quicksand",
+                                                "color": CREAM, 'font-size': "22px"}
+                                        ), width=9),
+                                dbc.Col(dbc.Badge(html.H1(percent_correct, style={
+                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
+                            ]),
+                            html.Br(),
+                            dbc.Row
+                            ([
+                                dbc.Col(html.H6
+                                        (
+                                            "Number Questions Correct (#):",
+                                            style={"font-family": "Quicksand",
+                                                "color": WHITE, 'font-size': "22px"}
+                                        ), width=9),
+                                dbc.Col(dbc.Badge(html.H1(num_correct, style={
+                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
+                            ]),
+                            dbc.Row
+                            ([
+                                dbc.Col(html.H6
+                                        (
+                                            "Number Questions Total (#):",
+                                            style={"font-family": "Quicksand",
+                                                "color": WHITE, 'font-size': "22px"}
+                                        ), width=9),
+                                dbc.Col(dbc.Badge(html.H1(num_total, style={
+                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
+                            ]),
+                            html.Hr(style={"color": WHITE}),
+                            self.get_bench_TimeGraph(results["times"]["all_ts"]),
+                            html.Br(),
+                            dbc.Row
+                            ([
+                                dbc.Col(html.H6
+                                        (
+                                            "Average time / Question (s):",
+                                            style={"font-family": "Quicksand",
+                                                "color": CREAM, 'font-size': "22px"}
+                                        ), width=9),
+                                dbc.Col(dbc.Badge(html.H1(avg_time, style={
+                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
+                            ]),
+                        ]),
+                        ])
+        ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem"}
+        )
+
+
+    # === (Solo Bench) Returns all incorrectly-answered questions in SQUAD data === #
+
+    def get_bench_IncorrectCard(self, params):
+
+        # If no model selected, say we must select a model to proceed. 
+
+        if len(params._data_dict['states']['model_active']) == 0: 
+            return dbc.Card([
+                html.Div(
+                    [
+                       self.get_spinnyCircle()
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "vertical-align": "middle"}
+            )
+
+
+        m_name = params._data_dict['states']['model_active'][0]
+
+        if m_name not in params._data_dict['states']['processes']: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please begin indexing the model",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "vertical-align": "middle"}
+            )
+
+
+        results = params._data_dict['states']['processes'][m_name][2]
+
+        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
+        incorrect = results['metrics']['incorrect_d']
+
+        accordion_list = []
+        for wrong in incorrect:
+            m_ans = incorrect[wrong][0]
+            q_ans = incorrect[wrong][1]
+            contx = incorrect[wrong][2]
+
+            accordion_list.append(
+                dbc.AccordionItem(
+                    f"Model's answer: {m_ans} | Correct answer: {q_ans} \n | \n Context: {contx}", title=wrong,
+                    style={'font-family': "Quicksand", 'color': WHITE,
+                        'background-color': "#049FD911", 'text-color': WHITE}
+                )
+            )
+
+        item_list = [f"item-{i}" for i in range(len(accordion_list))]
+
+        return dbc.Card([
+            html.Div(
+                [
+                        html.Br(),
+                        dbc.Progress(
+                            label=f"Accuracy: {accuracy}%", value=accuracy, id="animated-progress", animated=False, striped=True, color="success"
+                        ),
+                        html.Br(),
+                        html.Center(html.H6
+                                    (
+                                        "All questions answered incorrectly will appear in the accordion, found below.",
+                                        style={"font-family": "Quicksand", "color": WHITE,
+                                            'font-size': "22px", "padding": "1rem"}
+                                    )),
+                        html.Br(),
+                        dbc.Accordion(
+                            accordion_list,
+                            start_collapsed=False, always_open=True, active_item=item_list, style={"padding": "1rem", 'font-family': "Quicksand", 'color': "#049FD911", 'background-color': "#049FD911", 'text-color': "#049FD911"}
+                        ),
+                        ])
+        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "overflow": "auto"}
+        )
+
+
+    # === (Solo Bench) Returns graph of time taken (s) vs. question number === #
+
+    def get_bench_TimeGraph(self, data_arr):
+
+        try:
+            q_num = [(i+1) for i in range(len(data_arr))]
+            t_sec = data_arr
+
+            line = px.line(x=q_num, y=t_sec)
+            line.update_layout(
+                margin=dict(l=0, r=0, b=0, t=0),
+                xaxis_title="Question Number",
+                yaxis_title="Time (s)",
+            )
+
+        except:
+            q_num = [0.0]
+            t_sec = [0.0]
+
+            line = px.line(x=q_num, y=t_sec)
+            line.update_layout(
+                margin=dict(l=0, r=0, b=0, t=0),
+                xaxis_title="Question Number",
+                yaxis_title="Time (s)",
+            )
+
+        return dcc.Graph(id="time-series", figure=line, style={"height": "9rem"})
+
 
 
     """
@@ -533,7 +853,7 @@ class SearchInterface():
 
     # === (Compare Ms) Returns a spinning circle to be displayed while loading === #
 
-    def get_compare_spinnyCircle(self):
+    def get_spinnyCircle(self):
         return dbc.Card([
             html.Div(
                 [
@@ -542,235 +862,3 @@ class SearchInterface():
                 ])
         ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "24rem", "vertical-align": "middle"}
         )
-
-
-    """
-
-    The following four functions are for the Solo Benchmark page.
-
-
-    """
-
-
-    # === (Solo Bench) Returns the top model/data choosing card === #
-
-    def get_squadTitleCard(self, data):
-
-        default = data['squad']['chosen_name']
-        if default is None:
-            default = data['data']['DEFAULT']
-
-        return dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5(default, style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    dbc.Row([
-                        dbc.Col([
-                            html.H6
-                            (
-                                "Please choose a SQUAD dataset:",
-                                style={"font-family": "Quicksand", "color": WHITE,
-                                    'font-size': "22px", "padding": "1rem"}
-                            ),
-                        ], width=6),
-                        dbc.Col([
-                            dbc.Select(
-                                id="squad-file",
-                                options=gen_inputOptions(data['inputs']),
-                                style={"background": "#888888",
-                                    "color": WHITE, "font-family": "Quicksand"},
-                                placeholder=default
-                            ),
-                        ])
-                    ], align="center", style={'margin-bottom': "10px"}),
-                    html.Center(dbc.Button(f'Begin {data["model"]["name"]} Benchmark', color="info", outline=True,
-                                id="squad-begin-index", style={'font-size': "26px", 'font-family': "Quicksand"}))
-
-
-                ]),
-
-        ],  outline=True,
-            color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"}
-        )
-
-
-    # === (Solo Bench) Returns the progress, accuracy, latency, graph(s) === #
-
-    def get_squadMetricsCard(self, data, pQueue):
-
-        if not data['squad']['begun_queue'] and pQueue.empty():
-            return dbc.Card([
-                html.Div(
-                    [
-                        html.Center(html.H6
-                            (
-                                "Starting ColBERT model...",
-                                    style={"font-family": "Quicksand",
-                                        "color": CREAM, 'font-size': "22px"}
-                                    ),
-                                    style={"margin-top": "50%"})
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
-            )
-        else:
-            data['squad']['begun_queue'] = True
-
-        try:
-            results = pQueue.get_nowait()
-            print("1")
-            data['squad']['old_results'] = results
-
-        except:
-            results = data['squad']['old_results']
-
-        percent_correct = round(
-            100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        num_correct = results["metrics"]["correct_arr"].count(1)
-        num_total = results["questions"]["num_qs"]
-        num_curr = results["questions"]["tot_qs"]
-        avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-        progress = round(100.0 * num_curr / (num_total+0.01), 2)
-
-        return dbc.Card([
-            html.Div(
-                [
-                        html.Br(),
-                        dbc.Progress(
-                            label=f"Progress: {progress}%", value=progress, id="animated-progress", animated=False, striped=True
-                        ),
-                        html.Br(),
-                        dbc.Col([
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Percent Questions Correct (%):",
-                                            style={"font-family": "Quicksand",
-                                                "color": CREAM, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(percent_correct, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Number Questions Correct (#):",
-                                            style={"font-family": "Quicksand",
-                                                "color": WHITE, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_correct, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Number Questions Total (#):",
-                                            style={"font-family": "Quicksand",
-                                                "color": WHITE, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_total, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            html.Hr(style={"color": WHITE}),
-                            get_squadTimeGraph(results["times"]["all_ts"]),
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Average time / Question (s):",
-                                            style={"font-family": "Quicksand",
-                                                "color": CREAM, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(avg_time, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                        ]),
-                        ])
-        ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem"}
-        )
-
-
-    # === (Solo Bench) Returns all incorrectly-answered questions in SQUAD data === #
-
-    def get_squadIncorrectCard(self, data):
-        m_name = data['model']['name']
-        results = data['squad']['old_results'][m_name]
-        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
-
-        results = data['squad']['old_results'][m_name]
-        incorrect = results['metrics']['incorrect_d']
-
-        accordion_list = []
-        for wrong in incorrect:
-            m_ans = incorrect[wrong][0]
-            q_ans = incorrect[wrong][1]
-            contx = incorrect[wrong][2]
-
-            accordion_list.append(
-                dbc.AccordionItem(
-                    f"Model's answer: {m_ans} | Correct answer: {q_ans} \n | \n Context: {contx}", title=wrong,
-                    style={'font-family': "Quicksand", 'color': WHITE,
-                        'background-color': "#049FD911", 'text-color': WHITE}
-                )
-            )
-
-        item_list = [f"item-{i}" for i in range(len(accordion_list))]
-
-        return dbc.Card([
-            html.Div(
-                [
-                        html.Br(),
-                        dbc.Progress(
-                            label=f"Accuracy: {accuracy}%", value=accuracy, id="animated-progress", animated=False, striped=True, color="success"
-                        ),
-                        html.Br(),
-                        html.Center(html.H6
-                                    (
-                                        "All questions answered incorrectly will appear in the accordion, found below.",
-                                        style={"font-family": "Quicksand", "color": WHITE,
-                                            'font-size': "22px", "padding": "1rem"}
-                                    )),
-                        html.Br(),
-                        dbc.Accordion(
-                            accordion_list,
-                            start_collapsed=False, always_open=True, active_item=item_list, style={"padding": "1rem", 'font-family': "Quicksand", 'color': "#049FD911", 'background-color': "#049FD911", 'text-color': "#049FD911"}
-                        ),
-                        ])
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem", "overflow": "auto"}
-        )
-
-
-    # === (Solo Bench) Returns graph of time taken (s) vs. question number === #
-
-    def get_squadTimeGraph(self, data):
-
-        try:
-            year = [(i+1) for i in range(len(data))]
-            carbon = data
-
-            line = px.line(x=year, y=carbon)
-            line.update_layout(
-                margin=dict(l=0, r=0, b=0, t=0),
-                xaxis_title="Question Number",
-                yaxis_title="Time (s)",
-            )
-
-        except:
-            year = [0]
-            carbon = [0]
-
-            line = px.line(x=year, y=carbon)
-            line.update_layout(
-                margin=dict(l=0, r=0, b=0, t=0),
-                xaxis_title="Question Number",
-                yaxis_title="Time (s)",
-            )
-
-        return dcc.Graph(id="time-series", figure=line, style={"height": "9rem"})
-
