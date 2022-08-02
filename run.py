@@ -6,7 +6,7 @@ from aski.datasets.cnn_dailymail import CNNDailyMail
 from datasets import get_dataset_config_names
 
 if __name__ == "__main__":
-	
+
 	parser = argparse.ArgumentParser()
 	parser.add_argument('yaml_file', \
 		help='YAML file that describes the NLP pipeline', \
@@ -33,3 +33,4 @@ if __name__ == "__main__":
 
 	model._summarize_text(random_example)
 		#model._summarize_dataset(dataset._tokenized_dataset['train'])
+"""
