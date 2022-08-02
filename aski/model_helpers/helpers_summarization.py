@@ -22,10 +22,9 @@ def get_list_models(list_models_str):
     list_models_obj = []
 
     for model_name in list_models_str:
-
-    	model = call_model_class_from_name(model_name)
-
-    	list_models_obj.append(model)
+      model = call_model_class_from_name(model_name)
+      
+      list_models_obj.append(model)
 
     return list_models_obj
 
