@@ -39,7 +39,6 @@ def get_bart_info():
 class BartRXF(Model_Summary):
 
 	def __init__(self):
-<<<<<<< HEAD
 
 		self._info      = get_bart_info()
 		self._model     = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
@@ -59,11 +58,8 @@ class BartRXF(Model_Summary):
 									 clean_up_tokenization_spaces=False))
 		
 	def _summarize_dataset(self, inputs):
-
 		summary_ids = self._model.generate(inputs["input_ids"], num_beams=4)
-=======
-		self._info = get_bart_info()
 
-    def get_name(self): 
-        return self._info['name']
->>>>>>> fb353a3ed880d07d309ad6bf9bac1f2166570658
+
+	def get_name(self): 
+		return self._info['name']

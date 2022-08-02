@@ -8,11 +8,7 @@ dashboard to use.
 """
 
 
-<<<<<<< HEAD
-from aski.models.model import Model
-=======
 from aski.models.model import Model_Summary
->>>>>>> fb353a3ed880d07d309ad6bf9bac1f2166570658
 
 
 # ==============================================================================
@@ -38,6 +34,6 @@ class Muppet(Model_Summary):
 
 	def __init__(self):
 		self._info = get_muppet_info()
-
+    
     def get_name(self): 
         return self._info['name']
