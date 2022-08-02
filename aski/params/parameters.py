@@ -9,18 +9,13 @@ of the dashboard used throughout the code.
 
 import json
 from multiprocessing import Queue
+from aski.model_helpers.helpers_summarization import get_list_models
+from aski.dash_files.app_constants import *
+
 
 # ==============================================================================
 # =========================== AUXILIARY FUNCTIONS ==============================
 # ==============================================================================
-
-def read_params():
-
-    with open('params/data_dict.txt') as data_dict_file:
-        data = data_dict_file.read()
-        data_dict = json.loads(data)
-
-    return data_dict
 
 # ==============================================================================
 # ============================ PARAMETERS CLASS ================================
@@ -30,15 +25,45 @@ class Parameters:
 
     def __init__(self, data_dict=None):
 
-        if data_dict is None:
-            self._data_dict = read_params()
-        else:
-            self._data_dict = data_dict
+        """
+        
+        What yml will contain: 
+
+        "Title": "Solo Question Answering on Custom Text", 
+        "function": {"task": "Search", "custom": true, "benchmarking": false, "comparing": false}, 
+        "data": {"DATA_PATH": "./data/squad2_data", "DATA_SETS": "1", "DEFAULT": "1973_oil_crisis", "FILES_PATH": "./data/user_files"}, 
+        "models": ["ElasticBERT"]}
+        
+
+        What will be added by this class: 
+
+        "states" : {"chosen_data": None, "chosen_path": None, "has_input_file": False, "has_indexed": False, "model_objs": []}
+
+        """
+
+
+        self._data_dict = data_dict
+        
+        self._data_dict['states'] = {} 
+
+        self._data_dict['states']['chosen_data'] = None 
+        self._data_dict['states']['chosen_path'] = None 
+        self._data_dict['states']['has_input_file'] = False  
+        self._data_dict['states']['has_indexed'] = False 
+
+        self._data_dict['states']['model_objs'] = get_list_models(self._data_dict['models']) 
+        self._data_dict['states']['model_active'] = [] 
+
+        self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
+        self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
+
+        self._data_dict['states']['reset_presses'] = 0 
+        
+
 
     def _update_data_dict_model_used(self, model_used):
 
-        self._data_dict['models_in_use'] = model_used
-        self._dump_params()
+        self._data_dict['states']['model_active'] = model_used 
 
     def _reset_data_dict_states(self):
 
@@ -46,22 +71,20 @@ class Parameters:
         self._data_dict['states']['has_indexed']    = False
         self._data_dict['states']['chosen_name']    = None
         self._data_dict['states']['chosen_path']    = None 
-        self._data_dict['states']['q_placeholder']  = "Ask your question",
-        self._data_dict['states']['a_placeholder']  = "The output will be here"
-        self._dump_params()
 
-    def _read_params(self):
+        self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
+        self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
 
-        self._data_dict = read_params()
-
-    def _dump_params(self):
-
-        with open('params/data_dict.txt', 'w') as data_dict_file:
-            data_dict_file.write(json.dumps(self._data_dict))
-    
     def _update_params(self, params):
 
         self._data_dict = params
+    
+    def _get_params(self): 
 
+        return(self._data_dict)
 
+    def get_function_task(self): 
+        return self._data_dict['function']['task']
 
+    def get_title(self): 
+        return self._data_dict['Title']

@@ -23,6 +23,7 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem 2rem 1rem",
     "background-color": "#222222",
     'font': {'family': 'Quicksand'},
+    "overflow": "scroll"
 }
 
 SIDEBAR_STYLE = {
@@ -32,7 +33,8 @@ SIDEBAR_STYLE = {
     "bottom": 0,
     "width": "16rem",
     "padding": "2rem 1rem",
-    "background-color": "#424242"
+    "background-color": "#424242",
+    "overflow": "scroll"
 }
 
 
@@ -43,6 +45,8 @@ CREAM = "#FFE5B4"
 BLACK = "#000000"
 TEAL = "#049FD9"
 
+SEARCH_BOX_PLACEHOLDER = "Once the input has been indexed, ask away..."
+ANSWER_BOX_PLACEHOLDER = "... and the output will be shown here!"
 
 # === Defaults (Paths, Toggles) === #
 
@@ -53,7 +57,8 @@ TEAL = "#049FD9"
 #SQUAD_DEFAULT = "1973_oil_crisis"
 
 SIDEBAR_TEXT = "A Comparison of Semantic Search Implementations"
-
+PARAMS_PATH = "aski/params/data_dict.txt"
+USER_FILES_PATH = "data/user_files"
 
 # === Fonts, Images, Links === #
 

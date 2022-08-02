@@ -1,0 +1,11 @@
+Title: "Solo Question Answering on Custom Text"
+function: 
+  task: Search 
+  custom: true 
+data: 
+  DATA_PATH: ./data/squad2_data
+  DATA_SETS: '1'
+  DEFAULT: 1973_oil_crisis
+  FILES_PATH: ./data/user_files
+models:
+- ElasticBERT

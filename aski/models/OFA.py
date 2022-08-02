@@ -8,7 +8,7 @@ dashboard to use.
 """
 
 
-from aski_summarization.models.model import Model
+from aski.models.model import Model_Summary
 
 
 # ==============================================================================
@@ -30,7 +30,10 @@ def get_ofa_info():
 # =============================== BART CLASS ===================================
 # ==============================================================================
 
-class OFA(Model):
+class OFA(Model_Summary):
 
 	def __init__(self):
 		self._info = get_ofa_info()
+
+    def get_name(self): 
+        return self._info['name']

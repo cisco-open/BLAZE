@@ -1,76 +1,61 @@
-"""
+""" 
+====================================================
+ColBERT 
+====================================================
+This module loads a ColBERT model and makes it available for the 
+dashboard to use.
 
 This file provides an interface to the ColBERT model proposed in: 
 - https://github.com/stanford-futuredata/ColBERT/tree/new_api
 
 
-NOTE: ColBERT is currently NOT supported. As a result, lines 38, 39,
-      and 40 are commented out (three import statements, from colbert.)
-      Upon downloading/setting up ColBERT, make sure to uncomment them! 
-
-This file will work if ColBERT is downloaded into the "ColBERT" directory,
-by following the instructions in the new_api branch of the above Repo. 
-
-The file structure (only showing dirs) should look something like: 
-
-> ColBERT
-  > baleen
-  > colbert
-  > docs
-  > utility
-> data
-> docs
-> experiments
-> misc_helpers
-> model_helpers 
-
-
-Heads up, this portion might be a little finnicky to setup! 
-
 """
 
 
-from transformers import AutoTokenizer, AutoModelForQuestionAnswering
-import os
-import sys
-import time
-import torch
-import textract
-import shutil
-
-from aski.models.model import Model
+from aski.models.model import Model_Search
 from aski.model_helpers.helpers_general import segment_documents
 from aski.model_helpers.helpers_semantic import answer_question
 
-sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
+from transformers import AutoTokenizer, AutoModelForQuestionAnswering
+import os, sys, time, torch, shutil
 
+# sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
 # from colbert.infra import Run, RunConfig, ColBERTConfig
 # from colbert import Indexer, Searcher
 # from colbert.data import Queries
+# sys.path.insert(0, f"{os.getcwd()}/")
 
-# MAKE SURE TO REMOVE THESE COMMENTS ^^ UPON DOWNLOADING COLBERT
+# ==============================================================================
+# =========================== AUXILIARY FUNCTIONS ==============================
+# ==============================================================================
 
-sys.path.insert(0, f"{os.getcwd()}/")
+def get_ColBERT_info(): 
 
+    model_info = {
+        'name'       : "ColBERT",
+        'class_name' : "ColBERT",
+        'desc'       : "ColBERT - Scalable BERT-Based Search",
+        'link'       : "https://arxiv.org/abs/2004.12832",
+        'repo'       : "https://github.com/stanford-futuredata/ColBERT"}
 
-class ColBERT(Model):
+    return model_info
 
-    """
-    This function initializes the ColBERT search.
-    The folllowing variables may be accessed via self: 
-    - string, filename, docs
-    - tokenizer, model, device 
-    - index_name, checkpoint, experiment
-    - searcher, indexer
-    - f_index_name, config
+# ==============================================================================
+# ============================= MUPPET CLASS ===================================
+# ==============================================================================
 
-    """
+class ColBERT(Model_Search):
 
-    def __init__(self, file_name, file_content):
-        print(os.getcwd())
-
-        self.string = f"ColBERT for {file_name}"
+    def __init__(self):
+        self._info = get_ColBERT_info()
+    
+    def get_name(self): 
+        return self._info['name']
+    
+    def load_model(self, file_name, file_content):
         self.filename = file_name
+
+        self.string = f"ColBERT for {self.filename}"
         self.docs = segment_documents([file_content])
 
         self.tokenizer = AutoTokenizer.from_pretrained(
@@ -110,10 +95,7 @@ class ColBERT(Model):
         t_e = time.time()
         self.t_startup = t_e - t_s
 
-    """
-    This function, given a file, searches it accordingly.
 
-    """
 
     def file_search(self, search_term):
 
