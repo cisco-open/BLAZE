@@ -8,7 +8,11 @@ dashboard to use.
 """
 
 
+<<<<<<< HEAD
+from aski.models.model import Model
+=======
 from aski.models.model import Model_Summary
+>>>>>>> fb353a3ed880d07d309ad6bf9bac1f2166570658
 
 
 # ==============================================================================
