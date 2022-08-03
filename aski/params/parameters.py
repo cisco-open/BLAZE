@@ -58,6 +58,9 @@ class Parameters:
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
 
         self._data_dict['states']['reset_presses'] = 0 
+
+        self._data_dict['states']['processes'] = {} # Dictionary with: {model_name: [process, queue, old_results]}
+        self._data_dict['states']['begun_queue'] = False 
         
 
 
@@ -74,6 +77,18 @@ class Parameters:
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
+
+
+        # Killing/resetting all multi-processing related things 
+
+        for model_name in self._data_dict['states']['processes']: 
+            p = self._data_dict['states']['processes'][model_name][0]
+            p.kill() 
+        
+        self._data_dict['states']['processes'] = {}
+        self._data_dict['states']['begun_queue'] = False 
+
+
 
     def _update_params(self, params):
 

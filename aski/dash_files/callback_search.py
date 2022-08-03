@@ -1,5 +1,11 @@
 from dash import Dash, html, dcc, Input, Output, State
 
+import multiprocessing 
+from multiprocessing import Queue 
+
+from aski.dash_files.app_constants import * 
+from aski.model_helpers.helpers_benchmark import squad_benchmark 
+
 
 def get_search_callbacks(app, page, params): 
 
@@ -76,58 +82,108 @@ def get_search_callbacks(app, page, params):
 
 
 
-    # === (03) Callback for Solo Benchmarking page === #
+    # === Callback for Solo Benchmarking page === #
 
-    @app.callback(Output("squad-content", "children"),
-                  [Input("squad-file", "value"),
-                   Input("squad-begin-index", "n_clicks")],
+    @app.callback(Output("bench-content", "children"),
+                  [Input("search-bench-choose-file", "value"),
+                   Input("search-bench-begin-index", "n_clicks"),],
                   [])
-    def render_squad_content(s_chosen, s_bench_button):
-        print("Now, we're in this callback func")
-        results = None
+    
+    def render_bench_content(file_chosen, bench_button):
 
-        if s_chosen:
-            data['squad']['has_input_file'] = True
+        print(f"(render_bench_content) > Entered bench callback.")
 
-            if (s_chosen.split("/")[-1] == "story.txt"):
-                data['squad']['chosen_name'] = (
-                    s_chosen.split("/")[-2]).replace("_", " ")
+        ### Component 01 - Selecting User File ###
+
+        if file_chosen:
+            params._data_dict['states']['has_input_file'] = True 
+
+            if (file_chosen.split("/")[-1] == "story.txt"):
+                params._data_dict['states']['chosen_data'] = (
+                    file_chosen.split("/")[-2]).replace("_", " ")
             else:
-                data['squad']['chosen_name'] = (
-                    s_chosen.split("/")[-1]).replace("_", " ")
+                params._data_dict['states']['chosen_path'] = (
+                    file_chosen.split("/")[-1]).replace("_", " ")
 
-            data['squad']['chosen_path'] = s_chosen
+            params._data_dict['states']['chosen_path'] = file_chosen
 
-            print(s_chosen)
+        
+        ### Component 02 - Starting Indexing ###
 
-        if s_bench_button == 1 and data['squad']['has_input_file'] and not data['squad']['has_indexed']:
+        if bench_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
             # Spawn new process, dump to shared pipe every question --> read to generate figures!
-            p1 = multiprocessing.Process(target=squad_benchmark, args=(
-                pQueue, data['squad']['chosen_name'], data['squad']['chosen_path']))
-            p1.start()
+            
+            m_name = params._data_dict['states']['model_active'][0]
 
-            data['squad']['has_indexed'] = True
+            params._data_dict['states']['processes'][m_name] = [None, Queue(), CONST_RESULTS]
+            params._data_dict['states']['processes'][m_name][0] = multiprocessing.Process(target=squad_benchmark, args=(
+                                                                                    params._data_dict['states']['processes'][m_name][1], 
+                                                                                    params._data_dict['states']['chosen_data'] , 
+                                                                                    params._data_dict['states']['chosen_path'], 
+                                                                                    params._data_dict['states']['model_objs'][0]))
 
-            print("NO LONGER IN PROCESS SPAWNING")
+            params._data_dict['states']['processes'][m_name][0].start() 
 
-        return get_content(data, pQueue)
+            print(f"(render_bench_content) > Started indexing...")
+            params._data_dict['states']['has_indexed'] = True 
+
+
+        return page.get_page_benchmark(params) 
+
+
 
     # === (04) Callback for updating the progress bar === #
 
-    @app.callback(Output("progress-content", "children"),
-                  [Input('interval-component', 'n_intervals')],
-                  [State("progress-content", "children")])
-    def render_progress_content(n, existing_state):
+    @app.callback(Output("search-bench-metrics-content", "children"),
+                  [Input('search-bench-interval-component', 'n_intervals')],
+                  [State("search-bench-metrics-content", "children")])
 
-        if data['squad']['old_results'] == "DONE":
+    def render_bench_metrics(n_interval, existing_state):
+
+        # If no model selected
+        if len(params._data_dict['states']['model_active']) == 0: 
+            return existing_state 
+
+        # If we haven't indexed yet
+        if not params._data_dict['states']['has_indexed']:
+            return page.get_spinnyCircle() 
+
+        # If we're done benchmarking 
+        m_name = params._data_dict['states']['model_active'][0]
+        if params._data_dict['states']['processes'][m_name][2] == "DONE":
             return existing_state
 
-        if data['squad']['has_indexed']:
-            return get_squadMetricsCard(data, pQueue)
-        else:
-            return get_spinnyCircle()
+        return page.get_bench_MetricsCard(params)
 
+
+
+  # === (08) Callback for updating Incorrect Answers Card (solo bench) === #
+
+    @app.callback(Output("search-bench-incorrect-content", "children"),
+                  [Input('search-bench-interval-component', 'n_intervals')],
+                  [State("search-bench-incorrect-content", "children")])
+
+    def render_bench_incorrect(n_interval, existing_state):
+
+        # If no model selected
+        if len(params._data_dict['states']['model_active']) == 0: 
+            return existing_state 
+            
+        # If we haven't indexed yet
+        if not params._data_dict['states']['has_indexed']:
+            return page.get_spinnyCircle() 
+
+        # If we're done benchmarking 
+        m_name = params._data_dict['states']['model_active'][0]
+        if params._data_dict['states']['processes'][m_name][2] == "DONE":
+            return existing_state
+
+        return page.get_bench_IncorrectCard(params)
+
+
+
+    """
     # === (05) Callback for starting indexing of both models (ColBERT, Elastic) === #
 
     @app.callback(Output("compare-content", "children"),
@@ -199,24 +255,8 @@ def get_search_callbacks(app, page, params):
         else:
             return get_compare_spinnyCircle()
 
-    """
 
-    The following three callbacks are for updating the Incorrect Answers Card. 
-
-    """
-
-    # === (08) Callback for updating Incorrect Answers Card (solo bench) === #
-
-    @app.callback(Output("incorrect-content", "children"),
-                  [Input('interval-component', 'n_intervals')],
-                  [State("incorrect-content", "children")])
-    def render_progress_content(n, existing_state):
-        if data['squad']['old_results'] == "DONE":
-            return existing_state
-
-        return get_squadIncorrectCard(data)
-
-       # === (09) Callback for updating Incorrect Answers Card (ColBERT) === #
+     # === (09) Callback for updating Incorrect Answers Card (ColBERT) === #
 
     @app.callback(Output("incorrect-content0", "children"),
                   [Input('interval-component', 'n_intervals')],
@@ -237,3 +277,9 @@ def get_search_callbacks(app, page, params):
             return existing_state
 
         return get_compareIncorrectCard(data, "Elastic")
+
+
+    """
+
+  
+  
