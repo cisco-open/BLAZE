@@ -9,12 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/bart
 
 """
 
-<<<<<<< HEAD
-=======
 from aski.models.model import Model_Summary
->>>>>>> fb353a3ed880d07d309ad6bf9bac1f2166570658
-
-from aski.models.model import Model
 from transformers import BartTokenizer, BartForConditionalGeneration
 
 # ==============================================================================
@@ -23,14 +18,14 @@ from transformers import BartTokenizer, BartForConditionalGeneration
 
 def get_bart_info():
 
-    model_info = {
-        'name'       : "BART-RXF",
-        'class_name' : 'BartRXF',
-        'desc'       : "BART-RXF - Reducing Representational Collapse",
-        'link'       : "https://arxiv.org/pdf/2008.03156v1.pdf",
-        'repo'       : "https://github.com/stanford-futuredata/ColBERT"}
+	model_info = {
+		'name'       : "BART-RXF",
+		'class_name' : 'BartRXF',
+		'desc'       : "BART-RXF - Reducing Representational Collapse",
+		'link'       : "https://arxiv.org/pdf/2008.03156v1.pdf",
+		'repo'       : "https://github.com/stanford-futuredata/ColBERT"}
 
-    return model_info
+	return model_info
 
 # ==============================================================================
 # =============================== BART CLASS ===================================
@@ -59,7 +54,7 @@ class BartRXF(Model_Summary):
 		
 	def _summarize_dataset(self, inputs):
 		summary_ids = self._model.generate(inputs["input_ids"], num_beams=4)
-
+		self._info = get_bart_info()
 
 	def get_name(self): 
 		return self._info['name']
