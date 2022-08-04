@@ -8,7 +8,7 @@ interactive.
 """
 
 
-import importlib, base64 
+import base64 
 from dash import Dash, html, dcc, Input, Output, State
 from aski.dash_files.callback_search import get_search_callbacks
 from aski.dash_files.callbacks_summarization import get_summarization_callbacks
@@ -21,7 +21,6 @@ from aski.models.model import *
 
 from aski.model_helpers.helpers_benchmark import *
 from aski.params.parameters import Parameters
-from aski.model_helpers.helpers_summarization import get_list_models
 
 
 # ==============================================================================

@@ -16,6 +16,7 @@ class SearchInterface():
     def get_page(self): 
         return self.get_page_custom(self.params)
 
+
     def get_page_custom(self, params): 
         
         model_active = self.params._data_dict['states']['model_active']
@@ -68,24 +69,20 @@ class SearchInterface():
     def get_page_comparison(self, params): 
 
         return html.Div(html.Div([
-            get_compareTitleCard(data),
+            self.get_compare_TitleCard(params),
             dbc.Row([
                 dbc.Col([
-                    html.Div(get_compareMetricsCard(data, pQueue0,
-                                                    "ColBERT"), id="progress-content0"),
-                    html.Div(get_compareIncorrectCard(
-                        data, "ColBERT"), id="incorrect-content0")
+                    html.Div(self.get_compare_MetricsCard(params, 0), id="search-compare-metrics-content-0"),
+                    html.Div(self.get_compare_IncorrectCard(params, 0), id="search-compare-incorrect-content-0")
 
                 ]),
                 dbc.Col([
-                    html.Div(get_compareMetricsCard(data, pQueue1,
-                                                    "Elastic"), id="progress-content1"),
-                    html.Div(get_compareIncorrectCard(
-                        data, "Elastic"), id="incorrect-content1")
+                    html.Div(self.get_compare_MetricsCard(params, 1), id="search-compare-metrics-content-1"),
+                    html.Div(self.get_compare_IncorrectCard(params, 1), id="search-compare-incorrect-content-1")
 
                 ]),
                 dcc.Interval(
-                    id='compare-interval-component',
+                    id='search-compare-interval-component',
                     interval=1*1000,  # in milliseconds
                     n_intervals=0,
                 )
@@ -340,15 +337,13 @@ class SearchInterface():
     """
 
 
-    # === (Solo Bench) Returns the top model/data choosing card === #
-
     def get_bench_TitleCard(self, params):
 
         default = params._data_dict['states']['chosen_data']
         if default is None:
             default = "Please select an input file"
 
-        if len(params._data_dict['states']['model_active']) == 0: 
+        if len(params._data_dict['states']['model_active']) != 1: 
             begin_text = "Please select a model"
         else: 
             begin_text = f"Begin {params._data_dict['states']['model_active'][0]} Benchmarking"
@@ -389,13 +384,11 @@ class SearchInterface():
         )
 
 
-    # === (Solo Bench) Returns the progress, accuracy, latency, graph(s) === #
-
     def get_bench_MetricsCard(self, params):
 
         # If no model selected, say we must select a model to proceed. 
 
-        if len(params._data_dict['states']['model_active']) == 0: 
+        if len(params._data_dict['states']['model_active']) != 1: 
             return dbc.Card([
                 html.Div(
                     [
@@ -539,13 +532,11 @@ class SearchInterface():
         )
 
 
-    # === (Solo Bench) Returns all incorrectly-answered questions in SQUAD data === #
-
     def get_bench_IncorrectCard(self, params):
 
         # If no model selected, say we must select a model to proceed. 
 
-        if len(params._data_dict['states']['model_active']) == 0: 
+        if len(params._data_dict['states']['model_active']) != 1: 
             return dbc.Card([
                 html.Div(
                     [
@@ -618,8 +609,6 @@ class SearchInterface():
         )
 
 
-    # === (Solo Bench) Returns graph of time taken (s) vs. question number === #
-
     def get_bench_TimeGraph(self, data_arr):
 
         try:
@@ -654,21 +643,28 @@ class SearchInterface():
 
     """
 
-    # === (Compare Ms) Returns the top models/data choosing card === #
 
+    def get_compare_TitleCard(self, params):
 
-    def get_compareTitleCard(self, data):
-
-        default = data['squad']['chosen_name']
+        default = params._data_dict['states']['chosen_data']
         if default is None:
-            default = data['data']['DEFAULT']
+            default = "Select an input file"
+
+        if len(params._data_dict['states']['model_active']) != 2: 
+            begin_text = "Select two models"
+            model_title = "Please select two models"
+        else: 
+            begin_text = f"Begin Benchmarking"
+            model_title = f"{params._data_dict['states']['model_active'][0]} vs {params._data_dict['states']['model_active'][1]}"
+
+        dataset_text = "Choose a dataset:"
 
         return dbc.Card([
             html.Div(
                 [
                     dbc.Row([
                         dbc.Col([
-                            html.Center(html.H5("ColBERT vs Elastic", style={
+                            html.Center(html.H5(model_title, style={
                                         "font-family": "Quicksand", "color": TEAL, 'font-size': "40px", "padding": "0.5rem"})),
                         ], width=5),
                         dbc.Col([
@@ -678,33 +674,28 @@ class SearchInterface():
                                     dbc.Col([
                                         html.H6
                                         (
-                                            "Please choose a SQUAD dataset (same for both):",
+                                            dataset_text,
                                             style={"font-family": "Quicksand", "color": WHITE,
-                                                'font-size': "22px", "padding": "0rem"}
+                                                'font-size': "22px", "padding": "1rem"}
                                         ),
                                     ], width=4),
                                     dbc.Col([
                                         dbc.Select(
-                                            id="compare-squad-file",
-                                            options=gen_inputOptions(
-                                                data['inputs']),
+                                            id="search-compare-choose-file",
+                                            options=gen_inputOptions(params),
                                             style={"background": "#888888",
                                                 "color": WHITE, "font-family": "Quicksand"},
                                             placeholder=default
                                         ),
                                     ], width=3),
                                     dbc.Col([
-                                        html.Center(dbc.Button(f'Begin Benchmark', color="info", outline=True,
-                                                            id="compare-begin-index", style={'font-size': "26px", 'font-family': "Quicksand"}))
+                                        html.Center(dbc.Button(begin_text, color="info", outline=True,
+                                                            id="search-compare-begin-index", style={'font-size': "26px", 'font-family': "Quicksand"}))
                                     ]),
                                 ], align="center", style={'margin-bottom': "0px"}),
                             ]),
                         ]),
-
                     ])
-
-
-
                 ]),
 
         ],  outline=True,
@@ -712,11 +703,51 @@ class SearchInterface():
         )
 
 
-    # === (Compare Ms) Returns the progress, accuracy, latency, graph(s) === #
+    def get_compare_MetricsCard(self, params, m_num):
 
-    def get_compareMetricsCard(self, data, pQueue, m_name):
+        # If no model selected, say we must select a model to proceed. 
 
-        if not data['squad']['begun_queue'] and pQueue.empty():
+        if len(params._data_dict['states']['model_active']) != 2: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please select a model from the left",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
+            )
+
+        m_name = params._data_dict['states']['model_active'][m_num]
+        print(f"(get_compare_MetricsCard) > {params._data_dict['states']['processes']}, processing {m_name}")
+        
+        
+        # If we haven't started our process, say so 
+
+        if m_name not in params._data_dict['states']['processes']: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please begin indexing the model",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
+            )
+
+
+        # If we're starting up, say that we are
+
+
+        if params._data_dict['states']['has_input_file'] and not params._data_dict['states']['begun_queue'] and params._data_dict['states']['processes'][m_name][1].empty():
             return dbc.Card([
                 html.Div(
                     [
@@ -726,29 +757,32 @@ class SearchInterface():
                                     style={"font-family": "Quicksand",
                                         "color": CREAM, 'font-size': "22px"}
                                     ),
-                                    style={"margin-top": "12rem"})
+                                    style={"margin-top": "50%"})
                     ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "26rem", "vertical-align": "middle"}
+            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
             )
-        else:
-            data['squad']['begun_queue'] = True
+        elif params._data_dict['states']['has_input_file'] and not params._data_dict['states']['processes'][m_name][1].empty(): 
+            params._data_dict['states']['begun_queue'] = True
+
+
+
+        # Try getting results, if not, show old results 
 
         try:
-            results = pQueue.get_nowait()
-            print("1")
-            data['squad']['old_results'][m_name] = results
+            results = params._data_dict['states']['processes'][m_name][1].get_nowait()
+            params._data_dict['states']['processes'][m_name][2] = results
 
         except:
-            results = data['squad']['old_results'][m_name]
+            results = params._data_dict['states']['processes'][m_name][2]
 
+
+        percent_correct = round(
+            100 * np.mean(results["metrics"]["correct_arr"]), 2)
         num_correct = results["metrics"]["correct_arr"].count(1)
         num_total = results["questions"]["num_qs"]
         num_curr = results["questions"]["tot_qs"]
         avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-        progress = round(100.0 * num_curr / (num_total+0.01), 2)
-
-        results = data['squad']['old_results'][m_name]
-        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
+        progress = round(100.0 * num_curr / (num_total+0.001), 2)
 
         return dbc.Card([
             html.Div(
@@ -784,10 +818,10 @@ class SearchInterface():
                             ]),
                             html.Br(),
                             dbc.Progress(
-                                label=f"Accuracy: {accuracy}%", value=accuracy, id="animated-progress", animated=False, striped=True, color="success"
+                                label=f"Accuracy: {percent_correct}%", value=percent_correct, id="animated-progress", animated=False, striped=True, color="success"
                             ),
                             html.Br(),
-                            get_squadTimeGraph(results["times"]["all_ts"]),
+                            self.get_bench_TimeGraph(results["times"]["all_ts"]),
                             html.Br(),
                             dbc.Row
                             ([
@@ -806,14 +840,41 @@ class SearchInterface():
         )
 
 
-    # === (Compare Ms) Returns all incorrectly-answered questions in SQUAD data === #
+    def get_compare_IncorrectCard(self, params, m_num):
 
-    def get_compareIncorrectCard(self, data, m_name):
+        # If no model selected, say we must select a model to proceed. 
 
-        results = data['squad']['old_results'][m_name]
+        if len(params._data_dict['states']['model_active']) != 2: 
+            return dbc.Card([
+                html.Div(
+                    [
+                       self.get_spinnyCircle()
+                    ])
+            ], outline=True, color="#049FD911", style={"margin-top": "15px", "color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "vertical-align": "middle", "overflow": "auto"}
+            )
+
+
+        m_name = params._data_dict['states']['model_active'][m_num]
+
+        if m_name not in params._data_dict['states']['processes']: 
+            return dbc.Card([
+                html.Div(
+                    [
+                        html.Center(html.H6
+                            (
+                                f"Please begin indexing the model",
+                                    style={"font-family": "Quicksand",
+                                        "color": CREAM, 'font-size': "22px"}
+                                    ),
+                                    style={"margin-top": "50%"})
+                    ])
+            ], outline=True, color="#049FD911", style={"margin-top": "15px", "color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "vertical-align": "middle", "overflow": "auto"}
+            )
+
+
+        results = params._data_dict['states']['processes'][m_name][2]
+
         accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
-
-        results = data['squad']['old_results'][m_name]
         incorrect = results['metrics']['incorrect_d']
 
         accordion_list = []
@@ -832,12 +893,13 @@ class SearchInterface():
 
         item_list = [f"item-{i}" for i in range(len(accordion_list))]
 
+
         return dbc.Card([
             html.Div(
                 [
                         html.Center(html.H6
                                     (
-                                        f"Questions answered incorrectly by {m_name} will appear here.",
+                                        f"Q's answered incorrectly by {m_name} will appear here.",
                                         style={"font-family": "Quicksand", "color": WHITE,
                                             'font-size': "22px", "padding": "1rem"}
                                     )),
@@ -851,7 +913,11 @@ class SearchInterface():
         )
 
 
-    # === (Compare Ms) Returns a spinning circle to be displayed while loading === #
+    """
+    
+    This final function is miscellanous.
+    
+    """
 
     def get_spinnyCircle(self):
         return dbc.Card([
