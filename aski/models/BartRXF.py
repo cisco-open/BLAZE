@@ -38,6 +38,7 @@ class BartRXF(Model_Summary):
 		self._info      = get_bart_info()
 		self._model     = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
 		self._tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-cnn")
+		self._summary_text = "" 
 
 
 	def _summarize_text(self, text_to_summarize):
@@ -48,13 +49,16 @@ class BartRXF(Model_Summary):
 		summary_ids = self._model.generate(inputs["input_ids"], 
 										   num_beams=4)
 
-		print(self._tokenizer.batch_decode(summary_ids, 
+		self._summary_text = self._tokenizer.batch_decode(summary_ids, 
 									 skip_special_tokens=True, 
-									 clean_up_tokenization_spaces=False))
+									 clean_up_tokenization_spaces=False)
+		print(self._summary_text)
+
 		
 	def _summarize_dataset(self, inputs):
 		summary_ids = self._model.generate(inputs["input_ids"], num_beams=4)
 		self._info = get_bart_info()
 
-	def get_name(self): 
-		return self._info['name']
+
+	def _get_summary(self): 
+		return self._summary_text

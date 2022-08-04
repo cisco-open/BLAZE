@@ -8,4 +8,4 @@ data:
   DEFAULT: 1973_oil_crisis
   FILES_PATH: ./data/user_files
 models:
-- OFA
+- BartRXF

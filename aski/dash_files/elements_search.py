@@ -10,17 +10,14 @@ class SearchInterface():
     def __init__(self, params):
         self.params = params 
 
-        self.interface_data = {}
-
-
     def get_page(self): 
         return self.get_page_custom(self.params)
 
 
     def get_page_custom(self, params): 
         
-        model_active = self.params._data_dict['states']['model_active']
-        model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x.get_name()) in model_active]
+        model_active = params._data_dict['states']['model_active']
+        model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model_active]
 
 
         if len(model_objs) == 1: 
@@ -43,7 +40,7 @@ class SearchInterface():
                     style=CONTENT_STYLE), 
                 id="custom-content")
 
-        pass 
+         
 
 
     def get_page_benchmark(self, params): 
@@ -291,7 +288,7 @@ class SearchInterface():
             model_text = "<>"
         
         else: 
-            model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x.get_name()) in model]
+            model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model]
             print(model_obj)
             link = model_obj[0]._info['link']
             repo = model_obj[0]._info['repo']

@@ -29,7 +29,7 @@ def get_search_callbacks(app, page, params):
                 params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-2]).replace("_", " ")
             else:
-                params._data_dict['states']['chosen_path'] = (
+                params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-1]).replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
@@ -102,7 +102,7 @@ def get_search_callbacks(app, page, params):
                 params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-2]).replace("_", " ")
             else:
-                params._data_dict['states']['chosen_path'] = (
+                params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-1]).replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
@@ -210,7 +210,7 @@ def get_search_callbacks(app, page, params):
                 params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-2]).replace("_", " ")
             else:
-                params._data_dict['states']['chosen_path'] = (
+                params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-1]).replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
