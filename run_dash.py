@@ -15,5 +15,6 @@ if __name__ == "__main__":
 
     with open(args.yaml_file, mode="rt", encoding="utf-8") as file:
         data = yaml.safe_load(file)
+    os.remove("tmp.yaml")
    # print(data)
     run_app(data)
