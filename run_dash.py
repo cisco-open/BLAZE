@@ -1,10 +1,9 @@
 import argparse
-from aski.dash_files.app_callbacks import run_app
-
-
-def start(data=None):
-    print("Coming here!!!")
-    run_app(data)
+import yaml
+from aski.dash_files.app_callbacks import *
+from aski.flask_servers.app import *
+from multiprocessing import Process
+import os
 
 
 if __name__ == "__main__":
@@ -16,5 +15,5 @@ if __name__ == "__main__":
 
     with open(args.yaml_file, mode="rt", encoding="utf-8") as file:
         data = yaml.safe_load(file)
-
-    start(data)
+   # print(data)
+    run_app(data)
