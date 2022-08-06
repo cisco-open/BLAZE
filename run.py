@@ -1,8 +1,9 @@
 import argparse
+from time import sleep
 import yaml
 #from aski.dash_files.app_callbacks import *
 from aski.flask_servers.app import *
-#from multiprocessing import Process
+from multiprocessing import Process
 import os
 import subprocess
 
@@ -28,7 +29,8 @@ if __name__ == "__main__":
    # p = Process(target=run_app, args=(data,))
     with open("tmp.yaml", mode="wt", encoding="utf-8") as file:
         yaml.dump(data, file)
-
+    print("Created tmp.yaml")
+    sleep(5)
     app = create_app(data)
     p1 = Process(target=run_app_server, args=(app,))
     # p.start()
