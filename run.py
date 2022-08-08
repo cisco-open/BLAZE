@@ -1,8 +1,17 @@
 import argparse
 import yaml
 from aski.dash_files.app_callbacks import run_app 
+from aski.datasets.squad import Squad
+from aski.datasets.cnn_dailymail import CNNDailyMail
+from datasets import get_dataset_config_names
 
 def main(): 
+
+	configs = get_dataset_config_names("squad")
+	print(configs)
+	
+	dataset = Squad()
+	print(dataset._dataset)
 
 	parser = argparse.ArgumentParser()
 	parser.add_argument('yaml_file', \

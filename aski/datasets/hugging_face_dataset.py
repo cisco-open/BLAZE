@@ -10,13 +10,14 @@ from datasets import load_dataset_builder, load_dataset, load_metric
 from random import randint
 from transformers import AutoTokenizer
 
+from aski.datasets.dataset import Dataset
 
 # ==============================================================================
 # ======================= HUGGING FACE DATASET CLASS ===========================
 # ==============================================================================
 
 
-class HuggingFaceDataset:
+class HuggingFaceDataset(Dataset):
 
 	def __init__(self, dataset_name, config):
 
@@ -58,4 +59,14 @@ class HuggingFaceDataset:
 
 		return self._dataset[random_index][text_column_name]
 
+	def _get_list_examples(self, text_column_name, number_examples):
 
+		examples = []
+
+		# Sample the first x examples from the dataset
+		for index in range(0, number_examples):
+
+			example = self._dataset[index][text_column_name]
+			examples.append(example)
+
+		return examples
