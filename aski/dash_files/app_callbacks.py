@@ -10,17 +10,15 @@ interactive.
 
 import base64 
 from dash import Dash, html, dcc, Input, Output, State
-from aski.dash_files.callback_search import get_search_callbacks
-from aski.dash_files.callbacks_summarization import get_summarization_callbacks
 import dash_bootstrap_components as dbc
 
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_elements import *
 from aski.dash_files.app_helpers import *
+from aski.dash_files.callback_search import get_search_callbacks
+from aski.dash_files.callbacks_summarization import get_summarization_callbacks
 from aski.models.summarization import * 
 from aski.models.search import * 
-
-from aski.model_helpers.helpers_benchmark import *
 from aski.params.parameters import Parameters
 
 

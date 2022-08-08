@@ -13,8 +13,8 @@ This file provides an interface to the ColBERT model proposed in:
 
 
 from aski.models.search.model_search import ModelSearch
-from aski.model_helpers.helpers_general import segment_documents
-from aski.model_helpers.helpers_semantic import answer_question
+from aski.models.model_helpers.helpers_general import segment_documents
+from aski.models.model_helpers.helpers_semantic import answer_question
 
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import os, sys, time, torch, shutil

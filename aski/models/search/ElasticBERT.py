@@ -14,8 +14,8 @@ If on Windows, you will need to type ".\bin\elasticsearch.bat"
 """
 
 from aski.models.search.model_search import ModelSearch
-from aski.model_helpers.helpers_semantic import answer_question
-from aski.model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
+from aski.models.model_helpers.helpers_semantic import answer_question
+from aski.models.model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
 
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 from transformers import pipeline
