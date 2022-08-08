@@ -1,6 +1,6 @@
 Title: "Solo Summarization on Custom Text"
 function: 
-  task: Summarization
+  task: summarization
   custom: true 
 data:
   DATA_PATH: ./data/squad2_data
@@ -8,4 +8,4 @@ data:
   DEFAULT: 1973_oil_crisis
   FILES_PATH: ./data/user_files
 models:
-- BartRXF
+- Bart

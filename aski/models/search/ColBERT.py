@@ -12,7 +12,7 @@ This file provides an interface to the ColBERT model proposed in:
 """
 
 
-from aski.models.model import Model_Search
+from aski.models.search.model_search import ModelSearch
 from aski.model_helpers.helpers_general import segment_documents
 from aski.model_helpers.helpers_semantic import answer_question
 
@@ -44,7 +44,7 @@ def get_ColBERT_info():
 # ============================= MUPPET CLASS ===================================
 # ==============================================================================
 
-class ColBERT(Model_Search):
+class ColBERT(ModelSearch):
 
     def __init__(self):
         self._info = get_ColBERT_info()

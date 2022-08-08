@@ -13,7 +13,7 @@ If on Windows, you will need to type ".\bin\elasticsearch.bat"
 
 """
 
-from aski.models.model import Model_Search
+from aski.models.search.model_search import ModelSearch
 from aski.model_helpers.helpers_semantic import answer_question
 from aski.model_helpers.helpers_general import create_index, index_into_elasticsearch, search, segment_documents
 
@@ -41,7 +41,7 @@ def get_ElasticBERT_info():
 # ==============================================================================
 
 
-class ElasticBERT(Model_Search):
+class ElasticBERT(ModelSearch):
 
     def __init__(self):
         self._info = get_ElasticBERT_info()

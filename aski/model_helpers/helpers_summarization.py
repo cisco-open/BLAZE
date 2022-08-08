@@ -1,7 +1,7 @@
 from importlib import import_module
 
 
-def get_list_models(list_models_str):
+def get_list_models(list_models_str, task):
     """ 
     Function that takes as input a list of strings of the models we want to use
     for the dashboard and that returns a list of the different models as 
@@ -22,17 +22,18 @@ def get_list_models(list_models_str):
     list_models_obj = []
 
     for model_name in list_models_str:
-      model = call_model_class_from_name(model_name)
+      model = call_model_class_from_name(model_name, task)
       
       list_models_obj.append(model)
 
     return list_models_obj
 
-def call_model_class_from_name(model_name):
+def call_model_class_from_name(model_name, task):
 
-	model_class = import_module("aski.models." + model_name) \
+	model_class = import_module("aski.models." + task + '.' + model_name) \
 							.__getattribute__(model_name) 
 
 	model = model_class()
 
 	return model
+    

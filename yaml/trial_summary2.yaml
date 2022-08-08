@@ -1,6 +1,6 @@
 Title: "A Comparison of Summarization Implementations"
 function: 
-  task: Summarization
+  task: summarization
   custom: true 
   comparing: true 
 data:
@@ -9,5 +9,5 @@ data:
   DEFAULT: 1973_oil_crisis
   FILES_PATH: ./data/user_files
 models:
-- OFA
-- Muppet 
+- Bart
+- T5 
