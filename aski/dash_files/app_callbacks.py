@@ -43,6 +43,7 @@ from aski.models.ElasticSearch import *
 from aski.models.ColbertSearch import *
 from aski.model_helpers.helpers_benchmark import *
 
+
 def str_to_class(classname):
     return getattr(sys.modules[__name__], classname)
 
@@ -116,6 +117,8 @@ def run_app(data=None):
         if f_name is not None:
             content_type, content_string = f_contents.split(',')
             decoded = base64.b64decode(content_string).decode("utf-8")
+
+            FILES_DATA_PATH = data['data']['FILES_PATH']
 
             f_path = FILES_DATA_PATH + "/" + f_name
 
@@ -375,8 +378,9 @@ def run_app(data=None):
     # Finally, after defining all our callbacks, we can run our app
 
     app.config['suppress_callback_exceptions'] = True
-    app.run_server(port='5001', debug=True)
+    app.run_server(port='5002', debug=True)
 
 
 if __name__ == "__main__":
+    print("Coming here")
     run_app()
