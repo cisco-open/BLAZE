@@ -49,8 +49,7 @@ def create_app(server_config):
         nonlocal server_config
         content_type = request.headers.get('Content-Type')
         if (content_type == 'application/json'):
-            json = request.json
-            data = json.loads(json)
+            data = request.json
             status = json_input_validators(data, ['filename'])
             if 'Error' in status.keys():
                 print('Error! Ignoring wrong request')
@@ -72,8 +71,7 @@ def create_app(server_config):
         nonlocal server_config
         content_type = request.headers.get('Content-Type')
         if (content_type == 'application/json'):
-            json = request.json
-            data = json.loads(json)
+            data = request.json
             status = json_input_validators(data, ['filename', 'filecontents'])
             if 'Error' in status.keys():
                 return {'Status': status['Error']}
