@@ -9,7 +9,7 @@ of the dashboard used throughout the code.
 
 import json
 from multiprocessing import Queue
-from aski.models.model_helpers.helpers_general import get_list_models
+from aski.utils.helpers import get_list_models
 from aski.dash_files.app_constants import *
 
 
