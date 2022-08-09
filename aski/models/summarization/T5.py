@@ -42,5 +42,5 @@ class T5(HuggingFaceModelSummary):
         super().__init__(
             model_name='t5-base',
             model_info=get_t5_info(),
-            max_length=50, 
+            max_length=512, 
             truncation=True)

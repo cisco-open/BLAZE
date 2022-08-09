@@ -21,8 +21,8 @@ from aski.models.summarization.hugging_face_model_summary import HuggingFaceMode
 def get_bart_info():
 
     model_info = {
-        'name'       : "BART-RXF",
-        'class_name' : 'BartRXF',
+        'name'       : "BART",
+        'class_name' : 'Bart',
         'desc'       : "BART-RXF - Reducing Representational Collapse",
         'link'       : "https://arxiv.org/pdf/2008.03156v1.pdf",
         'repo'       : "https://github.com/stanford-futuredata/ColBERT"}
@@ -42,5 +42,5 @@ class Bart(HuggingFaceModelSummary):
         super().__init__(
             model_name='facebook/bart-large-cnn',
             model_info=get_bart_info(),
-            max_length=50, 
+            max_length=1020, 
             truncation=True)

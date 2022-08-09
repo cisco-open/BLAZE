@@ -3,7 +3,7 @@ class Dataset():
     def __init__(self):
         pass
 
-    def from_directory(self, dir: String):
+    def from_directory(self, dir):
         ''' Create a dataset -> create json file from directory'''
         pass
 

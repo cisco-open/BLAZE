@@ -30,8 +30,6 @@ def get_summarization_callbacks(app, page, params):
 
             params._data_dict['states']['chosen_path'] = file_chosen
 
-
-
         ### Component 02 - Indexing (Init) ###
 
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
@@ -43,14 +41,25 @@ def get_summarization_callbacks(app, page, params):
             f.close()
             f_content = "".join(lines)
 
-            print(f"(callback_search) > Begun indexing {params._data_dict['states']['model_active']}")
+            print(f" > Begun summarizing {params._data_dict['states']['model_active']}")
             
-            params._data_dict['states']['model_objs'][0]._summarize_text(f_content)
+            model_active = params._data_dict['states']['model_active'][0]
+            current_model = None 
+
+            for model in params._data_dict['states']['model_objs']:
+
+                model_name = model._get_class_name()
+
+                if model_name == model_active:
+
+                    current_model = model
+
+            result = current_model._summarize_text(f_content)
+
             params._data_dict['states']['has_indexed'] = True 
 
-            print(f"(callback_search) > Completed indexing...")
+            print(f" > Completed indexing...")
         
-            params._data_dict['states']['result'] = params._data_dict['states']['model_objs'][0]._get_summary()
-
+            params._data_dict['states']['result'] = result
 
         return page.get_page_custom(params)

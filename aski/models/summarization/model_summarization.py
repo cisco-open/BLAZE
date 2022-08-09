@@ -16,3 +16,6 @@ class ModelSummarization():
 
     def _get_name(self):
         return self._info['name']
+
+    def _get_class_name(self):
+        return self._info['class_name']

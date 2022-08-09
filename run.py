@@ -7,12 +7,6 @@ from datasets import get_dataset_config_names
 
 def main(): 
 
-	configs = get_dataset_config_names("squad")
-	print(configs)
-	
-	dataset = Squad()
-	print(dataset._dataset)
-
 	parser = argparse.ArgumentParser()
 	parser.add_argument('yaml_file', \
 		help='YAML file that describes the NLP pipeline', \
@@ -25,8 +19,6 @@ def main():
 	print(f"\n==== Starting Flexible NLP Pipeline ===\n")
 	print(f"(run) > Loaded data from yaml: {data}\n")
 	print(f"(run) > Starting dashboard...")
-
-	print(data)
 
 	run_app(data)
 

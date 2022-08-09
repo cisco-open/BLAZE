@@ -17,10 +17,20 @@ class HuggingFaceModelSummary(ModelSummarization):
 
     def __init__(self, model_name, max_length, truncation, model_info):
 
-        self._info = model_info
-        self._model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        self._tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self._pipe      = pipeline(
+        self._info       = model_info
+        self._max_length = max_length
+        self._truncation = truncation
+
+        self._model      = AutoModelForSeq2SeqLM.from_pretrained(
+            model_name, 
+            max_length=max_length)
+
+        self._tokenizer  = AutoTokenizer.from_pretrained(
+            model_name, 
+            max_length=max_length,
+            truncation=truncation)
+
+        self._pipe       = pipeline(
             "summarization", 
             model=model_name, 
             max_length=max_length, 
@@ -43,9 +53,13 @@ class HuggingFaceModelSummary(ModelSummarization):
 
     def _summarize_text(self, text_to_summarize):
 
-        inputs = self._tokenizer([text_to_summarize], return_tensors="pt")
+        inputs = self._tokenizer(
+            [text_to_summarize], 
+            return_tensors="pt", 
+            max_length=self._max_length,
+            truncation=self._truncation)
 
-        summary_ids = self._model.generate(inputs["input_ids"], num_beams=4)
+        summary_ids = self._model.generate(inputs["input_ids"], num_beams=4, max_length=self._max_length)
 
         summary_text = self._tokenizer.batch_decode(summary_ids, 
                                      skip_special_tokens=True, 

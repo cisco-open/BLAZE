@@ -52,12 +52,12 @@ def run_app(data):
     # Determining which callbacks are needed
     task = params._data_dict['function']['task']
 
-    if task == 'Search': 
+    if task == 'search': 
         page = SearchInterface(params)
         get_search_callbacks(app, page, params)
          
     
-    elif task == 'Summarization': 
+    elif task == 'summarization': 
         page = SummarizationInterface(params) 
         get_summarization_callbacks(app, page, params)
          
@@ -143,7 +143,7 @@ def run_app(data):
     # Finally, after defining all our callbacks, we can run our app
 
     app.config['suppress_callback_exceptions'] = True
-    app.run_server(port='5001', debug=True)
+    app.run_server(port='5001', debug=True, use_reloader=False)
 
 
 
