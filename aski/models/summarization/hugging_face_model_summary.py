@@ -6,7 +6,7 @@ This module extends the ModelSummary interface to load Hugging Face models.
 
 """
 
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipeline
 from transformers.pipelines.base import KeyDataset
 from tqdm.auto import tqdm
 import torch
@@ -15,26 +15,39 @@ from aski.models.summarization.model_summarization import ModelSummarization
 
 class HuggingFaceModelSummary(ModelSummarization):
 
-    def __init__(self, model_name, max_length, truncation, model_info):
+    def __init__(self, model_name, max_length, model_max_length, truncation, model_info, verbose=True):
 
-        self._info       = model_info
-        self._max_length = max_length
-        self._truncation = truncation
+        self._info             = model_info
+        self._max_length       = max_length
+        self._truncation       = truncation
 
-        self._model      = AutoModelForSeq2SeqLM.from_pretrained(
+
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' model...')
+
+        self._model = AutoModelForSeq2SeqLM.from_pretrained(
             model_name, 
             max_length=max_length)
 
-        self._tokenizer  = AutoTokenizer.from_pretrained(
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' tokenizer...')
+
+        self._tokenizer = AutoTokenizer.from_pretrained(
             model_name, 
             max_length=max_length,
+            model_max_length=model_max_length,
             truncation=truncation)
 
-        self._pipe       = pipeline(
-            "summarization", 
-            model=model_name, 
-            max_length=max_length, 
-            truncation=truncation)
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' pipe...')
+
+        self._pipe = SummarizationPipeline(
+            model=self._model, 
+            tokenizer=self._tokenizer)
+
+        if verbose == True:
+
+            print('\n> Finished loading ' + self._info['name'] + ' class.\n')
 
     def _summarize_dataset(self, dataset, column):
 

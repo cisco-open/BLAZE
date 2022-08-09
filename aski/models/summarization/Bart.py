@@ -23,9 +23,9 @@ def get_bart_info():
     model_info = {
         'name'       : "BART",
         'class_name' : 'Bart',
-        'desc'       : "BART-RXF - Reducing Representational Collapse",
-        'link'       : "https://arxiv.org/pdf/2008.03156v1.pdf",
-        'repo'       : "https://github.com/stanford-futuredata/ColBERT"}
+        'desc'       : "BART - Denoising Sequence-to-Sequence Pre-training",
+        'link'       : "https://arxiv.org/pdf/1910.13461.pdf",
+        'repo'       : "https://github.com/facebookresearch/fairseq/blob/main/examples/bart"}
 
     return model_info
 
@@ -40,7 +40,8 @@ class Bart(HuggingFaceModelSummary):
     def __init__(self):
 
         super().__init__(
-            model_name='facebook/bart-large-cnn',
+            model_name='facebook/bart-large',
             model_info=get_bart_info(),
-            max_length=1020, 
+            max_length=1020,
+            model_max_length=1020, 
             truncation=True)

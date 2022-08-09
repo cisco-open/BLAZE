@@ -1,5 +1,3 @@
-
-
 class ModelSummarization():
 
     def __init__(self):

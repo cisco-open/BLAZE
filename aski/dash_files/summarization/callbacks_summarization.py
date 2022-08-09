@@ -58,7 +58,7 @@ def get_summarization_callbacks(app, page, params):
 
             params._data_dict['states']['has_indexed'] = True 
 
-            print(f" > Completed indexing...")
+            print(f" > Completed summarization...")
         
             params._data_dict['states']['result'] = result
 
