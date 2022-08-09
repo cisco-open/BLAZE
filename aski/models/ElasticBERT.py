@@ -46,8 +46,6 @@ class ElasticBERT(Model_Search):
     def __init__(self):
         self._info = get_ElasticBERT_info()
     
-    def get_name(self): 
-        return self._info['name']
 
     def load_model(self, file_name, file_content): 
 

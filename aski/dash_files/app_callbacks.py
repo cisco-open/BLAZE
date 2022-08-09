@@ -126,6 +126,7 @@ def run_app(data):
 
             print(f"(sidebar_functionality) > Added file {file_name}.")
 
+        #params.dump_params() <-- write to txt 
             
         # If the user switches to a new page
 

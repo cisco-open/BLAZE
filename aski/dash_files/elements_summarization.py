@@ -14,7 +14,6 @@ class SummarizationInterface():
         return self.get_page_custom(self.params)
 
     
-
     def get_page_custom(self, params): 
         model_active = params._data_dict['states']['model_active']
         model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model_active]
@@ -43,9 +42,9 @@ class SummarizationInterface():
                 id="custom-content")
 
 
-
     def get_page_benchmark(self, params): 
         pass
+
 
     def get_page_comparison(self, params): 
         pass 

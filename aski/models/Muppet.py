@@ -34,6 +34,3 @@ class Muppet(Model_Summary):
 
 	def __init__(self):
 		self._info = get_muppet_info()
-    
-    def get_name(self): 
-        return self._info['name']

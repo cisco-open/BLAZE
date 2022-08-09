@@ -13,18 +13,20 @@ model to other models. Here's ASKI's current functionalities:
   - Gives latency, still need to update accuracy card (bottom right) 
 
 
-- **Solo SQUAD Benchmarking** (ColBERT, Elasticsearch) 
+- **Solo Benchmarking** (ColBERT, Elasticsearch) 
   - Can only use SQUAD texts (goes through ALL questions of chosen dataset) 
   - Gives latency (avg time/question, as well as generates real-time graph)
   - Gives accuracy (num correct, num total, % correct, % progress) 
   - Displays incorrect questions 
 
-- **Model Comparison on SQUAD** (ColBERT, Elasticsearch)
+- **Model Comparison** (ColBERT, Elasticsearch)
   - Goes through all questions of chosen dataset on both models
   - Gives latency, accuracy, incorrect questions for both 
   - Allows for side-by-side comparison of performance 
 
-> NOTE: Solo SQUAD Benchmarking and Model Comparison are a *little unstable*. Will be fixed in next commit! 
+
+**Custom Summarization** (Bart-RXF)
+- Can upload custom files (`.txt` support), with dataset support coming soon 
 
 
 Over the coming weeks, this dashboard will be further fleshed out with more exciting features 😄. 
@@ -39,7 +41,6 @@ Over the coming weeks, this dashboard will be further fleshed out with more exci
 
 &nbsp;&nbsp;
 
-> As a reminder, Solo Benchmarking and Model Comparison are unstable! (will be fixed in next commit)
 
 &nbsp;&nbsp;
 

@@ -10,6 +10,7 @@ class SearchInterface():
     def __init__(self, params):
         self.params = params 
 
+
     def get_page(self): 
         return self.get_page_custom(self.params)
 
@@ -41,8 +42,6 @@ class SearchInterface():
                 id="custom-content")
 
          
-
-
     def get_page_benchmark(self, params): 
 
         return html.Div(html.Div([
