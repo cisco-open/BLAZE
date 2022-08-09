@@ -62,7 +62,7 @@ def run_app(data):
         get_summarization_callbacks(app, page, params)
          
     
-    elif task == "Search/Summarization": 
+    elif task == "search/summarization": 
         pass  
 
     
