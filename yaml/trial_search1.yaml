@@ -1,6 +1,6 @@
 Title: "Solo Question Answering on Custom Text"
 function: 
-  task: Search 
+  task: search 
   custom: true 
 data: 
   DATA_PATH: ./data/squad2_data

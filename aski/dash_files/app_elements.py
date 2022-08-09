@@ -140,11 +140,11 @@ def get_content(params):
 
     task = params._data_dict['function']['task']
 
-    if task == 'Search': 
+    if task == 'search': 
         page = SearchInterface(params)
          
     
-    elif task == 'Summarization': 
+    elif task == 'summarization': 
         page = SummarizationInterface(params)
          
     

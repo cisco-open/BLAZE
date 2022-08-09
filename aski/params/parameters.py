@@ -9,7 +9,7 @@ of the dashboard used throughout the code.
 
 import json
 from multiprocessing import Queue
-from aski.model_helpers.helpers_summarization import get_list_models
+from aski.utils.helpers import get_list_models
 from aski.dash_files.app_constants import *
 
 
@@ -51,7 +51,7 @@ class Parameters:
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
 
-        self._data_dict['states']['model_objs'] = get_list_models(self._data_dict['models']) 
+        self._data_dict['states']['model_objs'] = get_list_models(self._data_dict['models'], self._data_dict['function']['task']) 
         self._data_dict['states']['model_active'] = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER

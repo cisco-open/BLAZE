@@ -1,6 +1,6 @@
 Title: "A Comparison of Semantic Search Implementations"
 function: 
-  task: Search 
+  task: search 
   custom: true  
   benchmarking: true 
   comparing: true  

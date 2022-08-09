@@ -1,4 +1,4 @@
-name: aski-benchmark
+name: aski
 channels:
   - pytorch
   - anaconda

@@ -4,7 +4,7 @@ import multiprocessing
 from multiprocessing import Queue 
 
 from aski.dash_files.app_constants import * 
-from aski.model_helpers.helpers_benchmark import squad_benchmark 
+from aski.models.search.model_search import squad_benchmark 
 
 
 def get_search_callbacks(app, page, params): 
