@@ -1,23 +1,78 @@
-name: aski-benchmark
+name: aski
 channels:
   - pytorch
-  - nvidia
   - anaconda
-  - conda-forge
   - defaults
+  - conda-forge
 dependencies:
-  - python=3.7
-  - cudatoolkit=11.1
-  - faiss-gpu=1.7.0
-  - pip=21.0
-  - pytorch=1.9.0
-  - torchaudio
-  - torchvision
+  - blas=1.0=mkl
+  - bzip2=1.0.8=h1de35cc_0
+  - ca-certificates=2022.4.26=hecd8cb5_0
+  - cudatoolkit=9.0=h41a26b3_0
+  - ffmpeg=4.3=h0a44026_0
+  - freetype=2.11.0=hd8bbffd_0
+  - gettext=0.21.0=h7535e17_0
+  - giflib=5.2.1=haf1e3a3_0
+  - gmp=6.2.1=he9d5cce_3
+  - gnutls=3.6.15=hed9c0bf_0
+  - icu=58.2=h0a44026_3
+  - intel-openmp=2021.4.0=hecd8cb5_3538
+  - jpeg=9b=he5867d9_2
+  - lame=3.100=h1de35cc_0
+  - lcms2=2.12=hf1fd2bf_0
+  - libcxx=12.0.0=h2f01273_0
+  - libffi=3.3=hb1e8313_2
+  - libiconv=1.16=hca72f7f_2
+  - libidn2=2.3.2=h9ed2024_0
+  - libpng=1.6.37=ha441bb4_0
+  - libtasn1=4.16.0=h9ed2024_0
+  - libtiff=4.2.0=h87d7836_0
+  - libunistring=0.9.10=h9ed2024_0
+  - libuv=1.40.0=haf1e3a3_0
+  - libwebp=1.2.0=hacca55c_0
+  - libwebp-base=1.2.0=h9ed2024_0
+  - libxml2=2.9.14=hbf8cd5e_0
+  - llvm-openmp=12.0.0=h0dcd299_1
+  - lz4-c=1.9.3=h23ab428_1
+  - mkl=2021.4.0=hecd8cb5_637
+  - mkl-service=2.4.0=py37h9ed2024_0
+  - mkl_fft=1.3.1=py37h4ab4a9b_0
+  - mkl_random=1.2.2=py37hb2f4e1b_0
+  - ncurses=6.3=hca72f7f_2
+  - nettle=3.7.3=h230ac6f_1
+  - ninja=1.10.2=hecd8cb5_5
+  - ninja-base=1.10.2=haf03e11_5
+  - numpy=1.21.5=py37h2e5f0a9_3
+  - numpy-base=1.21.5=py37h3b1a694_3
+  - openh264=2.1.1=h8346a28_0
+  - openssl=1.1.1o=hca72f7f_0
+  - pillow=9.0.1=py37hde71d04_0
+  - pip=21.0.1=py37hecd8cb5_0
+  - python=3.7.13=hdfd78df_0
+  - pytorch=1.9.0=py3.7_0
+  - readline=8.1.2=hca72f7f_1
+  - setuptools=61.2.0=py37hecd8cb5_0
+  - sqlite=3.38.5=h707629a_0
+  - tk=8.6.12=h5d9f67b_0
+  - torchaudio=0.9.0=py37
+  - torchvision=0.10.0=py37_cpu
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - xz=5.2.5=hca72f7f_1
+  - zlib=1.2.12=h4dc903c_2
+  - zstd=1.4.5=h41d2c2f_0
   - pip:
+    - absl-py==1.2.0
+    - aiohttp==3.8.1
+    - aiosignal==1.2.0
+    - alabaster==0.7.12
     - anyio==3.5.0
+    - appnope==0.1.3
     - argcomplete==1.10.3
     - argon2-cffi==21.3.0
     - argon2-cffi-bindings==21.2.0
+    - astunparse==1.6.3
+    - async-timeout==4.0.2
+    - asynctest==0.13.0
     - attrs==21.4.0
     - babel==2.9.1
     - backcall==0.2.0
@@ -27,6 +82,7 @@ dependencies:
     - bleach==5.0.0
     - blis==0.7.7
     - brotli==1.0.9
+    - cachetools==5.2.0
     - catalogue==2.0.7
     - certifi==2021.10.8
     - cffi==1.15.0
@@ -34,7 +90,6 @@ dependencies:
     - charset-normalizer==2.0.12
     - click==8.0.4
     - compressed-rtf==1.0.6
-    - cupy-cuda110==10.3.1
     - cymem==2.0.6
     - dash==2.3.1
     - dash-bootstrap-components==1.1.0
@@ -43,14 +98,18 @@ dependencies:
     - dash-extensions==0.0.71
     - dash-html-components==2.0.0
     - dash-table==5.0.0
+    - datasets==2.4.0
     - debugpy==1.6.0
     - decorator==5.1.1
     - defusedxml==0.7.1
+    - dill==0.3.5.1
+    - docutils==0.17.1
     - docx2txt==0.8
     - ebcdic==1.1.1
     - editorconfig==0.12.3
     - elasticsearch==7.13.3
     - entrypoints==0.4
+    - et-xmlfile==1.1.0
     - extract-msg==0.28.7
     - fastjsonschema==2.15.3
     - fastrlock==0.8
@@ -58,11 +117,21 @@ dependencies:
     - flask==2.1.1
     - flask-caching==1.10.1
     - flask-compress==1.11
+    - flatbuffers==1.12
+    - frozenlist==1.3.0
+    - fsspec==2022.7.1
     - fuzzywuzzy==0.18.0
+    - gast==0.4.0
     - gitdb==4.0.9
     - gitpython==3.1.27
+    - google-auth==2.9.1
+    - google-auth-oauthlib==0.4.6
+    - google-pasta==0.2.0
+    - grpcio==1.47.0
+    - h5py==3.7.0
     - huggingface-hub==0.5.1
     - idna==3.3
+    - imagesize==1.4.1
     - imapclient==2.1.0
     - importlib-metadata==4.11.3
     - importlib-resources==5.7.0
@@ -86,12 +155,19 @@ dependencies:
     - jupyterlab-pygments==0.2.1
     - jupyterlab-server==2.12.0
     - jupyterlab-widgets==1.1.0
+    - keras==2.9.0
+    - keras-preprocessing==1.1.2
     - langcodes==3.3.0
+    - libclang==14.0.6
+    - lumache==0.0.0
     - lxml==4.8.0
+    - markdown==3.4.1
     - markupsafe==2.1.1
     - matplotlib-inline==0.1.3
     - mistune==0.8.4
     - more-itertools==8.12.0
+    - multidict==6.0.2
+    - multiprocess==0.70.13
     - murmurhash==1.0.6
     - nbclassic==0.3.7
     - nbclient==0.6.0
@@ -100,7 +176,10 @@ dependencies:
     - nest-asyncio==1.5.5
     - notebook==6.4.10
     - notebook-shim==0.1.0
+    - oauthlib==3.2.0
+    - olefile==0.46
     - openpyxl==3.0.9
+    - opt-einsum==3.3.0
     - packaging==21.3
     - pandas==1.3.5
     - pandocfilters==1.5.0
@@ -110,11 +189,16 @@ dependencies:
     - pexpect==4.8.0
     - pickleshare==0.7.5
     - plotly==5.7.0
+    - pockets==0.9.1
     - preshed==3.0.6
     - prometheus-client==0.14.1
     - prompt-toolkit==3.0.29
+    - protobuf==3.19.4
     - psutil==5.9.0
     - ptyprocess==0.7.0
+    - pyarrow==8.0.0
+    - pyasn1==0.4.8
+    - pyasn1-modules==0.2.8
     - pycparser==2.21
     - pycryptodome==3.14.1
     - pydantic==1.8.2
@@ -122,6 +206,7 @@ dependencies:
     - pyparsing==3.0.8
     - pyrsistent==0.18.1
     - python-dateutil==2.8.2
+    - python-levenshtein==0.12.2
     - python-pptx==0.6.21
     - pytz==2022.1
     - pytz-deprecation-shim==0.1.0.post0
@@ -131,6 +216,9 @@ dependencies:
     - qtpy==2.0.1
     - regex==2022.3.15
     - requests==2.27.1
+    - requests-oauthlib==1.3.1
+    - responses==0.18.0
+    - rsa==4.9
     - sacremoses==0.0.49
     - scipy==1.7.3
     - send2trash==1.8.0
@@ -138,14 +226,30 @@ dependencies:
     - smart-open==5.2.1
     - smmap==5.0.0
     - sniffio==1.2.0
+    - snowballstemmer==2.2.0
     - sortedcontainers==2.4.0
     - soupsieve==2.3.2
     - spacy==3.2.4
     - spacy-legacy==3.0.9
     - spacy-loggers==1.0.2
     - speechrecognition==3.8.1
+    - sphinx==5.0.2
+    - sphinx-rtd-theme==1.0.0
+    - sphinxcontrib-applehelp==1.0.2
+    - sphinxcontrib-devhelp==1.0.2
+    - sphinxcontrib-htmlhelp==2.0.0
+    - sphinxcontrib-jsmath==1.0.1
+    - sphinxcontrib-napoleon==0.7
+    - sphinxcontrib-qthelp==1.0.3
+    - sphinxcontrib-serializinghtml==1.1.5
     - srsly==2.4.3
     - tenacity==8.0.1
+    - tensorboard==2.9.1
+    - tensorboard-data-server==0.6.1
+    - tensorboard-plugin-wit==1.8.1
+    - tensorflow-estimator==2.9.0
+    - tensorflow-io-gcs-filesystem==0.26.0
+    - termcolor==1.1.0
     - terminado==0.13.3
     - textract==1.6.5
     - thinc==8.0.15
@@ -167,7 +271,10 @@ dependencies:
     - websocket-client==1.3.2
     - werkzeug==2.1.1
     - widgetsnbextension==3.6.0
+    - wrapt==1.14.1
     - xlrd==1.2.0
     - xlsxwriter==3.0.3
+    - xxhash==3.0.0
+    - yarl==1.8.1
     - zipp==3.8.0
-prefix: /home/jasriniv@ioetoronto.ca/miniconda3/envs/new-benchmark
+prefix: /Users/tlemenes/opt/anaconda3/envs/aski-benchmark
