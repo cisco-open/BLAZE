@@ -5,8 +5,8 @@ from aski.params.parameters import Parameters
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_helpers import *
 
-from aski.dash_files.elements_search import SearchInterface
-from aski.dash_files.elements_summarization import SummarizationInterface 
+from aski.dash_files.search.elements_search import SearchInterface
+from aski.dash_files.summarization.elements_summarization import SummarizationInterface 
 
 # === Returns the sidebar. No customization needed (no inputs) === #
 
