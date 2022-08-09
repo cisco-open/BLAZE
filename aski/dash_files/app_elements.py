@@ -148,7 +148,7 @@ def get_content(params):
         page = SummarizationInterface(params)
          
     
-    elif task == "Search/Summarization": 
+    elif task == "search/summarization": 
         pass 
 
     return page.get_page()
