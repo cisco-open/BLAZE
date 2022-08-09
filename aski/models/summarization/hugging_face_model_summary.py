@@ -1,0 +1,80 @@
+""" 
+====================================================
+Hugging Face Model Summary 
+====================================================
+This module extends the ModelSummary interface to load Hugging Face models.
+
+"""
+
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipeline
+from transformers.pipelines.base import KeyDataset
+from tqdm.auto import tqdm
+import torch
+
+from aski.models.summarization.model_summarization import ModelSummarization
+
+class HuggingFaceModelSummary(ModelSummarization):
+
+    def __init__(self, model_name, max_length, model_max_length, truncation, model_info, verbose=True):
+
+        self._info             = model_info
+        self._max_length       = max_length
+        self._truncation       = truncation
+
+
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' model...')
+
+        self._model = AutoModelForSeq2SeqLM.from_pretrained(
+            model_name, 
+            max_length=max_length)
+
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' tokenizer...')
+
+        self._tokenizer = AutoTokenizer.from_pretrained(
+            model_name, 
+            max_length=max_length,
+            model_max_length=model_max_length,
+            truncation=truncation)
+
+        if verbose == True:
+            print('> Loading ' + self._info['name'] + ' pipe...')
+
+        self._pipe = SummarizationPipeline(
+            model=self._model, 
+            tokenizer=self._tokenizer)
+
+        if verbose == True:
+
+            print('\n> Finished loading ' + self._info['name'] + ' class.\n')
+
+    def _summarize_dataset(self, dataset, column):
+
+        summarization_outputs = []
+
+        for output in tqdm(self._pipe(KeyDataset(dataset, column))):
+
+            answer = output[0]['summary_text']
+            summarization_outputs.append(answer)
+
+        dataset.add_column(
+            name=('result' + self._info['class_name']), 
+            column=summarization_outputs)
+
+        return dataset
+
+    def _summarize_text(self, text_to_summarize):
+
+        inputs = self._tokenizer(
+            [text_to_summarize], 
+            return_tensors="pt", 
+            max_length=self._max_length,
+            truncation=self._truncation)
+
+        summary_ids = self._model.generate(inputs["input_ids"], num_beams=4, max_length=self._max_length)
+
+        summary_text = self._tokenizer.batch_decode(summary_ids, 
+                                     skip_special_tokens=True, 
+                                     clean_up_tokenization_spaces=False)
+        return summary_text

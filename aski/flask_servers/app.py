@@ -1,28 +1,36 @@
 from flask import Flask, request
 import json
+import os
+import subprocess
 
-#######
-# Create Server with different endpoints:
-# It takes in fields from the yaml file and creates server with those properties.
-# Endpoints are :
-# GET directory
-# POST default_file
-# GET model1 name
-# GET model2 name
-# GET running_model_name
-# GET default_model1 name
-# GET most_recent_metrics
-# POST summary  (with file)
-# POST search
-# POST selected_file
-# POST index_files / pre-process it
-# POST upload_user_file
-# GET/POST state
-# GET/POST function (either benchmarking/comparing)
-#######
+ #######
+ # Create Server with different endpoints:
+ # It takes in fields from the yaml file and creates server with those properties.
+ # Endpoints are :
+ # GET directory
+ # POST default_file
+ # GET model1 name
+ # GET model2 name
+ # GET running_model_name
+ # GET default_model1 name
+ # GET most_recent_metrics
+ # POST summary  (with file)
+ # POST search
+ # POST selected_file
+ # POST index_files / pre-process it
+ # POST upload_user_file
+ # GET/POST state
+ # GET/POST function (either benchmarking/comparing)
+ #######
 
-#server_config = {}
+ #server_config = {}
 
+def run_app_server(app, port=3000, ip='localhost'):
+
+    print("PID:", os.getpid())
+    print("Werkzeug subprocess:", os.environ.get("WERKZEUG_RUN_MAIN"))
+    print("Inherited FD:", os.environ.get("WERKZEUG_SERVER_FD"))
+    app.run(host=ip, port=port)
 
 def json_input_validators(input_data, fields_to_be_present):
     for f in fields_to_be_present:
@@ -56,7 +64,7 @@ def create_app(server_config):
                 return {'Status': status['Error']}
             try:
                 f = open(server_config['data']
-                         ['DATA_PATH']+'/'+data['filename'], 'r')
+                          ['DATA_PATH']+'/'+data['filename'], 'r')
                 f.read()
             except:
                 print('Selected file does not exist in dataset')
