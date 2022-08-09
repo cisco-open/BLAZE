@@ -446,7 +446,7 @@ def squad_benchmark(queue, file_name, file_path, model_obj):
 
     results = CONST_RESULTS
 
-    results['m_name'] = model_obj.get_name()
+    results['m_name'] = model_obj._info['class_name']
     results['f_name'] = file_name 
     results['root'] = q_dir 
 

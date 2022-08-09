@@ -380,7 +380,7 @@ class SearchInterface():
         )
 
 
-    def get_bench_MetricsCard(self, params):
+    def get_bench_MetricsCard(self, params, existing_state=None):
 
         # If no model selected, say we must select a model to proceed. 
 
@@ -456,13 +456,16 @@ class SearchInterface():
 
         # Compute the necessary metrics to be displayed 
 
-        percent_correct = round(
-            100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        num_correct = results["metrics"]["correct_arr"].count(1)
-        num_total = results["questions"]["num_qs"]
-        num_curr = results["questions"]["tot_qs"]
-        avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-        progress = round(100.0 * num_curr / (num_total+0.001), 2)
+        if results == "DONE": 
+            return existing_state 
+        else: 
+            percent_correct = round(
+                100 * np.mean(results["metrics"]["correct_arr"]), 2)
+            num_correct = results["metrics"]["correct_arr"].count(1)
+            num_total = results["questions"]["num_qs"]
+            num_curr = results["questions"]["tot_qs"]
+            avg_time = round(np.mean(results["times"]["all_ts"]), 2)
+            progress = round(100.0 * num_curr / (num_total+0.001), 2)
 
         return dbc.Card([
             html.Div(

@@ -154,7 +154,7 @@ def get_search_callbacks(app, page, params):
         if params._data_dict['states']['processes'][m_name][2] == "DONE":
             return existing_state
 
-        return page.get_bench_MetricsCard(params)
+        return page.get_bench_MetricsCard(params, existing_state)
 
 
 
