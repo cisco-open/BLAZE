@@ -9,14 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/bart
 
 """
 
-
 from aski.models.summarization.hugging_face_model_summary import HuggingFaceModelSummary
-
-
-# ==============================================================================
-# =========================== AUXILIARY FUNCTIONS ==============================
-# ==============================================================================
-
 
 def get_bart_info():
     """ 
@@ -38,12 +31,6 @@ def get_bart_info():
         'repo'       : "https://github.com/facebookresearch/fairseq/blob/main/examples/bart"}
 
     return model_info
-
-
-# ==============================================================================
-# =============================== BART CLASS ===================================
-# ==============================================================================
-
 
 class Bart(HuggingFaceModelSummary):
     """BART model from 'Denoising Sequence-to-Sequence Pre-training for Natural 

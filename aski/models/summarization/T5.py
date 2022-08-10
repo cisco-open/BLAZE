@@ -9,14 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/t5
 
 """
 
-
 from aski.models.summarization.hugging_face_model_summary import HuggingFaceModelSummary
-
-
-# ==============================================================================
-# =========================== AUXILIARY FUNCTIONS ==============================
-# ==============================================================================
-
 
 def get_t5_info():
     """ 
@@ -38,12 +31,6 @@ def get_t5_info():
         'repo'       : "https://github.com/google-research/text-to-text-transfer-transformer"}
 
     return model_info
-
-
-# ==============================================================================
-# ================================= T5 CLASS ===================================
-# ==============================================================================
-
 
 class T5(HuggingFaceModelSummary):
     """T5 model from 'Exploring the Limits of Transfer Learning with a Unified

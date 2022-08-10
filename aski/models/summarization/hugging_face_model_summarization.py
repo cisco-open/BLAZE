@@ -6,10 +6,10 @@ This module extends the ModelSummary interface to load Hugging Face models.
 
 """
 
+import torch
+from tqdm.auto import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipeline
 from transformers.pipelines.base import KeyDataset
-from tqdm.auto import tqdm
-import torch
 
 from aski.models.summarization.model_summarization import ModelSummarization
 
@@ -58,7 +58,6 @@ class HuggingFaceModelSummary(ModelSummarization):
         self._info       = model_info
         self._max_length = max_length
         self._truncation = truncation
-
 
         if verbose == True:
             print('> Loading ' + self._info['name'] + ' model...')
