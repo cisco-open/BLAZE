@@ -19,7 +19,17 @@ from aski.models.summarization.hugging_face_model_summary import HuggingFaceMode
 
 
 def get_t5_info():
+    """ 
+    Function to return a dictionnary containing the name, class name, 
+    description, paper link and GitHub repo link of the T5 model. It is used 
+    throughout the code to get various information about the model.
 
+    Returns
+    -------
+    model_info : a dictionnary
+        A dictionnary containing the name, class name, 
+        description, paper link and GitHub repo link of the T5 model
+    """
     model_info = {
         'name'       : "T5",
         'class_name' : 'T5',
@@ -36,6 +46,8 @@ def get_t5_info():
 
 
 class T5(HuggingFaceModelSummary):
+    """T5 model from 'Exploring the Limits of Transfer Learning with a Unified
+     Text-to-Text Transformer' paper"""
 
     def __init__(self):
 

@@ -19,7 +19,17 @@ from aski.models.summarization.hugging_face_model_summary import HuggingFaceMode
 
 
 def get_bart_info():
+    """ 
+    Function to return a dictionnary containing the name, class name, 
+    description, paper link and GitHub repo link of the BART model. It is used 
+    throughout the code to get various information about the model.
 
+    Returns
+    -------
+    model_info : a dictionnary
+        A dictionnary containing the name, class name, 
+        description, paper link and GitHub repo link of the T5 model
+    """
     model_info = {
         'name'       : "BART",
         'class_name' : 'Bart',
@@ -36,7 +46,9 @@ def get_bart_info():
 
 
 class Bart(HuggingFaceModelSummary):
-
+    """BART model from 'Denoising Sequence-to-Sequence Pre-training for Natural 
+    Language Generation, Translation, and Comprehension' paper"""
+    
     def __init__(self):
 
         super().__init__(

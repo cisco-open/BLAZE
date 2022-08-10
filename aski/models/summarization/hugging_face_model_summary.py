@@ -15,11 +15,49 @@ from aski.models.summarization.model_summarization import ModelSummarization
 
 class HuggingFaceModelSummary(ModelSummarization):
 
-    def __init__(self, model_name, max_length, model_max_length, truncation, model_info, verbose=True):
+   """
+    A Superclass used to build HuggingFace models for summarization
 
-        self._info             = model_info
-        self._max_length       = max_length
-        self._truncation       = truncation
+    ...
+
+    Attributes
+    ----------
+    _info : dictionnary
+        A dictionnary containing the name, class name, description, paper link 
+        and GitHub repo link of the model
+    _max_length : int
+        The maximum length parameter of the model
+    _truncation : boolean
+        Whether or not to truncate input sequences
+    _model : AutoModelForSeq2SeqLM
+        A HuggingFace model for summarization
+    _tokenizer : AutoTokenizer
+        A HuggingFace tokenizer 
+    _pipe : SummarizationPipeline
+        A HuggingFace pipeline for summarization
+
+    Methods
+    -------
+    _summarize_dataset(self, dataset, column):
+        Summarizes a dataset and appends to it a column with the summarized text.
+
+    _summarize_text(self, text_to_summarize):
+        Summarizes a piece of text and returns it.
+
+    """
+
+    def __init__(
+        self, 
+        model_name, 
+        max_length, 
+        model_max_length, 
+        truncation, 
+        model_info, 
+        verbose=True):
+
+        self._info       = model_info
+        self._max_length = max_length
+        self._truncation = truncation
 
 
         if verbose == True:
@@ -50,6 +88,25 @@ class HuggingFaceModelSummary(ModelSummarization):
             print('\n> Finished loading ' + self._info['name'] + ' class.\n')
 
     def _summarize_dataset(self, dataset, column):
+        """ 
+        Method that takes in a HuggingFace dataset and the name of the column of
+        the dataset that contains the text to summarize. It calls the 
+        summarization pipeline attribute and runs it on the whole dataset. It 
+        saves the results in a list and adds this list to the dataset object and
+        returns it.
+
+        Parameters
+        ----------
+        dataset : a HuggingFace dataset object
+            The HuggingFace dataset to summarize
+        column : str
+            The name of the column ofthe dataset with the text to summarize
+
+        Returns
+        -------
+        dataset : a HuggingFace dataset object
+            The HuggingFace dataset to summarize with the summarized text column
+        """
 
         summarization_outputs = []
 
@@ -65,6 +122,20 @@ class HuggingFaceModelSummary(ModelSummarization):
         return dataset
 
     def _summarize_text(self, text_to_summarize):
+        """ 
+        Method that takes in a piece of text and summarizes it by calling the 
+        tokenizer and model attributes and finally returns it.
+
+        Parameters
+        ----------
+        text_to_summarize : str
+            The piece of text to summarize
+
+        Returns
+        -------
+        summary_text : str
+            The summarized text
+        """
 
         inputs = self._tokenizer(
             [text_to_summarize], 
@@ -72,9 +143,14 @@ class HuggingFaceModelSummary(ModelSummarization):
             max_length=self._max_length,
             truncation=self._truncation)
 
-        summary_ids = self._model.generate(inputs["input_ids"], num_beams=4, max_length=self._max_length)
+        summary_ids = self._model.generate(
+            inputs["input_ids"], 
+            num_beams=4, 
+            max_length=self._max_length)
 
-        summary_text = self._tokenizer.batch_decode(summary_ids, 
-                                     skip_special_tokens=True, 
-                                     clean_up_tokenization_spaces=False)
+        summary_text = self._tokenizer.batch_decode(
+            summary_ids,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False)
+
         return summary_text
