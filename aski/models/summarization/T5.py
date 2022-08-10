@@ -9,7 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/t5
 
 """
 
-from aski.models.summarization.hugging_face_model_summary import HuggingFaceModelSummary
+from aski.models.summarization.hugging_face_model_summarization import HuggingFaceModelSummarization
 
 def get_t5_info():
     """ 
@@ -32,7 +32,7 @@ def get_t5_info():
 
     return model_info
 
-class T5(HuggingFaceModelSummary):
+class T5(HuggingFaceModelSummarization):
     """T5 model from 'Exploring the Limits of Transfer Learning with a Unified
      Text-to-Text Transformer' paper"""
 

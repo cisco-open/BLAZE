@@ -9,7 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/bart
 
 """
 
-from aski.models.summarization.hugging_face_model_summary import HuggingFaceModelSummary
+from aski.models.summarization.hugging_face_model_summarization import HuggingFaceModelSummarization
 
 def get_bart_info():
     """ 
@@ -32,7 +32,7 @@ def get_bart_info():
 
     return model_info
 
-class Bart(HuggingFaceModelSummary):
+class Bart(HuggingFaceModelSummarization):
     """BART model from 'Denoising Sequence-to-Sequence Pre-training for Natural 
     Language Generation, Translation, and Comprehension' paper"""
     

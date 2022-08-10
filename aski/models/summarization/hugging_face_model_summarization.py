@@ -13,12 +13,10 @@ from transformers.pipelines.base import KeyDataset
 
 from aski.models.summarization.model_summarization import ModelSummarization
 
-class HuggingFaceModelSummary(ModelSummarization):
-
-   """
+class HuggingFaceModelSummarization(ModelSummarization):
+    """
     A Superclass used to build HuggingFace models for summarization
 
-    ...
 
     Attributes
     ----------
@@ -46,14 +44,7 @@ class HuggingFaceModelSummary(ModelSummarization):
 
     """
 
-    def __init__(
-        self, 
-        model_name, 
-        max_length, 
-        model_max_length, 
-        truncation, 
-        model_info, 
-        verbose=True):
+    def __init__(self, model_name, max_length, model_max_length, truncation, model_info, verbose=True):
 
         self._info       = model_info
         self._max_length = max_length
