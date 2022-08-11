@@ -9,7 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/t5
 
 """
 
-from aski.models.summarization.hugging_face_model_summarization import HuggingFaceModelSummarization
+from aski.models.interfaces.hugging_face_model_summarization import HuggingFaceModelSummarization
 
 def get_t5_info():
     """ 

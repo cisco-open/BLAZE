@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipeline
 from transformers.pipelines.base import KeyDataset
 
-from aski.models.summarization.model_summarization import ModelSummarization
+from aski.models.interfaces.model_summarization import ModelSummarization
 
 class HuggingFaceModelSummarization(ModelSummarization):
     """

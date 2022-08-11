@@ -13,7 +13,7 @@ If on Windows, you will need to type ".\bin\elasticsearch.bat"
 
 """
 
-from aski.models.search.model_search import ModelSearch, answer_question, \
+from aski.models.interfaces.model_search import ModelSearch, answer_question, \
 create_index, index_into_elasticsearch, search, segment_documents
 
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering

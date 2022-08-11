@@ -12,7 +12,7 @@ This file provides an interface to the ColBERT model proposed in:
 """
 
 
-from aski.models.search.model_search import ModelSearch, segment_documents, \
+from aski.models.interfaces.model_search import ModelSearch, segment_documents, \
 answer_question
 
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering

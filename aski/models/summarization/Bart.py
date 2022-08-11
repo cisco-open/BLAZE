@@ -9,7 +9,7 @@ https://huggingface.co/docs/transformers/model_doc/bart
 
 """
 
-from aski.models.summarization.hugging_face_model_summarization import HuggingFaceModelSummarization
+from aski.models.interfaces.hugging_face_model_summarization import HuggingFaceModelSummarization
 
 def get_bart_info():
     """ 
