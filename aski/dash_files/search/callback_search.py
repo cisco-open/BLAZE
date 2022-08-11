@@ -40,6 +40,8 @@ def get_search_callbacks(app, page, params):
 
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
+            # TODO: REST API - Start indexing selected file with model 
+
             f_name = params._data_dict['states']['chosen_data']
 
             f = open(params._data_dict['states']['chosen_path'], "r")
@@ -59,6 +61,8 @@ def get_search_callbacks(app, page, params):
         ### Component 03 - Clicking "Ask Q" ###
 
         if ask_button == 1 and params._data_dict['states']['has_indexed']:
+
+            # TODO: REST API - Get answer, latency from model with given query 
 
             print(f"(callback_search) > About to ask: {query_text}")
 
@@ -111,6 +115,10 @@ def get_search_callbacks(app, page, params):
         ### Component 02 - Starting Indexing ###
 
         if bench_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
+
+            # TODO: REST API - Start indexing selected dataset with model 
+            # TODO: REST API - Have some way to read/dump information into a Queue/write last few results 
+
 
             # Spawn new process, dump to shared pipe every question --> read to generate figures!
             
@@ -220,6 +228,9 @@ def get_search_callbacks(app, page, params):
 
         if bench_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
+            # TODO: REST API - Start indexing selected dataset with model 
+            # TODO: REST API - Have some way to read/dump information into a Queue/write last few results 
+
             # Spawn new process, dump to shared pipe every question --> read to generate figures!
             
             m_name_1 = params._data_dict['states']['model_active'][0]
@@ -248,6 +259,7 @@ def get_search_callbacks(app, page, params):
 
 
         return page.get_page_comparison(params) 
+
 
 
     # === Callback for Model Comparison page (helper) === #

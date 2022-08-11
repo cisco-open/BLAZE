@@ -34,6 +34,8 @@ def get_summarization_callbacks(app, page, params):
 
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
+            # TODO: REST API - Start indexing selected file with model 
+
             f_name = params._data_dict['states']['chosen_data']
 
             f = open(params._data_dict['states']['chosen_path'], "r")
@@ -47,13 +49,12 @@ def get_summarization_callbacks(app, page, params):
             current_model = None 
 
             for model in params._data_dict['states']['model_objs']:
-
                 model_name = model._get_class_name()
 
                 if model_name == model_active:
-
                     current_model = model
 
+            # TODO: REST API - Get summarized result from model 
             result = current_model._summarize_text(f_content)
 
             params._data_dict['states']['has_indexed'] = True 

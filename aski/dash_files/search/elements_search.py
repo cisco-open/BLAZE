@@ -230,6 +230,8 @@ class SearchInterface():
 
     def get_latencyCard(self, params):
 
+        # TODO: REST API - For given model, get latency results 
+
         metrics =  {
             'latency': [-1, -1, -1],
             'search_avg': -1,
@@ -270,6 +272,8 @@ class SearchInterface():
 
 
     def get_accuracyCard(self, params):
+
+        # TODO: REST API - For given model, get accuracy results 
 
         metrics =  {
             'latency': [-1, -1, -1],
@@ -446,6 +450,8 @@ class SearchInterface():
 
         # Try getting results, if not, show old results 
 
+        # TODO: REST API - For given model that is currently being benchmarked, get results OR directly get stats (metrics)
+
         try:
             results = params._data_dict['states']['processes'][m_name][1].get_nowait()
             params._data_dict['states']['processes'][m_name][2] = results
@@ -561,6 +567,9 @@ class SearchInterface():
                     ])
             ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "vertical-align": "middle"}
             )
+
+
+        # TODO: REST API - For given model that is currently being benchmarked, get results OR all incorrect questions directly 
 
 
         results = params._data_dict['states']['processes'][m_name][2]
@@ -764,6 +773,8 @@ class SearchInterface():
             params._data_dict['states']['begun_queue'] = True
 
 
+        # TODO: REST API - For given model that is currently being benchmarked, get results OR directly get stats (metrics)
+
 
         # Try getting results, if not, show old results 
 
@@ -869,6 +880,8 @@ class SearchInterface():
                     ])
             ], outline=True, color="#049FD911", style={"margin-top": "15px", "color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "vertical-align": "middle", "overflow": "auto"}
             )
+
+        # TODO: REST API - For given model that is currently being benchmarked, get results OR all incorrect questions directly 
 
 
         results = params._data_dict['states']['processes'][m_name][2]

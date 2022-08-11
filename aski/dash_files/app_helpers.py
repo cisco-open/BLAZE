@@ -50,6 +50,8 @@ The following four functions are miscellaneous helpers.
 
 def gen_inputOptions(params):
 
+    # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
+
     n_squad, p_squad = [], []
     datasets = [dir[0] for dir in os.walk(params._data_dict['data']['DATA_PATH'])]
 
@@ -89,6 +91,8 @@ def gen_inputOptions(params):
 
 def gen_filePreview(name, path):
 
+    # TODO: REST API - Given a file choice, return text, size, and length information 
+
     f = open(path, "r")
 
     # read the content of file
@@ -97,123 +101,4 @@ def gen_filePreview(name, path):
     # "Preview of File: 17825 chars, 2772 words, 17.3 kilobytes"
     preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
     return preview, data
-
-
-# === (Misc Help) Initializes the data dictionary used throughout === #
-
-def __get_data():
-    return {
-        'Function': 'Search',
-        'benchmarking': False,
-        'comparing': False,
-        'model': {
-            'name': "ColBERT",
-            'title': "ColBERT - Scalable BERT-Based Search",
-                    'l_info': "https://arxiv.org/abs/2004.12832",
-                    'l_repo': "https://github.com/stanford-futuredata/ColBERT"
-        },
-        'data': {
-            "DATA_PATH": "./data/squad2_data",
-            "FILES_PATH": "./data/user_files",
-            "DATA_SETS": "1",  # Use * for all Squad Datasets,
-            "DEFAULT": "1973_oil_crisis"
-        },
-        'states': {
-            'has_input_file': False,
-            'has_indexed': False,
-            'chosen_name': None,
-            'chosen_path': None,
-            'm_in_use': 1,
-            'q_placeholder': "Once the input has been indexed, ask away...",
-            'a_placeholder': "... and the output will be shown here!"
-        },
-        'metrics': {
-            'latency': [-1, -1, -1],
-            'search_avg': -1,
-            'num_GPUs': 1,
-            'accuracy': [-1, -1]
-        },
-
-    }
-
-
-def initialize_data(data=None):
-    if not data:
-        data = __get_data()
-        
-    DATA_PATH = data["data"]["DATA_PATH"]
-    FILES_PATH = data["data"]["FILES_PATH"]
-    DATA_SETS = data["data"]["DATA_SETS"]
-    n_squad, p_squad = [], []
-    datasets = [dir[0] for dir in os.walk(DATA_PATH)]
-
-    for dir in datasets[1:]:
-        name = dir.split("/")[-1]
-        n_squad.append(name.replace("_", " "))
-        p_squad.append(dir + "/story.txt")
-
-    n_user, p_user = [], []
-    datasets = [dir for dir in os.listdir(FILES_PATH)]
-
-    for dir in datasets:
-        n_user.append(dir)
-        p_user.append(FILES_PATH + "/" + dir)
-
-    dummy_results = {
-        "name": None,
-        "root": None,
-        "questions": {
-            "num_qf": len([]),
-            "num_qs": 0,
-            "all_qs": [],
-            "tot_qs": 0,
-        },
-        "times": {
-            "avg_ts": 0,
-            "all_ts": [],
-        },
-        "metrics": {
-            "correct_arr": [],
-            "incorrect_d": {},
-            "accuracy_num": 0,
-            "accuracy_prc": 0,
-        }
-    }
-    data['inputs'] = {
-        'n_squad': n_squad,
-        'p_squad': p_squad,
-        'n_user': n_user,
-        'p_user': p_user
-    }
-
-    data['squad'] = {
-        'has_input_file': False,
-        'chosen_name': None,
-        'chosen_path': None,
-        'has_indexed': False,
-        'metrics_window': {
-
-        },
-        'incorrect_window': {
-
-        },
-        'begun_queue': False,
-        'old_results': {
-            "ColBERT": dummy_results,
-            "Elastic": dummy_results,
-        }
-    }
-    return data
-
-
-# === (Misc Help) Returns a spinny circle for loading screens === #
-
-def get_spinnyCircle():
-    return dbc.Card([
-        html.Div(
-            [
-                html.Center(dbc.Spinner(color="info", spinner_style={
-                            "width": "3rem", "height": "3rem"}), style={"margin-top": "50%"})
-            ])
-    ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
-    )
+    

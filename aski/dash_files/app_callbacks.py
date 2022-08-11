@@ -83,6 +83,8 @@ def run_app(data):
             params._data_dict['states']['model_active'] = [] 
             params._data_dict['states']['reset_presses'] = reset_button 
 
+            # TODO: REST API - Stop Currently Active Models (kill processes, if active)
+
             return page.get_page_custom(params) 
 
 
@@ -102,6 +104,9 @@ def run_app(data):
                 params._data_dict['states']['model_active'] = [] 
             
             params._reset_data_dict_states()
+
+            # TODO: REST API - Stop Model that was Deactivated or Activate New Model (kill processes, if active)
+
             print(f"(sidebar_functionality) > Updated model_active: {params._data_dict['states']['model_active']}")
 
 
@@ -109,6 +114,9 @@ def run_app(data):
         # If the user chooses to upload a new file 
 
         if file_name is not None:
+
+            # TODO: REST API - Push new file to REST API Server 
+
             content_type, content_string = file_content.split(',')
             decoded = base64.b64decode(content_string).decode("utf-8")
 

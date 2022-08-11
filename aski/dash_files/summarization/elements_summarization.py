@@ -189,6 +189,8 @@ class SummarizationInterface():
 
     def get_latencyCard(self, params):
 
+        # TODO: REST API - For given model, get latency results 
+
         metrics =  {
             'latency': [-1, -1, -1],
             'search_avg': -1,
@@ -229,6 +231,8 @@ class SummarizationInterface():
 
 
     def get_accuracyCard(self, params):
+
+        # TODO: REST API - For given model, get accuracy results 
 
         metrics =  {
             'latency': [-1, -1, -1],
