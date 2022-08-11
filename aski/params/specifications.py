@@ -90,20 +90,20 @@ class Specifications:
         custom : str
             The option to have the custom page or not
         benchmarking : str
-            The option to have the custom page or not
+            The option to have the benchmarking page or not
         comparing : str
-            The option to have the custom page or not
+            The option to have the comparing page or not
         yaml_path : str
             The path to dump the yaml file
 
         Examples
         --------
-        Here, we parse all the available models and datasetsfor search and 
+        Here, we parse all the available models and datasets for search and 
         generate the corresponding yaml file.
     
         >>> specs = Specifications()
-        >>>     specs._specs_to_yaml(title="Dashboard", task='search',
-        custom='true', benchmarking='true', comparing='true', yaml_path='yaml/trial_yaml.yaml')
+        >>> specs._specs_to_yaml(title="Dashboard", task='search',custom='true',
+        benchmarking='true', comparing='true', yaml_path='yaml/trial_yaml.yaml')
 
         """
 
