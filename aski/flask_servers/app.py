@@ -25,6 +25,21 @@ import subprocess
 
  #server_config = {}
 
+"""
+
+500 - internal server error
+400 - bad request
+404 - not found
+200 - successful
+
+states to retain: 
+- yaml file (nonlocal server_config)
+    o add models (indexed or not) to this 
+    o for each model process, have pid and other related info
+
+"""
+
+
 def run_app_server(app, port=3000, ip='localhost'):
 
     print("PID:", os.getpid())
@@ -105,4 +120,78 @@ def create_app(server_config):
         else:
             return {'Status': 'Error! Content-Type not supported!'}
 
+
+    
+    """
+    dataset-related
+    
+    """
+
+
+    @app.route('/files/all_files', methods=['GET'])
+    def change_my_name(): 
+        #nonlocal server_config
+        #return internal_func(request, response, server_config)
+        pass # Add imported function here!
+
+    @app.route('/files/file', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/files/initialize', methods=['POST'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/files/upload', methods=['POST'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/files/all_files', methods=['DELETE'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+
+
+    """
+    model-related
+    
+    """
+
+
+    @app.route('/models/all_models', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+    
+    @app.route('/models/model', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!    
+
+    @app.route('/models/initialize', methods=['POST'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+
+    @app.route('/models/kill', methods=['POST'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/models/summary', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/models/search', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/models/search/file', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+
+    @app.route('/models/benchmark', methods=['GET'])
+    def change_my_name(): 
+        pass # Add imported function here!
+    
+    
+    
     return app
+

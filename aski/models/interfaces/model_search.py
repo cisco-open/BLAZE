@@ -476,6 +476,10 @@ def squad_benchmark(queue, file_name, file_path, model_obj):
     results["questions"]["num_qs"] = tot_q
 
 
+    # TODO: go through all files and index at once (giant txt)
+    # TODO: make this a new function ^^ (test retriever + q/a)
+    # TODO: currently retriever has little work to do 
+
     # Start iterating through all answerable questions
 
     for q_file in questions:
