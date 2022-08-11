@@ -10,7 +10,7 @@ from datasets import load_dataset_builder, load_dataset, load_metric
 from random import randint
 from transformers import AutoTokenizer
 
-from aski.datasets.dataset import Dataset
+from aski.datasets.interfaces.dataset import Dataset
 
 # ==============================================================================
 # ======================= HUGGING FACE DATASET CLASS ===========================
