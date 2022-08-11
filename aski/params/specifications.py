@@ -87,11 +87,11 @@ class Specifications:
             The title for the dashboard
         task : str
             The task (here, either 'search' or 'summarization')
-        custom : str
+        custom : boolean
             The option to have the custom page or not
-        benchmarking : str
+        benchmarking : boolean
             The option to have the benchmarking page or not
-        comparing : str
+        comparing : boolean
             The option to have the comparing page or not
         yaml_path : str
             The path to dump the yaml file
@@ -102,8 +102,8 @@ class Specifications:
         generate the corresponding yaml file.
     
         >>> specs = Specifications()
-        >>> specs._specs_to_yaml(title="Dashboard", task='search',custom='true',
-        benchmarking='true', comparing='true', yaml_path='yaml/trial_yaml.yaml')
+        >>> specs._specs_to_yaml(title="Dashboard", task='search',custom=true,
+        benchmarking=true, comparing=true, yaml_path='yaml/trial_yaml.yaml')
 
         """
 
@@ -124,9 +124,10 @@ class Specifications:
 
         'function': 
         {
-        'task'        :task,
-        'custom'      :custom,
-        'benchmarking':benchmarking
+        'task'         : task,
+        'custom'       : custom,
+        'benchmarking' : benchmarking,
+        'comparing'    : comparing
         },
 
         'data': 
