@@ -1,4 +1,5 @@
 from importlib import import_module
+import yaml
 
 def get_list_models(list_models_str, task):
     """ 
@@ -35,3 +36,8 @@ def call_model_class_from_name(model_name, task):
     model = model_class()
 
     return model
+
+def dump_yaml(data, path):
+
+    with open(path, mode="wt", encoding="utf-8") as file:
+        yaml.dump(data, file)
