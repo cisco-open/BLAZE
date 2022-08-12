@@ -1,4 +1,5 @@
 from flask import Flask, request
+import requests_files
 import json
 import os
 import subprocess
@@ -120,7 +121,10 @@ def create_app(server_config):
         else:
             return {'Status': 'Error! Content-Type not supported!'}
 
-
+    @app.route('/feedback', methods=['POST'])
+    def feedback():
+        # request.json['feedback']
+        return {}, 200
     
     """
     dataset-related
@@ -129,26 +133,23 @@ def create_app(server_config):
 
 
     @app.route('/files/all_files', methods=['GET'])
-    def change_my_name(): 
-        #nonlocal server_config
-        #return internal_func(request, response, server_config)
-        pass # Add imported function here!
+    def all_files(): 
+        nonlocal server_config
+        return requests_files.all_files(request, server_config)
 
     @app.route('/files/file', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def file(): 
+        nonlocal server_config
+        return requests_files.file(request, server_config)
 
     @app.route('/files/initialize', methods=['POST'])
     def change_my_name(): 
         pass # Add imported function here!
 
-    @app.route('/files/upload', methods=['POST'])
-    def change_my_name(): 
-        pass # Add imported function here!
-
-    @app.route('/files/all_files', methods=['DELETE'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    @app.route('/files/upload', methods=['POST', 'DELETE'])
+    def upload():
+        nonlocal server_config
+        return requests_files.upload(request, server_config)
 
 
 
