@@ -42,7 +42,7 @@ def summarization(request, server_config):
     model_name        = json['model']
     text_to_summarize = json['content']
 
-    model = get_model_object_from_name(model_name, params)
+    model = get_model_object_from_name(model_name, server_config)
     summarized_text = model._summarize_text(text_to_summarize)
 
     return summarized_text

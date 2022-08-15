@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 from aski.flask_servers import requests_files
+from aski.utils.helpers import get_list_models
 
  #######
  # Create Server with different endpoints:
@@ -56,7 +57,11 @@ def json_input_validators(input_data, fields_to_be_present):
 
 
 def create_app(server_config):
+
     app = Flask(__name__)
+
+    # Initialize models by storing the models in a list in server config
+    server_config['model_objs'] = get_list_models(server_config['models'], server_config['function']['task']) 
 
     @app.route('/', methods=['GET'])
     def default():
