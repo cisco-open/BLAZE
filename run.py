@@ -17,12 +17,12 @@ if __name__ == "__main__":
 
     app = create_app(data)
 
-    p = Process(target=run_app, args=(data,))
-    p1 = Process(target=run_app_server, args=(app,))
+    p_dash = Process(target=run_app, args=(data,))
+    p_serv = Process(target=run_app_server, args=(app,))
 
-    p.start()
-    p1.start()
+    p_dash.start()
+    p_serv.start()
     
-    p1.join()
-    p.join()
+    p_serv.join()
+    p_dash.join()
 

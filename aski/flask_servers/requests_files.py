@@ -2,24 +2,15 @@ from glob import glob
 import os
 import os.path as path
 
+from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
- 
-"""
-3) POST/files/initialize - initialize datasets 
-    - Input: {"datasets": [str]}
-    - Output: {}
-    - Use Case: if user chooses squad + cnn dailymail in yaml
-    - Who's Doing: Advit
+
+
 """
 
-# ASKI/data
-FILES_DIR    = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', '..', 'data'))
+All files-related methods.
 
-# /ASKI/aski/models
-MODELS_DIR   = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', 'models/'))
-
-# /ASKI/aski/datasets
-DATASETS_DIR = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', 'datasets/'))
+"""
 
 def all_datasets(request, server_config):
 	"""
@@ -56,6 +47,20 @@ def file(request, server_config):
         return response_data, 200
     else:
         return "That file doesn't exist", 404
+
+def load(request, server_config): 
+    """
+    3) POST/files/load - load datasets 
+        - Input: {"datasets": [str]}
+        - Output: {}
+        - Use Case: if user chooses squad + cnn dailymail in yaml
+        - Who's Doing: Advit
+    """
+
+    # TODO: cannot implement since all data is currently local 
+    # TODO: implement squad, cnn dailymail as huggingface classes
+    # TODO: then, files are not local .txt's and must be loaded 
+    pass 
 
 def upload(request, server_config):
     """

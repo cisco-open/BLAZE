@@ -2,30 +2,11 @@ from flask import Flask, request
 import json
 import os
 import subprocess
+
 from aski.flask_servers import requests_files
+from aski.flask_servers import requests_models 
 from aski.utils.helpers import get_list_models
 
- #######
- # Create Server with different endpoints:
- # It takes in fields from the yaml file and creates server with those properties.
- # Endpoints are :
- # GET directory
- # POST default_file
- # GET model1 name
- # GET model2 name
- # GET running_model_name
- # GET default_model1 name
- # GET most_recent_metrics
- # POST summary  (with file)
- # POST search
- # POST selected_file
- # POST index_files / pre-process it
- # POST upload_user_file
- # GET/POST state
- # GET/POST function (either benchmarking/comparing)
- #######
-
- #server_config = {}
 
 """
 
@@ -63,6 +44,32 @@ def create_app(server_config):
     # Initialize models by storing the models in a list in server config
     server_config['model_objs'] = get_list_models(server_config['models'], server_config['function']['task']) 
 
+    print("DUMPING SERVER_CONFIG", server_config)
+    
+    """
+    
+    Things we can cut out of server_config: 
+
+    - 'Title'
+    - 'function'
+
+    Things that are currently in server_config: 
+
+    - 'data' : {'DATA_PATH', 'DATA_SETS', 'DEFAULT', 'FILES_PATH'} <-- rework this! 
+    - 'models' : ['m1_name']
+    - 'model_objs' : [m1_obj]
+
+    What server_config should eventually look like: 
+
+    - 'data_names' : ['Squad', 'CNN Dailymail', 'User Files']
+    - 'data_objs' : [Squad.py obj, CNNDailyMail.py obj, UserFiles.obj]
+    - 'model_names' : [ElasticBERT, T5]
+    - 'model_objs' : [ElasticBERT.py obj, T5.py obj]
+    
+    """
+
+    # 01) General methods. 
+    
     @app.route('/', methods=['GET'])
     def default():
         nonlocal server_config
@@ -73,69 +80,13 @@ def create_app(server_config):
         nonlocal server_config
         return json.dumps({'data': server_config['data']})
 
-    @app.route('/set_dataset_file', methods=['POST'])
-    def set_filename():
-        nonlocal server_config
-        content_type = request.headers.get('Content-Type')
-        if (content_type == 'application/json'):
-            data = request.json
-            status = json_input_validators(data, ['filename'])
-            if 'Error' in status.keys():
-                print('Error! Ignoring wrong request')
-                return {'Status': status['Error']}
-            try:
-                f = open(server_config['data']
-                          ['DATA_PATH']+'/'+data['filename'], 'r')
-                f.read()
-            except:
-                print('Selected file does not exist in dataset')
-                return {'Status': 'Error! Incorrect filename in dataset!'}
-            server_config['data']['DEFAULT'] = data['filename']
-            return {'Status': 'OK'}
-        else:
-            return {'Status': 'Error! Content-Type not supported!'}
-
-    @app.route('/upload_user_file', methods=['POST'])
-    def upload_userfile():
-        nonlocal server_config
-        content_type = request.headers.get('Content-Type')
-        if (content_type == 'application/json'):
-            data = request.json
-            status = json_input_validators(data, ['filename', 'filecontents'])
-            if 'Error' in status.keys():
-                return {'Status': status['Error']}
-            try:
-                content_string = data['filecontents']
-                decoded = content_string
-                #decoded = base64.b64decode(content_string).decode("utf-8")
-
-                FILES_DATA_PATH = server_config['data']['FILES_PATH']
-
-                f_path = FILES_DATA_PATH + "/" + data['filename']
-
-                f = open(f_path, "w")
-                f.write(decoded)
-                f.close()
-                server_config['states']['has_input_file'] = True
-                server_config['states']['has_indexed'] = False
-            except:
-                print('Selected file does not exist in dataset')
-                return {'Status': 'Error! Incorrect filename in dataset!'}
-            server_config['data']['DEFAULT'] = data['filename']
-            return {'Status': 'OK'}
-        else:
-            return {'Status': 'Error! Content-Type not supported!'}
-
     @app.route('/feedback', methods=['POST'])
     def feedback():
         # request.json['feedback']
         return {}, 200
     
-    """
-    dataset-related
-    
-    """
 
+    # 02) Dataset methods.
 
     @app.route('/files/all_datasets', methods=['GET'])
     def all_datasets(): 
@@ -147,9 +98,11 @@ def create_app(server_config):
         nonlocal server_config
         return requests_files.file(request, server_config)
 
-    @app.route('/files/initialize', methods=['POST'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    @app.route('/files/load', methods=['POST'])
+    def load(): 
+        nonlocal server_config
+        return requests_files.load(request, server_config)
+
 
     @app.route('/files/upload', methods=['POST', 'DELETE'])
     def upload():
@@ -158,46 +111,47 @@ def create_app(server_config):
 
 
 
-    """
-    model-related
-    
-    """
-
+    # 03) Model methods.
 
     @app.route('/models/all_models', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
-    
+    def all_models(): 
+        nonlocal server_config
+        return requests_models.all_models(request, server_config)
+
     @app.route('/models/model', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!    
+    def model(): 
+        nonlocal server_config
+        return requests_models.model(request, server_config)
 
     @app.route('/models/initialize', methods=['POST'])
-    def change_my_name(): 
-        pass # Add imported function here!
-
-
-    @app.route('/models/kill', methods=['POST'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def initialize(): 
+        nonlocal server_config
+        return requests_models.initialize(request, server_config)
 
     @app.route('/models/summary', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def summary(): 
+        nonlocal server_config
+        return requests_models.summary(request, server_config)
 
     @app.route('/models/search', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def search(): 
+        nonlocal server_config
+        return requests_models.search(request, server_config)
 
     @app.route('/models/search/file', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def search_file(): 
+        nonlocal server_config
+        return requests_models.search_file(request, server_config)
 
     @app.route('/models/benchmark', methods=['GET'])
-    def change_my_name(): 
-        pass # Add imported function here!
+    def benchmark(): 
+        nonlocal server_config
+        return requests_models.benchmark(request, server_config)
     
-    
+    @app.route('/models/kill', methods=['POST'])
+    def kill(): 
+        nonlocal server_config
+        return requests_models.kill(request, server_config)
     
     return app
 
