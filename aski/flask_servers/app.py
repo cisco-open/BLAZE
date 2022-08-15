@@ -1,8 +1,8 @@
 from flask import Flask, request
-import requests_files
 import json
 import os
 import subprocess
+from aski.flask_servers import requests_files
 
  #######
  # Create Server with different endpoints:
@@ -132,10 +132,10 @@ def create_app(server_config):
     """
 
 
-    @app.route('/files/all_files', methods=['GET'])
-    def all_files(): 
+    @app.route('/files/all_datasets', methods=['GET'])
+    def all_datasets(): 
         nonlocal server_config
-        return requests_files.all_files(request, server_config)
+        return requests_files.all_datasets(request, server_config)
 
     @app.route('/files/file', methods=['GET'])
     def file(): 

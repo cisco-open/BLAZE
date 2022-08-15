@@ -2,32 +2,35 @@ from glob import glob
 import os
 import os.path as path
 
+from aski.params.specifications import Specifications
+ 
+"""
+3) POST/files/initialize - initialize datasets 
+    - Input: {"datasets": [str]}
+    - Output: {}
+    - Use Case: if user chooses squad + cnn dailymail in yaml
+    - Who's Doing: Advit
 """
 
-dataset/file-related
+# ASKI/data
+FILES_DIR    = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', '..', 'data'))
 
-    1) GET/files/all_files - all available files (datasets/strings)
+# /ASKI/aski/models
+MODELS_DIR   = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', 'models/'))
+
+# /ASKI/aski/datasets
+DATASETS_DIR = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', 'datasets/'))
+
+def all_datasets(request, server_config):
+	"""
+    1) GET/files/all_datasets - all available datasets (datasets)
         - Input: {}
-        - Output: {"datasets": {"name": [str]}}
+        - Output: {"datasets_summarization": {"name": [str]}, "datasets_search": {"name": [str]}}
         - Use Case: Generate that dropdown for the dash 
         - Who's Doing: Thomas
-
-    
-
-    3) POST/files/initialize - initialize datasets 
-        - Input: {"datasets": [str]}
-        - Output: {}
-        - Use Case: if user chooses squad + cnn dailymail in yaml
-        - Who's Doing: Advit
-
-    
-
-
-"""
-
-# /aski/data
-FILES_DIR = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', '..', 'data'))
-
+    """
+	specs = Specifications(MODELS_DIR, DATASETS_DIR)
+	return specs._list_datasets_summarization, specs._list_datasets_search
 
 def file(request, server_config):
     """
@@ -53,7 +56,6 @@ def file(request, server_config):
         return response_data, 200
     else:
         return "That file doesn't exist", 404
-
 
 def upload(request, server_config):
     """
