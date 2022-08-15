@@ -65,6 +65,7 @@ def create_app(server_config):
     - 'data_objs' : [Squad.py obj, CNNDailyMail.py obj, UserFiles.obj]
     - 'model_names' : [ElasticBERT, T5]
     - 'model_objs' : [ElasticBERT.py obj, T5.py obj]
+    - 'processes' : {'name' : 'ElasticBERT', 'pid' : Process, 'queue' : Queue, 'res' : dict()}
     
     """
 
