@@ -41,3 +41,29 @@ def dump_yaml(data, path):
 
     with open(path, mode="wt", encoding="utf-8") as file:
         yaml.dump(data, file)
+
+def get_current_model(params):
+
+    model_active = params._data_dict['states']['model_active'][0]
+    current_model = None 
+
+    for model in params._data_dict['states']['model_objs']:
+        model_name = model._get_class_name()
+
+        if model_name == model_active:
+            current_model = model
+
+    return current_model
+
+def get_model_object_from_name(model_name, params):
+
+    model_active = model_name
+    current_model = None 
+
+    for model in params._data_dict['states']['model_objs']:
+        model_name = model._get_class_name()
+
+        if model_name == model_active:
+            current_model = model
+
+    return current_model
