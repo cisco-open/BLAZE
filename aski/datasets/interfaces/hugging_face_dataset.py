@@ -29,17 +29,9 @@ class HuggingFaceDataset(Dataset):
 		self._dataset_description = self._dataset_builder.info.description
 		self._dataset_features    = self._dataset_builder.info.features
 
-	def _tokenise_dataset(self, text_column_name):
-
-		def tokenization(example):
-			return tokenizer(example[text_column_name], padding=True, truncation=True)
-
-		tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-		self._tokenized_dataset = self._dataset.map(tokenization, batched=True)
-
 	def _compute_metric(self, metric_name, model):
 
-		metric = load_metric(metric_name, self.dataset_name)
+		metric = load_metric(metric_name, self._dataset_name)
 
 		#model_predictions = model(model_inputs)
 		#final_score = metric.compute(predictions=model_predictions, references=gold_references)

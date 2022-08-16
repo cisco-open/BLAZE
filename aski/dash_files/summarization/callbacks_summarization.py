@@ -6,8 +6,7 @@ from aski.utils.helpers import get_current_model
 def get_summarization_callbacks(app, page, params): 
    
    
-    # === Callback for Custom Question/Answering page === #
-
+    # === Callback for Custom Summarization page === #
     @app.callback(Output("custom-content", "children"),
                   [Input("summarization-custom-choose-file", "value"),
                    Input("summarization-custom-begin-index", "n_clicks")],
@@ -20,7 +19,6 @@ def get_summarization_callbacks(app, page, params):
 
             # Update the params object to signify that the user chose a file
             params._data_dict['states']['has_input_file'] = True 
-
 
             # If the user reads from squad
             if (file_chosen.split("/")[-1] == "story.txt"):

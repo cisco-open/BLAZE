@@ -1,7 +1,7 @@
 from importlib import import_module
 import yaml
 
-def get_list_models(list_models_str, task):
+def get_list_objects(list_objects_str, task, object_type):
     """ 
     Function that takes as input a list of strings of the models we want to use
     for the dashboard and that returns a list of the different models as 
@@ -16,23 +16,25 @@ def get_list_models(list_models_str, task):
         List of the models we want to use for the dashboard as Objects
     """
 
-    list_models_obj = []
+    list_objects = []
 
-    for model_name in list_models_str:
-      model = call_model_class_from_name(model_name, task)
+    for object_name in list_objects_str:
+      object_var = call_object_class_from_name(object_name, task, object_type)
       
-      list_models_obj.append(model)
+      list_objects.append(object_var)
 
-    return list_models_obj
+    return list_objects
 
-def call_model_class_from_name(model_name, task):
+def call_object_class_from_name(object_name, task, object_type):
 
-    model_class = import_module("aski.models." + task + '.' + model_name) \
-                            .__getattribute__(model_name) 
+    # Get the class as a variable
+    object_class = import_module("aski." + object_type + '.' + task + '.' + object_name) \
+                            .__getattribute__(object_name) 
 
-    model = model_class()
+    # Call the class
+    object_var = object_class()
 
-    return model
+    return object_var
 
 def dump_yaml(data, path):
 
