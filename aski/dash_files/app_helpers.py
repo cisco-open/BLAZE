@@ -35,7 +35,7 @@ import plotly.express as px
 import numpy as np
 import os
 
-from aski.dash_files.app_constants import *
+from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
 
 
 def get_dataset_options(params):
@@ -59,7 +59,7 @@ def gen_inputOptions(params):
 
     # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
     n_squad, p_squad = [], []
-    datasets = [dir[0] for dir in os.walk(params._data_dict['data']['DATA_PATH'])]
+    datasets = [dir[0] for dir in os.walk(DATA_PATH)]
 
     for dir in datasets[1:]:
         name = dir.split("/")[-1]
@@ -67,11 +67,11 @@ def gen_inputOptions(params):
         p_squad.append(dir + "/story.txt")
 
     n_user, p_user = [], []
-    datasets = [dir for dir in os.listdir(params._data_dict['data']['FILES_PATH'])]
+    datasets = [dir for dir in os.listdir(FILES_PATH)]
 
     for dir in datasets:
         n_user.append(dir)
-        p_user.append(params._data_dict['data']['FILES_PATH']+ "/" + dir)
+        p_user.append(FILES_PATH+ "/" + dir)
 
     files = {
         'n_squad': n_squad,

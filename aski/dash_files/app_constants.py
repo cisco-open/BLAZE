@@ -90,3 +90,8 @@ FONT_QUICKSAND = "https://fonts.googleapis.com/css?family=Quicksand&display=swap
 
 CISCO_LINK = "https://research.cisco.com/"
 CISCO_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/2560px-Cisco_logo_blue_2016.svg.png"
+
+DATA_PATH  = './data/squad'
+FILES_PATH = './data/user_files'
+DATA_SETS  = '1'
+DEFAULT    = '1973_oil_crisis'
