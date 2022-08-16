@@ -13,3 +13,7 @@ models:
 datasets:
 - CNNDailyMail
 - XSum
+metrics:
+- BertScore
+- Bleu
+- Rouge
