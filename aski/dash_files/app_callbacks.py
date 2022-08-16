@@ -32,10 +32,6 @@ def run_app(data):
 
     models = params._data_dict['models']
     
-    print(f"(run_app) > Selected models: {models}")
-    print(f"(run_app) > Params: {params._get_params()}\n")
-
-
     # Using the parameters class object ONLY! 
     content = html.Div([get_content(params)], id="l0-page-content")
 
@@ -70,10 +66,6 @@ def run_app(data):
                   [State("sidebar-file-button", "filename")])
 
     def sidebar_functionality(model_choice, page_choice, file_content, reset_button, file_name): 
-        
-        print(f"(sidebar_funcionality) > Chosen model(s): {model_choice}")
-        print(f"(sidebar_funcionality) > Chosen page: {page_choice}")
-
 
         # If the user chooses to reset 
         if reset_button == params._data_dict['states']['reset_presses'] + 1: 
@@ -104,12 +96,6 @@ def run_app(data):
                 params._data_dict['states']['model_active'] = [] 
             
             params._reset_data_dict_states()
-
-            # TODO: REST API - Stop Model that was Deactivated or Activate New Model (kill processes, if active)
-
-            print(f"(sidebar_functionality) > Updated model_active: {params._data_dict['states']['model_active']}")
-
-
 
         # If the user chooses to upload a new file 
 

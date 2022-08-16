@@ -80,8 +80,6 @@ class SummarizationInterface():
         else: 
             begin_text = f"Begin {params._data_dict['states']['model_active'][0]} Indexing"
 
-        print(f"Placeholder is {placeholder}")
-
         inputBox = dbc.Card([
             dbc.CardBody([
                             html.Center(html.H5("Input Text(s)", style={

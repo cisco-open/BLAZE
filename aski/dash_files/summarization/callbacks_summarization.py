@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, Input, Output, State
 
 from aski.dash_files.app_constants import * 
-
+from aski.utils.helpers import get_current_model
 
 def get_summarization_callbacks(app, page, params): 
    
@@ -15,26 +15,27 @@ def get_summarization_callbacks(app, page, params):
 
     def render_custom_content(file_chosen, index_button):
 
-        ### Component 01 - Selecting User File ###
+        ### Component 01 - Selecting User File
+        if file_chosen is not None:
 
-        if file_chosen:
-
+            # Update the params object to signify that the user chose a file
             params._data_dict['states']['has_input_file'] = True 
 
+
+            # If the user reads from squad
             if (file_chosen.split("/")[-1] == "story.txt"):
                 params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-2]).replace("_", " ")
+
+            # If the user uses a custom file
             else:
                 params._data_dict['states']['chosen_data'] = (
                     file_chosen.split("/")[-1]).replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
 
-        ### Component 02 - Indexing (Init) ###
-
+        ### Component 02 - Summarizing the file  
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
-
-            # TODO: REST API - Start indexing selected file with model 
 
             f_name = params._data_dict['states']['chosen_data']
 
@@ -43,18 +44,11 @@ def get_summarization_callbacks(app, page, params):
             f.close()
             f_content = "".join(lines)
 
-            print(f" > Begun summarizing {params._data_dict['states']['model_active']}")
-            
             model_active = params._data_dict['states']['model_active'][0]
-            current_model = None 
+            print(f" > Begun summarizing with {model_active}...")
+            
+            current_model = get_current_model(params) 
 
-            for model in params._data_dict['states']['model_objs']:
-                model_name = model._get_class_name()
-
-                if model_name == model_active:
-                    current_model = model
-
-            # TODO: REST API - Get summarized result from model 
             result = current_model._summarize_text(f_content)
 
             params._data_dict['states']['has_indexed'] = True 

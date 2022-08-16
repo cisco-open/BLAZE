@@ -51,7 +51,9 @@ class Parameters:
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
 
+        print(f"\n==== Loading Models ===\n")
         self._data_dict['states']['model_objs'] = get_list_models(self._data_dict['models'], self._data_dict['function']['task']) 
+        
         self._data_dict['states']['model_active'] = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
