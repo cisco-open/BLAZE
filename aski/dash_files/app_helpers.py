@@ -38,20 +38,26 @@ import os
 from aski.dash_files.app_constants import *
 
 
+def get_dataset_options(params):
 
-"""
+    dataset_names = []
+    datasets = params._data_dict['states']['dataset_objs']
+    
+    for dataset in datasets:
+        dataset_name = dataset._get_class_name()
+        dataset_names.append(dataset_name)
 
-The following four functions are miscellaneous helpers.
+    options = []
 
-"""
+    for i in range(len(dataset_names)):
+        options.append(
+            {"label": dataset_names[i], "value": dataset_names[i]})
 
-# === (Misc Help) Merges SQUAD files with user-uploaded files === #
-
+    return options
 
 def gen_inputOptions(params):
 
     # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
-
     n_squad, p_squad = [], []
     datasets = [dir[0] for dir in os.walk(params._data_dict['data']['DATA_PATH'])]
 
@@ -76,10 +82,18 @@ def gen_inputOptions(params):
 
     options = []
 
+    # Add an unclickable option for it to look nicer
+    options.append({"label": "-- User files --", "disabled": True})
+
+    # Add the user files
     for i in range(len(files['n_user'])):
         options.append(
             {"label": files['n_user'][i], "value": files['p_user'][i]})
 
+    # Add an unclickable option for it to look nicer
+    options.append({"label": "-- Squad files --", "disabled": True})
+
+    # Add the Squad files
     for i in range(len(files['n_squad'])):
         options.append(
             {"label": files['n_squad'][i], "value": files['p_squad'][i]})

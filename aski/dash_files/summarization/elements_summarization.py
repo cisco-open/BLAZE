@@ -10,10 +10,13 @@ class SummarizationInterface():
     def __init__(self, params):
         self.params = params 
 
+# ==============================================================================
+# ================================== PAGES =====================================
+# ==============================================================================
+
     def get_page(self): 
         return self.get_page_custom(self.params)
 
-    
     def get_page_custom(self, params): 
         model_active = params._data_dict['states']['model_active']
         model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model_active]
@@ -38,7 +41,6 @@ class SummarizationInterface():
                     style=CONTENT_STYLE), 
                 id="custom-content")
 
-
     def get_page_benchmark(self, params): 
         return html.Div(html.Div([
             dbc.Row([
@@ -60,20 +62,15 @@ class SummarizationInterface():
     def get_page_comparison(self, params): 
         pass 
 
-
-
-    """
-
-    The following functions are for Custom Summarization: 
-    
-    """
+# ==============================================================================
+# ========================== CUSTOM SUMMARIZATION ==============================
+# ==============================================================================
 
     def get_titleCard(self, modelText):
         titleCard = html.Center(
             dbc.Button(modelText, color="info", outline=True, style={'font-family': "Quicksand", "font-size": "50px", "padding": "1rem", "margin-bottom": "2rem"},
                     ))
         return titleCard
-
 
     def get_inputBox(self, params):
 
@@ -152,7 +149,6 @@ class SummarizationInterface():
         )
         return inputBox
 
-
     def get_outputBox(self, params):
         outputBox = dbc.Card([
             dbc.CardBody([
@@ -195,7 +191,6 @@ class SummarizationInterface():
         )
         return outputBox
 
-
     def get_latencyCard(self, params):
 
         # TODO: REST API - For given model, get latency results 
@@ -237,7 +232,6 @@ class SummarizationInterface():
         )
 
         return latencyCard
-
 
     def get_accuracyCard(self, params):
 
@@ -294,120 +288,15 @@ class SummarizationInterface():
         )
         return accuracyCard
 
-    def get_latencyCard(self, params):
-
-        # TODO: REST API - For given model, get latency results 
-
-        metrics =  {
-            'latency': [-1, -1, -1],
-            'search_avg': -1,
-            'num_GPUs': 1,
-            'accuracy': [-1, -1]
-        }
-
-        table_header = [
-            html.Thead(html.Tr([html.Th("Step"), html.Th("Time (s)")]))
-        ]
-
-        row1 = html.Tr([html.Td("Load"), html.Td(metrics["latency"][0])])
-        row2 = html.Tr([html.Td("Index"), html.Td(metrics["latency"][1])])
-        row3 = html.Tr([html.Td("Search"), html.Td(metrics["latency"][2])])
-
-        table_body = [html.Tbody([row1, row2, row3])]
-
-        table = dbc.Table(table_header + table_body,
-                        bordered=True, style={"color": WHITE})
-
-        latencyCard = dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5("Latency", style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    table,
-                    html.Br(),
-                    html.H5(f"Number of GPUs: {metrics['num_GPUs']}", style={
-                            "font-family": "Quicksand", "color": WHITE}),
-                    html.H5(f"Search Time Avg: {metrics['search_avg']}", style={
-                            "font-family": "Quicksand", "color": WHITE})
-                ]),
-
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
-        )
-
-        return latencyCard
-
-
-    def get_accuracyCard(self, params):
-
-        # TODO: REST API - For given model, get accuracy results 
-
-        metrics =  {
-            'latency': [-1, -1, -1],
-            'search_avg': -1,
-            'num_GPUs': 1,
-            'accuracy': [-1, -1]
-        }
-
-        model = params._data_dict['states']['model_active']
-
-        if not model: 
-            link = ""
-            repo = "" 
-
-            model_text = "<>"
-        
-        else: 
-            model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model]
-            print(model_obj)
-            link = model_obj[0]._info['link']
-            repo = model_obj[0]._info['repo']
-
-            model_text = model[0]
-
-        row21 = html.Tr(
-            [html.Td("% Correct"), html.Td(f"{metrics['accuracy'][0]} %")])
-        row22 = html.Tr(
-            [html.Td("Avg Time"), html.Td(f"{metrics['accuracy'][1]} s")])
-
-        table2_body = [html.Tbody([row21, row22])]
-        table2 = dbc.Table(table2_body, bordered=True, style={"color": WHITE})
-
-        accuracyCard = dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5("Accuracy", style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    html.Center(html.H5("Tested on SQUAD questions (only for SQUAD datasets)", style={
-                                "font-family": "Quicksand", "color": WHITE, "padding": "0rem 0rem 1rem 0rem"})),
-                    table2,
-                    html.Br(),
-                    html.Center(html.H5(html.A(f"Learn more about {model_text}.", href=link, target="_blank", style={
-                                "font-family": "Quicksand", "color": WHITE}))),
-                    html.Center(html.H5(html.A(f"View {model_text} Github Repo.", href=repo, target="_blank", style={
-                                "font-family": "Quicksand", "color": WHITE})))
-
-                ]),
-
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
-        )
-        return accuracyCard
-
-
-
-
-    """
-
-    The following four functions are for the Solo Benchmark page.
-
-
-    """
-
+# ==============================================================================
+# ======================= BENCHMARKING SUMMARIZATION ===========================
+# ==============================================================================
 
     def get_bench_TitleCard(self, params):
 
         default = params._data_dict['states']['chosen_data']
         if default is None:
-            default = "Please select an input file"
+            default = "Please select a dataset."
 
         if len(params._data_dict['states']['model_active']) != 1: 
             begin_text = "Please select a model"
@@ -432,7 +321,7 @@ class SummarizationInterface():
                         dbc.Col([
                             dbc.Select(
                                 id="search-bench-choose-file",
-                                options=gen_inputOptions(params),
+                                options=get_dataset_options(params),
                                 style={"background": "#888888",
                                     "color": WHITE, "font-family": "Quicksand"},
                                 placeholder=default
@@ -709,4 +598,12 @@ class SummarizationInterface():
 
         return dcc.Graph(id="time-series", figure=line, style={"height": "9rem"})
 
-
+    def get_spinnyCircle(self):
+        return dbc.Card([
+            html.Div(
+                [
+                    html.Center(dbc.Spinner(color="info", spinner_style={
+                                "width": "3rem", "height": "3rem"}), style={"margin-top": "10rem"})
+                ])
+        ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "24rem", "vertical-align": "middle"}
+        )

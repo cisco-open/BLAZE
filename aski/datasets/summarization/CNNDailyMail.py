@@ -10,5 +10,5 @@ from aski.datasets.interfaces.hugging_face_dataset import HuggingFaceDataset
 class CNNDailyMail(HuggingFaceDataset):
 
 	def __init__(self):
-		super().__init__(dataset_name='cnn_dailymail', config='3.0.0')
+		super().__init__(dataset_name='cnn_dailymail', config='3.0.0', class_name='CNNDailyMail')
 		

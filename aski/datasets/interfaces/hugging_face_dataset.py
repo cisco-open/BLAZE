@@ -19,8 +19,9 @@ from aski.datasets.interfaces.dataset import Dataset
 
 class HuggingFaceDataset(Dataset):
 
-	def __init__(self, dataset_name, config):
+	def __init__(self, dataset_name, config, class_name):
 
+		self._class_name          = class_name
 		self._config              = config
 		self._dataset_name        = dataset_name
 		self._dataset             = load_dataset(self._dataset_name, config)
@@ -28,6 +29,12 @@ class HuggingFaceDataset(Dataset):
 														config)
 		self._dataset_description = self._dataset_builder.info.description
 		self._dataset_features    = self._dataset_builder.info.features
+
+	def _get_class_name(self):
+		return self._class_name
+
+	def _get_dataset_name(self):
+		return self._dataset_name
 
 	def _compute_metric(self, metric_name, model):
 

@@ -45,14 +45,18 @@ class Parameters:
         self._data_dict['states']['chosen_path'] = None 
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
+        self._data_dict['states']['has_dataset'] = False  
+
 
         print(f"\n==== Loading Datasets ===\n")
-        self._data_dict['states']['dataset_objs'] = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
+
+        self._data_dict['states']['dataset_objs']   = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
+        self._data_dict['states']['dataset_active'] = [] 
 
         print(f"\n==== Loading Models ===\n")
-        self._data_dict['states']['model_objs']   = get_list_objects(self._data_dict['models'], self._data_dict['function']['task'], 'models') 
-
-        self._data_dict['states']['model_active'] = [] 
+        
+        self._data_dict['states']['model_objs']     = get_list_objects(self._data_dict['models'], self._data_dict['function']['task'], 'models') 
+        self._data_dict['states']['model_active']   = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
