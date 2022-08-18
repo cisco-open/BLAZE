@@ -1,34 +1,3 @@
-"""
-
-This file stores all other elements utilized by the ASKI Dashboard.
-All functions (as well as their descriptions) are listed below:
-
-Comparing Models Page
-
-    get_compareTitleCard(data) - titles of models and option to choose SQUAD dataset
-    get_compareMetricsCard(data, pQueue, m_name) - shows progress, accuracy, latency
-    get_compareIncorrectCard(data, m_name) - shows all incorrectly-answered Q's
-    get_compare_spinnyCircle() - helper function to be shown while model is starting
-
-
-Solo Benchmark Page
-
-    get_squadTitleCard(data) - titles of chosen model and option to choose SQUAD dataset
-    get_squadMetricsCard(data, pQueue) - shows progress, accuracy, and latency
-    get_squadIncorrectCard(data) - shows all incorrectly-ansswered Q's
-    get_squadTimeGraph(data) - generates graph of time taken vs. question #
-
-
-Miscellaneous Helpers
-
-    get_inputOptions(files) - merges squad files with user files
-    get_filePreview(name, path) - given path, returns text of file
-    initialize_data() - intializes the data dictionary used by app
-    get_spinnyCircle() - returns a simple spinny circle for loading
-
-"""
-
-
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 import plotly.express as px
@@ -37,6 +6,22 @@ import os
 
 from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
 
+def get_object_options(params, object_type):
+
+    object_names = []
+    objects = params._data_dict['states'][object_type + '_objs']
+    
+    for object_iter in objects:
+        object_name = object_iter._get_class_name()
+        object_names.append(object_name)
+
+    options = []
+
+    for i in range(len(object_names)):
+        options.append(
+            {"label": object_names[i], "value": object_names[i]})
+
+    return options
 
 def get_dataset_options(params):
 
@@ -102,7 +87,6 @@ def gen_inputOptions(params):
 
 
 # === (Misc Help) Returns text of a file in preview format === #
-
 def gen_filePreview(name, path):
 
     # TODO: REST API - Given a file choice, return text, size, and length information 

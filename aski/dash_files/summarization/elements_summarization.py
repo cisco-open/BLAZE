@@ -3,7 +3,7 @@ from dash import html, dcc
 
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_helpers import *
-
+from aski.utils.helpers import get_object_from_name
 
 class SummarizationInterface(): 
 
@@ -42,20 +42,23 @@ class SummarizationInterface():
                 id="custom-content")
 
     def get_page_benchmark(self, params): 
+
+        model_active = params._data_dict['states']['model_active']
+        model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model_active]
+
+        if len(model_objs) == 1: 
+            model_title = f"{model_objs[0]._info['desc']}"
+        else:
+            model_title = "Please select a model from the left."
+
         return html.Div(html.Div([
+            self.get_titleCard(model_title),
             dbc.Row([
                 dbc.Col([
-                    self.get_bench_TitleCard(params),
-                    html.Div(self.get_bench_MetricsCard(params), id="search-bench-metrics-content")
-                ], width=4),
-                dbc.Col([
-                    html.Div(self.get_bench_IncorrectCard(params), id="search-bench-incorrect-content")
-                ]),
-                dcc.Interval(
-                    id='search-bench-interval-component',
-                    interval=1*1000,  # in milliseconds
-                    n_intervals=0,
-                )
+                    self.get_bench_dataset_card(params),
+                    html.Div(self.get_bench_metric_card(params)),
+                    html.Div(self.get_begin_summarization_button(params)),
+                ], width=4)
             ])
         ], style=CONTENT_STYLE), id="bench-content")
 
@@ -170,16 +173,6 @@ class SummarizationInterface():
                 ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand"}),
 
                 html.Br(),
-
-                # dbc.Row([
-                #     dbc.Col([
-                #         self.get_latencyCard(params)
-                #     ]),
-                #     dbc.Col([
-                #         self.get_accuracyCard(params)
-                #     ])
-                # ]),
-
             ],
                 className="mb-3",
                 style={"width": "100%", "height": "42rem"},
@@ -292,17 +285,21 @@ class SummarizationInterface():
 # ======================= BENCHMARKING SUMMARIZATION ===========================
 # ==============================================================================
 
-    def get_bench_TitleCard(self, params):
+    def get_bench_dataset_card(self, params):
 
-        default = params._data_dict['states']['chosen_data']
-        if default is None:
+        default = None
+
+        # If no dataset has been selected
+        if len(params._data_dict['states']['dataset_active']) == 0:
             default = "Please select a dataset."
+        else:
+            dataset = params._data_dict['states']['dataset_active'][0]
+            default = get_object_from_name(dataset, params, 'dataset')._get_class_name()
 
         if len(params._data_dict['states']['model_active']) != 1: 
             begin_text = "Please select a model"
         else: 
             begin_text = f"Begin {params._data_dict['states']['model_active'][0]} Benchmarking"
-
 
         return dbc.Card([
             html.Div(
@@ -317,286 +314,82 @@ class SummarizationInterface():
                                 style={"font-family": "Quicksand", "color": WHITE,
                                     'font-size': "22px", "padding": "1rem"}
                             ),
-                        ], width=6),
+                        ], width=10),
                         dbc.Col([
                             dbc.Select(
-                                id="search-bench-choose-file",
-                                options=get_dataset_options(params),
+                                id="summarization-bench-choose-dataset",
+                                required=True,
+                                options=get_object_options(params, 'dataset'),
+                                style={"background": "#888888",
+                                    "color": WHITE, "font-family": "Quicksand"},
+                                placeholder=default
+                            ),
+                        ]),
+                    ], align="center", style={'margin-bottom': "10px"})
+                ]),
+
+        ],  outline=True,
+            color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"})
+
+    def get_bench_metric_card(self, params):
+
+        default = None
+
+        # If no dataset has been selected
+        if len(params._data_dict['states']['metric_active']) == 0:
+            default = "Please select a metric."
+        else:
+            metric  = params._data_dict['states']['metric_active'][0]
+            default = get_object_from_name(metric, params, 'metric')._get_class_name()
+
+        return dbc.Card([
+            html.Div(
+                [
+                    html.Center(html.H5(default, style={
+                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
+                    dbc.Row([
+                        dbc.Col([
+                            html.H6
+                            (
+                                "Please choose a valid metric:",
+                                style={"font-family": "Quicksand", "color": WHITE,
+                                    'font-size': "22px", "padding": "1rem"}
+                            ),
+                        ], width=10),
+                        dbc.Col([
+                            dbc.Select(
+                                id="summarization-bench-choose-metric",
+                                options=get_object_options(params, 'metric'),
                                 style={"background": "#888888",
                                     "color": WHITE, "font-family": "Quicksand"},
                                 placeholder=default
                             ),
                         ])
-                    ], align="center", style={'margin-bottom': "10px"}),
-                    html.Center(dbc.Button(begin_text, color="info", outline=True,
-                                id="search-bench-begin-index", style={'font-size': "26px", 'font-family': "Quicksand"}))
-
-
+                    ], align="center", style={'margin-bottom': "10px"})
                 ]),
-
         ],  outline=True,
             color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"}
         )
 
+    def get_begin_summarization_button(self, params):
 
-    def get_bench_MetricsCard(self, params, existing_state=None):
-
-        # If no model selected, say we must select a model to proceed. 
-
-        if len(params._data_dict['states']['model_active']) != 1: 
-            return dbc.Card([
-                html.Div(
-                    [
-                        html.Center(html.H6
-                            (
-                                f"Please select a model from the left",
-                                    style={"font-family": "Quicksand",
-                                        "color": CREAM, 'font-size': "22px"}
-                                    ),
-                                    style={"margin-top": "50%"})
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
-            )
-
-        m_name = params._data_dict['states']['model_active'][0]
-        print(f"(get_bench_MetricsCard) > {params._data_dict['states']['processes']}")
-
-
-        # If we haven't started our process, say so 
-
-        if m_name not in params._data_dict['states']['processes']: 
-            return dbc.Card([
-                html.Div(
-                    [
-                        html.Center(html.H6
-                            (
-                                f"Please begin indexing the model",
-                                    style={"font-family": "Quicksand",
-                                        "color": CREAM, 'font-size': "22px"}
-                                    ),
-                                    style={"margin-top": "50%"})
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
-            )
-
-
-
-        # If we're starting up, say that we are
-
-
-        if params._data_dict['states']['has_input_file'] and not params._data_dict['states']['begun_queue'] and params._data_dict['states']['processes'][m_name][1].empty():
-
-            return dbc.Card([
-                html.Div(
-                    [
-                        html.Center(html.H6
-                            (
-                                f"Starting {params._data_dict['states']['model_active'][-1]} model...",
-                                    style={"font-family": "Quicksand",
-                                        "color": CREAM, 'font-size': "22px"}
-                                    ),
-                                    style={"margin-top": "50%"})
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
-            )
-        elif params._data_dict['states']['has_input_file'] and not params._data_dict['states']['processes'][m_name][1].empty(): 
-             params._data_dict['states']['begun_queue'] = True
-
-
-        # Try getting results, if not, show old results 
-
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR directly get stats (metrics)
-
-        try:
-            results = params._data_dict['states']['processes'][m_name][1].get_nowait()
-            params._data_dict['states']['processes'][m_name][2] = results
-
-        except:
-            results = params._data_dict['states']['processes'][m_name][2]
-
-
-        # Compute the necessary metrics to be displayed 
-
-        if results == "DONE": 
-            return existing_state 
-        else: 
-            percent_correct = round(
-                100 * np.mean(results["metrics"]["correct_arr"]), 2)
-            num_correct = results["metrics"]["correct_arr"].count(1)
-            num_total = results["questions"]["num_qs"]
-            num_curr = results["questions"]["tot_qs"]
-            avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-            progress = round(100.0 * num_curr / (num_total+0.001), 2)
+        default    = "Press the button below to start benchmarking."
+        begin_text = 'Run the model'
 
         return dbc.Card([
             html.Div(
                 [
-                        html.Br(),
-                        dbc.Progress(
-                            label=f"Progress: {progress}%", value=progress, id="animated-progress", animated=False, striped=True
-                        ),
-                        html.Br(),
+                    html.Center(html.H5(default, style={
+                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
+                    dbc.Row([
                         dbc.Col([
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Percent Questions Correct (%):",
-                                            style={"font-family": "Quicksand",
-                                                "color": CREAM, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(percent_correct, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Number Questions Correct (#):",
-                                            style={"font-family": "Quicksand",
-                                                "color": WHITE, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_correct, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Number Questions Total (#):",
-                                            style={"font-family": "Quicksand",
-                                                "color": WHITE, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_total, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                            html.Hr(style={"color": WHITE}),
-                            self.get_bench_TimeGraph(results["times"]["all_ts"]),
-                            html.Br(),
-                            dbc.Row
-                            ([
-                                dbc.Col(html.H6
-                                        (
-                                            "Average time / Question (s):",
-                                            style={"font-family": "Quicksand",
-                                                "color": CREAM, 'font-size': "22px"}
-                                        ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(avg_time, style={
-                                    "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
-                            ]),
-                        ]),
-                        ])
-        ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem"}
+                        ], width=10)
+                    ], align="center", style={'margin-bottom': "10px"}), html.Center(dbc.Button(begin_text, color="info", outline=True,
+                     id="summarization-bench-begin-summarization", style={'font-size': "26px", 'font-family': "Quicksand"}))
+                ]),
+        ],  outline=True,
+            color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"}
         )
-
-
-    def get_bench_IncorrectCard(self, params):
-
-        # If no model selected, say we must select a model to proceed. 
-
-        if len(params._data_dict['states']['model_active']) != 1: 
-            return dbc.Card([
-                html.Div(
-                    [
-                       self.get_spinnyCircle()
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "vertical-align": "middle"}
-            )
-
-
-        m_name = params._data_dict['states']['model_active'][0]
-
-        if m_name not in params._data_dict['states']['processes']: 
-            return dbc.Card([
-                html.Div(
-                    [
-                        html.Center(html.H6
-                            (
-                                f"Please begin indexing the model",
-                                    style={"font-family": "Quicksand",
-                                        "color": CREAM, 'font-size': "22px"}
-                                    ),
-                                    style={"margin-top": "50%"})
-                    ])
-            ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "vertical-align": "middle"}
-            )
-
-
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR all incorrect questions directly 
-
-
-        results = params._data_dict['states']['processes'][m_name][2]
-
-        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        incorrect = results['metrics']['incorrect_d']
-
-        accordion_list = []
-        for wrong in incorrect:
-            m_ans = incorrect[wrong][0]
-            q_ans = incorrect[wrong][1]
-            contx = incorrect[wrong][2]
-
-            accordion_list.append(
-                dbc.AccordionItem(
-                    f"Model's answer: {m_ans} | Correct answer: {q_ans} \n | \n Context: {contx}", title=wrong,
-                    style={'font-family': "Quicksand", 'color': WHITE,
-                        'background-color': "#049FD911", 'text-color': WHITE}
-                )
-            )
-
-        item_list = [f"item-{i}" for i in range(len(accordion_list))]
-
-        return dbc.Card([
-            html.Div(
-                [
-                        html.Br(),
-                        dbc.Progress(
-                            label=f"Accuracy: {accuracy}%", value=accuracy, id="animated-progress", animated=False, striped=True, color="success"
-                        ),
-                        html.Br(),
-                        html.Center(html.H6
-                                    (
-                                        "All questions answered incorrectly will appear in the accordion, found below.",
-                                        style={"font-family": "Quicksand", "color": WHITE,
-                                            'font-size': "22px", "padding": "1rem"}
-                                    )),
-                        html.Br(),
-                        dbc.Accordion(
-                            accordion_list,
-                            start_collapsed=False, always_open=True, active_item=item_list, style={"padding": "1rem", 'font-family': "Quicksand", 'color': "#049FD911", 'background-color': "#049FD911", 'text-color': "#049FD911"}
-                        ),
-                        ])
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "50rem", "overflow": "auto"}
-        )
-
-
-    def get_bench_TimeGraph(self, data_arr):
-
-        try:
-            q_num = [(i+1) for i in range(len(data_arr))]
-            t_sec = data_arr
-
-            line = px.line(x=q_num, y=t_sec)
-            line.update_layout(
-                margin=dict(l=0, r=0, b=0, t=0),
-                xaxis_title="Question Number",
-                yaxis_title="Time (s)",
-            )
-
-        except:
-            q_num = [0.0]
-            t_sec = [0.0]
-
-            line = px.line(x=q_num, y=t_sec)
-            line.update_layout(
-                margin=dict(l=0, r=0, b=0, t=0),
-                xaxis_title="Question Number",
-                yaxis_title="Time (s)",
-            )
-
-        return dcc.Graph(id="time-series", figure=line, style={"height": "9rem"})
 
     def get_spinnyCircle(self):
         return dbc.Card([

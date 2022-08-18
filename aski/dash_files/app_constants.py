@@ -44,7 +44,7 @@ SIDEBAR_STYLE = {
 WHITE = "#FFFFFF"
 CREAM = "#FFE5B4"
 BLACK = "#000000"
-TEAL = "#049FD9"
+TEAL  = "#049FD9"
 
 CONST_RESULTS = {
                     "m_name": "",

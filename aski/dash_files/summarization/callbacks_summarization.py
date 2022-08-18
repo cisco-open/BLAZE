@@ -10,14 +10,13 @@ from aski.utils.helpers import get_current_model, get_object_from_name
 def get_summarization_callbacks(app, page, params): 
    
     # === Callback for Custom Summarization page === #
-    @app.callback(Output("custom-content", "children"),
-                  [Input("summarization-custom-choose-file", "value"),
-                   Input("summarization-custom-begin-index", "n_clicks")],
+    @app.callback(Output("custom-content", "children"),[
+                  Input("summarization-custom-choose-file", "value"),
+                  Input("summarization-custom-begin-index", "n_clicks")],
                   [])
-
     def render_custom_content(file_chosen, index_button):
 
-        ### Component 01 - Selecting User File
+        ### SELECTING FILE FOR SUMMARIZATION
         if file_chosen is not None:
 
             # Update the params object to signify that the user chose a file
@@ -35,7 +34,7 @@ def get_summarization_callbacks(app, page, params):
 
             params._data_dict['states']['chosen_path'] = file_chosen
 
-        ### Component 02 - Summarizing the file  
+        ### RUNNING SUMMARIZATION
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
             f_name = params._data_dict['states']['chosen_data']
@@ -64,98 +63,61 @@ def get_summarization_callbacks(app, page, params):
 # ======================= BENCHMARKING SUMMARIZATION ===========================
 # ==============================================================================
 
-    @app.callback(Output("bench-content", "children"),
-                  [Input("search-bench-choose-file", "value"),
-                   Input("search-bench-begin-index", "n_clicks"),],
-                  [])
-    
-    def render_bench_content(dataset_chosen, bench_button):
+    @app.callback(Output("bench-content", "children"),[
+                  Input("summarization-bench-choose-dataset", "value"),
+                  Input("summarization-bench-choose-metric",  "value"),
+                  Input("summarization-bench-begin-summarization",   "n_clicks"),],[])
+    def render_bench_content(dataset_chosen, metric_chosen, bench_button):
 
-        print(f"(render_bench_content) > Entered bench callback.")
+        print("> Entered bench callback.")
 
-        ### Component 01 - Selecting User File ###
-        print(dataset_chosen)
-
-        dataset = get_object_from_name(dataset_chosen, params, 'dataset')
-
-        if dataset_chosen:
-            params._data_dict['states']['has_dataset'] = True 
-            params._data_dict['states']['dataset_active'] = [dataset] 
+        ### CHOOSING A DATASET ###
+        if dataset_chosen is not None:
+            params._data_dict['states']['has_dataset']    = True 
+            params._data_dict['states']['dataset_active'] = [dataset_chosen] 
         
-        print(params._data_dict['states']['dataset_active'])
-        print('Here')
-        ### Component 02 - Starting Indexing ###
-        if bench_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
+        ### CHOOSING A METRIC
+        if metric_chosen is not None:
+            params._data_dict['states']['has_metric'] = True 
+            params._data_dict['states']['metric_active'] = [metric_chosen] 
+        
+        ### RUNNING SUMMARIZATION ON AN ENTIRE DATASET
+        if (bench_button == 1 and \
+            len(params._data_dict['states']['model_active'])   == 1 and 
+            len(params._data_dict['states']['metric_active'])  == 1  and \
+            len(params._data_dict['states']['dataset_active']) == 1):
 
-            # TODO: REST API - Start indexing selected dataset with model 
-            # TODO: REST API - Have some way to read/dump information into a Queue/write last few results 
 
+            print(params._data_dict['states']['dataset_active'][0])
+            print(params._data_dict['states']['metric_active'][0])
+            print(params._data_dict['states']['model_active'][0])
 
-            # Spawn new process, dump to shared pipe every question --> read to generate figures!
-            
-            m_name = params._data_dict['states']['model_active'][0]
+            dataset_active  = get_object_from_name(params._data_dict['states']['dataset_active'][0], params, 'dataset')
+            metric_active   = get_object_from_name(params._data_dict['states']['metric_active'][0], params, 'metric')
+            model_active    = get_object_from_name(params._data_dict['states']['model_active'][0], params, 'model')
 
-            params._data_dict['states']['processes'][m_name] = [None, Queue(), CONST_RESULTS]
-            params._data_dict['states']['processes'][m_name][0] = multiprocessing.Process(target=squad_benchmark, args=(
-                                                                                    params._data_dict['states']['processes'][m_name][1], 
-                                                                                    params._data_dict['states']['chosen_data'] , 
-                                                                                    params._data_dict['states']['chosen_path'], 
-                                                                                    params._data_dict['states']['model_objs'][0]))
+            print('summarizing')
 
-            params._data_dict['states']['processes'][m_name][0].start() 
+            updated_dataset = model_active._summarize_dataset(
+                dataset_active,
+                dataset_active._document_column,
+                dataset_active._split)
 
-            print(f"(render_bench_content) > Started indexing...")
-            params._data_dict['states']['has_indexed'] = True 
+            print('Updating dataset')
+            dataset_index = params._data_dict['states']['dataset_objs'].index(dataset_active)
+            params._data_dict['states']['dataset_objs'][dataset_index] = updated_dataset
 
+            print(params._data_dict['states']['dataset_objs'][dataset_index])
+            print(params._data_dict['states']['dataset_objs'][dataset_index]['validation'])
 
         return page.get_page_benchmark(params) 
 
 
 
-    # === Callback for Solo Benchmarking page (helper) === #
-
-    @app.callback(Output("search-bench-metrics-content", "children"),
-                  [Input('search-bench-interval-component', 'n_intervals')],
-                  [State("search-bench-metrics-content", "children")])
-
-    def render_bench_metrics(n_interval, existing_state):
-
-        # If no model selected
-        if len(params._data_dict['states']['model_active']) == 0: 
-            return existing_state 
-
-        # If we haven't indexed yet
-        if not params._data_dict['states']['has_indexed']:
-            return page.get_spinnyCircle() 
-
-        # If we're done benchmarking 
-        m_name = params._data_dict['states']['model_active'][0]
-        if params._data_dict['states']['processes'][m_name][2] == "DONE":
-            return existing_state
-
-        return page.get_bench_MetricsCard(params, existing_state)
 
 
 
-  # === Callback for Solo benchmarking page (helper) === #
 
-    @app.callback(Output("search-bench-incorrect-content", "children"),
-                  [Input('search-bench-interval-component', 'n_intervals')],
-                  [State("search-bench-incorrect-content", "children")])
 
-    def render_bench_incorrect(n_interval, existing_state):
 
-        # If no model selected
-        if len(params._data_dict['states']['model_active']) == 0: 
-            return existing_state 
-            
-        # If we haven't indexed yet
-        if not params._data_dict['states']['has_indexed']:
-            return page.get_spinnyCircle() 
 
-        # If we're done benchmarking 
-        m_name = params._data_dict['states']['model_active'][0]
-        if params._data_dict['states']['processes'][m_name][2] == "DONE":
-            return existing_state
-
-        return page.get_bench_IncorrectCard(params)

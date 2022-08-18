@@ -46,6 +46,7 @@ class Parameters:
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
         self._data_dict['states']['has_dataset'] = False  
+        self._data_dict['states']['has_metric'] = False  
 
 
         print(f"\n==== Loading Datasets ===\n")
@@ -62,8 +63,6 @@ class Parameters:
         
         self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
         self._data_dict['states']['metric_active']   = [] 
-
-        print( self._data_dict['states']['metric_objs'])
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER

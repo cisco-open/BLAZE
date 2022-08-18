@@ -77,7 +77,7 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
             print('\n> Finished loading ' + self._info['name'] + ' class.\n')
 
-    def _summarize_dataset(self, dataset, column):
+    def _summarize_dataset(self, dataset, column, split):
         """ 
         Method that takes in a HuggingFace dataset and the name of the column of
         the dataset that contains the text to summarize. It calls the 
@@ -100,12 +100,12 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
         summarization_outputs = []
 
-        for output in tqdm(self._pipe(KeyDataset(dataset, column))):
+        for output in tqdm(self._pipe(KeyDataset(dataset._dataset[split], column))):
 
             answer = output[0]['summary_text']
             summarization_outputs.append(answer)
 
-        dataset.add_column(
+        dataset._dataset[split].add_column(
             name=('result' + self._info['class_name']), 
             column=summarization_outputs)
 
@@ -123,8 +123,8 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
         Returns
         -------
-        summary_text : str
-            The summarized text
+        summary_text : List of str
+            The summarized text as a list of strings
         """
 
         inputs = self._tokenizer(

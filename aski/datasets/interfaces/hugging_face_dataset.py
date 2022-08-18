@@ -16,10 +16,9 @@ from aski.datasets.interfaces.dataset import Dataset
 # ======================= HUGGING FACE DATASET CLASS ===========================
 # ==============================================================================
 
-
 class HuggingFaceDataset(Dataset):
 
-	def __init__(self, dataset_name, config, class_name):
+	def __init__(self, dataset_name, config, class_name, document_column, summary_column, split):
 
 		self._class_name          = class_name
 		self._config              = config
@@ -30,25 +29,22 @@ class HuggingFaceDataset(Dataset):
 		self._dataset_description = self._dataset_builder.info.description
 		self._dataset_features    = self._dataset_builder.info.features
 
+		self._document_column     = document_column
+		self._summary_column      = summary_column
+		self._split				  = split
+
 	def _get_class_name(self):
 		return self._class_name
 
 	def _get_dataset_name(self):
 		return self._dataset_name
 
-	def _compute_metric(self, metric_name, model):
-
-		metric = load_metric(metric_name, self._dataset_name)
-
-		#model_predictions = model(model_inputs)
-		#final_score = metric.compute(predictions=model_predictions, references=gold_references)
-
 	def _print_dataset_facts(self):
 
 		print(self._dataset_description)
 		print(self._dataset_features)
 
-	def _get_random_example(self, text_column_name):
+	def _get_random_example(self):
 
 		# Get the size of the dataset
 		dataset_len = self._dataset.num_rows
@@ -56,16 +52,16 @@ class HuggingFaceDataset(Dataset):
 		# Generate a random index to shuffle from in the dataset
 		random_index = randint(0, dataset_len - 1)
 
-		return self._dataset[random_index][text_column_name]
+		return self._dataset[random_index][self._document_column]
 
-	def _get_list_examples(self, text_column_name, number_examples):
+	def _get_list_examples(self, number_examples):
 
 		examples = []
 
 		# Sample the first x examples from the dataset
 		for index in range(0, number_examples):
 
-			example = self._dataset[index][text_column_name]
+			example = self._dataset[index][self._document_column]
 			examples.append(example)
 
 		return examples
