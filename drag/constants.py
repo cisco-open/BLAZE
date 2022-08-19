@@ -155,7 +155,7 @@ supported_models = {
         'ColBERT' : 'Woah, this is a short snipped about ColBERT'
     }, 
     'summarization' : {
-        'BART' : 'BART. What an interesting name...', 
+        'Bart' : 'BART. What an interesting name...', 
         'T5' : 'Here, we briefly cover the T5 model...'
     }, 
 }
@@ -169,6 +169,9 @@ supported_data = {
     }
 }
 
+
+PORTS = [5001, 8051]
+ports = PORTS 
 
 def generate_dropdown(choice): 
     if choice == "models": 

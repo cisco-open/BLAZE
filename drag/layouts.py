@@ -5,9 +5,18 @@ from dash import dcc, html
 
 from dash.dependencies import Input 
 
+import drag.constants as constants 
 from drag.constants import *
 import subprocess 
 import socket 
+
+from psutil import process_iter
+from signal import SIGTERM # or SIGKILL
+
+
+import os
+import signal
+from subprocess import Popen, PIPE
 
 
 
@@ -165,17 +174,29 @@ def get_schema(path=None):
 
     if path: 
         # Means that we have a yaml file at path: path
-        
-        cmd = f"python run.py {path}"
-        print(f"Running command: {cmd}")
-        subprocess.run(cmd)
 
+        # try: 
+        #     for proc in process_iter():
+        #         for conns in proc.connections(kind='inet'):
+        #             if conns.laddr.port == 5001:
+        #                 proc.send_signal(SIGTERM) # or SIGKILL
+        # except: 
+        #     print("Nothing already running... good!")
+
+        port = constants.ports[0]
+
+        cmd = f"python run.py ./{path} -p {port}"
+        print(f"Running command: {cmd}")
+        subprocess.Popen(cmd, shell=True, close_fds=True)
+
+        constants.ports = constants.ports[1:]
 
         # Now that the server's running, we need to get the link at which it's running... 
 
         host = socket.gethostbyname(socket.gethostname())
 
-        link = "http://127.0.0.1:" + "/5001"
+
+        link = f"http://127.0.0.1:{port}/"
         print(f"Opening link at {link}")
 
         placeholder = html.Center(dbc.Button("Open Dash", href=link, color="success", outline=True, style={'font-family': "Quicksand", "font-size": "30px", "padding": "1rem", "margin-top": "8rem", "margin-bottom":"1rem"}))

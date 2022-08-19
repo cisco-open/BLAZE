@@ -26,7 +26,7 @@ from aski.params.parameters import Parameters
 # ==============================================================================
 
 
-def run_app(data):
+def run_app(data, port):
 
     params = Parameters(data)
 
@@ -145,7 +145,7 @@ def run_app(data):
     # Finally, after defining all our callbacks, we can run our app
 
     app.config['suppress_callback_exceptions'] = True
-    app.run_server(port='5001', debug=True, use_reloader=False)
+    app.run_server(port=port, debug=True, use_reloader=False)
 
 if __name__ == "__main__":
     run_app()

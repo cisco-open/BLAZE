@@ -1,8 +1,7 @@
-Title: "Solo Summarization on Custom Text"
-function: 
+Title: Solo Summarization on Custom Text
+datasets: []
+function:
   task: summarization
-  custom: true 
-datasets: {} 
+metrics: {}
 models:
 - Bart
-metrics: {} 

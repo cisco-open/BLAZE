@@ -1,9 +1,8 @@
-Title: "A Comparison of Summarization Implementations"
-function: 
+Title: A Comparison of Summarization Implementations
+datasets: []
+function:
   task: summarization
-  custom: true 
-  comparing: true 
-datasets: {} 
+metrics: {}
 models:
-- T5 
+- T5
 - Bart
