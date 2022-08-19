@@ -129,25 +129,25 @@ def create_app(server_config):
 
 
     @app.route('/files/all_files', methods=['GET'])
-    def change_my_name(): 
+    def change_my_name1(): 
         #nonlocal server_config
         #return internal_func(request, response, server_config)
         pass # Add imported function here!
 
     @app.route('/files/file', methods=['GET'])
-    def change_my_name(): 
+    def change_my_name2(): 
         pass # Add imported function here!
 
     @app.route('/files/initialize', methods=['POST'])
-    def change_my_name(): 
+    def change_my_name3(): 
         pass # Add imported function here!
 
     @app.route('/files/upload', methods=['POST'])
-    def change_my_name(): 
+    def change_my_name4(): 
         pass # Add imported function here!
 
     @app.route('/files/all_files', methods=['DELETE'])
-    def change_my_name(): 
+    def change_my_name5(): 
         pass # Add imported function here!
 
 
@@ -159,36 +159,36 @@ def create_app(server_config):
 
 
     @app.route('/models/all_models', methods=['GET'])
-    def change_my_name(): 
+    def change_my_name6(): 
         pass # Add imported function here!
     
     @app.route('/models/model', methods=['GET'])
-    def change_my_name(): 
+    def change_my_name7(): 
         pass # Add imported function here!    
 
     @app.route('/models/initialize', methods=['POST'])
-    def change_my_name(): 
+    def change_my_name8(): 
         pass # Add imported function here!
 
 
     @app.route('/models/kill', methods=['POST'])
-    def change_my_name(): 
+    def change_my_name9(): 
         pass # Add imported function here!
 
     @app.route('/models/summary', methods=['GET'])
-    def change_my_name(): 
+    def change_my_nameA(): 
         pass # Add imported function here!
 
     @app.route('/models/search', methods=['GET'])
-    def change_my_name(): 
+    def change_my_nameB(): 
         pass # Add imported function here!
 
     @app.route('/models/search/file', methods=['GET'])
-    def change_my_name(): 
+    def change_my_nameC(): 
         pass # Add imported function here!
 
     @app.route('/models/benchmark', methods=['GET'])
-    def change_my_name(): 
+    def change_my_nameD(): 
         pass # Add imported function here!
     
     

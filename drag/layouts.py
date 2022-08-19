@@ -6,7 +6,8 @@ from dash import dcc, html
 from dash.dependencies import Input 
 
 from drag.constants import *
-
+import subprocess 
+import socket 
 
 
 
@@ -71,6 +72,7 @@ def get_cytoscape():
                 'selector': '[id *= "Model"]',
                 'style': {
                     'background-color': 'black',
+                    'shape' : 'triangle',
                     'label': 'data(label)',
                 }
             }, 
@@ -119,7 +121,6 @@ def get_warning():
                     [
                         html.Center(html.H6
                             (
-                                f"Any warning messages will be shown here.",
                                     style={"font-family": "Quicksand",
                                         "color": CREAM, 'font-size': "22px"}
                                     ),
@@ -141,7 +142,8 @@ def get_buttons():
             dbc.Button('Connect', id=str(DesignID.BTN_CONNECT_NODES), n_clicks=0, style={'margin-left':'33px'}),
             dbc.Button('Delete', id=str(DesignID.BTN_REMOVE_ELMT), n_clicks=0),
 
-            dbc.Button('Build', id=str(DesignID.BTN_BUILD_SCHEMA), n_clicks=0, style={'margin-left':'33px', 'color':CREAM})
+            dbc.Button(dcc.Upload(id=str(DesignID.BTN_UPLOAD_SCHEMA), children=html.Div([html.A('Upload')]), style={'color':CREAM}), style={'margin-left':'33px'}),
+            dbc.Button('Build', id=str(DesignID.BTN_BUILD_SCHEMA), n_clicks=0, style={'color':CREAM})
         ],
         className="d-grid gap-1 d-md-flex justify-content-md-end")
     ], outline=True, color="#049FD911", style={"color": "dark"})
@@ -162,10 +164,21 @@ def get_schema(path=None):
                     style={"margin-top": "7rem"})
 
     if path: 
-        path = r"C:\\Users\\addeepak/Downloads\\cytoscape\\flame-dashboard\\yaml\\yaml_squad.yaml"
-        #path = r"C:/Users/addeepak/OneDrive - Cisco/Desktop/red-riding-hood.txt"
-        print(f"Boutta show iframe for {path}")
-        placeholder = html.Iframe(src=path, style={"height":"100%", "width":"100%"})
+        # Means that we have a yaml file at path: path
+        
+        cmd = f"python run.py {path}"
+        print(f"Running command: {cmd}")
+        subprocess.run(cmd)
+
+
+        # Now that the server's running, we need to get the link at which it's running... 
+
+        host = socket.gethostbyname(socket.gethostname())
+
+        link = "http://127.0.0.1:" + "/5001"
+        print(f"Opening link at {link}")
+
+        placeholder = html.Center(dbc.Button("Open Dash", href=link, color="success", outline=True, style={'font-family': "Quicksand", "font-size": "30px", "padding": "1rem", "margin-top": "8rem", "margin-bottom":"1rem"}))
 
 
 

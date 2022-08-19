@@ -178,6 +178,15 @@ class Design(object):
 
         return None
 
+
+    def find_node_by_id(self, id: str):
+        """Return node from node name."""
+        for _, v in self.graph.items():
+            if v.node_id == id:
+                return v
+
+        return None
+
     def get_nodes_edges(self):
         """
         Return nodes and edges as a list.
@@ -543,30 +552,3 @@ class Channel(object):
         }
 
         return raw_data
-
-
-
-def build_yaml(title, task, task_choices, data, models): 
-    
-    # TODO: A LOT ON THIS FUNCTION!     
-
-    return {
-            'Title' : title,
-
-            'function': 
-            {
-            'task'         : task,
-            'custom'       : custom,
-            'benchmarking' : benchmarking,
-            'comparing'    : comparing
-            },
-
-            'data': 
-            {
-            'DATA_PATH'  : './data/squad2_data',
-            'DATA_SETS'  : '1',
-            'DEFAULT'    : '1973_oil_crisis',
-            'FILES_PATH' : './data/user_files'
-            },
-            'models' : None 
-        }

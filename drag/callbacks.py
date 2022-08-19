@@ -5,12 +5,13 @@ from doctest import master
 
 import dash
 import dash_bootstrap_components as dbc
+from dash import dcc 
 from dash.dependencies import ALL, Input, Output, State
 
 import drag.global_obj as g
-from drag.constants import DesignID, build_yaml 
+from drag.constants import DesignID, build_yaml, build_elements, master_dict
 
-from drag.layouts import dropdown_data_inputs, dropdown_models_inputs, dropdown_models_items, dropdown_data_items
+from drag.layouts import dropdown_data_inputs, dropdown_models_inputs, dropdown_models_items, dropdown_data_items, get_schema 
 import yaml 
 
 toast_message = ""
@@ -25,12 +26,16 @@ def get_callbacks(app):
         Output(str(DesignID.DESIGN_INTERFACE), 'elements'),
         Output(str(DesignID.SCHEMA_PANE), 'children'),
         Output(str(DesignID.DOWNLOAD_FILE), 'data'),
+        Output(str(DesignID.INPUT_DESIGN_TITLE), 'value'),
+        Output(str(DesignID.INPUT_YAML_TITLE), 'value'),
         Input(str(DesignID.INPUT_EDIT_EDGE_LABEL), 'value'),
         Input(str(DesignID.BTN_ADD_MODEL), 'n_clicks'),
         Input(str(DesignID.BTN_ADD_DATA), 'n_clicks'),
         Input(str(DesignID.BTN_REMOVE_ELMT), 'n_clicks'),
         Input(str(DesignID.BTN_CONNECT_NODES), 'n_clicks'),
         Input(str(DesignID.BTN_BUILD_SCHEMA), 'n_clicks'),
+        Input(str(DesignID.BTN_UPLOAD_SCHEMA), 'contents'),
+        State(str(DesignID.BTN_UPLOAD_SCHEMA), 'filename'),
         State(str(DesignID.DESIGN_INTERFACE), 'selectedNodeData'),
         State(str(DesignID.DESIGN_INTERFACE), 'selectedEdgeData'),
         State(str(DesignID.DESIGN_INTERFACE), 'elements'),
@@ -44,6 +49,8 @@ def get_callbacks(app):
         btn_remove,
         btn_connect,
         btn_build,
+        upload_content, 
+        upload_filename, 
         nodes,
         edges,
         elements,
@@ -60,13 +67,13 @@ def get_callbacks(app):
 
         if prop_id == str(DesignID.BTN_ADD_DATA):
             print(f"(update_elements) > Adding new data...")
-            return elements + [g.design.get_new_node("data")], get_schema(), None 
+            return elements + [g.design.get_new_node("data")], get_schema(), None, title, yaml_filename 
 
         # COMPONENT 02 - Adding new Datasets 
 
         elif prop_id == str(DesignID.BTN_ADD_MODEL):
             print(f"(update_elements) > Adding new model...")
-            return elements + [g.design.get_new_node("model")], get_schema(), None 
+            return elements + [g.design.get_new_node("model")], get_schema(), None, title, yaml_filename 
 
 
         # COMPONENT 03 - Deleting Nodes (either models or datasets)
@@ -89,7 +96,7 @@ def get_callbacks(app):
 
             g.design.remove_elements(combined)
 
-            return g.design.get_nodes_edges(), get_schema(), None 
+            return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename
 
         # COMPONENT 04 - Connecting Nodes (all nodes must be connected)
 
@@ -99,10 +106,24 @@ def get_callbacks(app):
             if not g.design.link(nodes):
                 return elements
 
-            return g.design.get_nodes_edges(), get_schema(), None 
+            return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename 
 
 
-        # COMPONENT 05 - Selecting "Build" button 
+        # COMPONENT 05 - Selecting "Upload" button 
+
+        elif prop_id == str(DesignID.BTN_UPLOAD_SCHEMA):
+            print(f"(update_elements) > Uploading YAML...")
+
+            print(f"      - Filename: {upload_filename}") 
+            print(f"      - FContent: {upload_content}") 
+
+            # Now, here we have a function that creates elements based on YAML 
+            test_title, test_elements = build_elements(upload_filename, upload_content)
+
+            return test_elements, get_schema(), None, test_title, upload_filename 
+
+
+        # COMPONENT 06 - Selecting "Build" button 
 
         elif prop_id == str(DesignID.BTN_BUILD_SCHEMA):
             print(f"(update_elements) > Building YAML...")
@@ -116,12 +137,16 @@ def get_callbacks(app):
             if yaml_filename is None or yaml_filename == "": 
                 yaml_filename = "test"
 
-            f_n = "yaml/" + yaml_filename + ".yaml"
+            if yaml_filename.split(".")[-1] == "yaml": 
+                f_n = "yaml/" + yaml_filename 
+            else: 
+                f_n = "yaml/" + yaml_filename + ".yaml"
 
             with open (f_n, mode="wt", encoding="utf-8") as file:
                 yaml.dump(yaml_raw, file)
- 
-            return elements, get_schema(f_n), dcc.send_file(f_n, filename=yaml_filename)
+
+
+            return elements, get_schema(f_n), dcc.send_file(f_n, filename=yaml_filename), title, yaml_filename
 
         # COMPONENT 06 - Editing Node Labels 
 
@@ -149,7 +174,7 @@ def get_callbacks(app):
 
 
         # None has been clicked
-        return elements, get_schema(), None 
+        return elements, get_schema(), None, title, yaml_filename
 
     
 

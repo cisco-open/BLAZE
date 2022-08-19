@@ -148,5 +148,4 @@ def run_app(data):
     app.run_server(port='5001', debug=True, use_reloader=False)
 
 if __name__ == "__main__":
-    print("Coming here")
     run_app()

@@ -4,11 +4,9 @@ function:
   custom: true  
   benchmarking: true 
   comparing: true  
-data:
-  DATA_PATH: ./data/squad2_data
-  DATA_SETS: '1'
-  DEFAULT: 1973_oil_crisis
-  FILES_PATH: ./data/user_files
+datasets: 
+- SQUAD 
 models:
 - ColBERT
 - ElasticBERT
+metrics: {} 

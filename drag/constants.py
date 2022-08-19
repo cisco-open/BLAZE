@@ -4,6 +4,11 @@ from enum import Enum, auto
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input 
 
+import yaml 
+import drag.global_obj as g
+
+
+from drag.design import Node 
 
 ID_CONTENT = "page-content"
 
@@ -40,6 +45,8 @@ class DesignID(Enum):
     BTN_ADD_MODEL = auto() 
     BTN_REMOVE_ELMT = auto()
     BTN_CONNECT_NODES = auto()
+
+    BTN_UPLOAD_SCHEMA = auto() 
 
     INPUT_SELECT_ELEMENT = auto()
     INPUT_DISPLAY_ELEMENT = auto() 
@@ -192,6 +199,82 @@ for task in supported_data:
     master_dict.update(supported_data[task])
 
 
+
+
+def build_elements(filename, filecontent): 
+    print(f"YAML recieived: {filename}")
+
+    with open(f"yaml/{filename}", mode="rt", encoding="utf-8") as file:
+        data = yaml.safe_load(file)
+
+    print(f"Data read: {data}")
+
+    # First, get title 
+
+    title = data['Title']
+
+    # Next, get elements 
+
+    elements_model = []
+    elements_data = [] 
+    counter = 0 
+
+    flag_list = [False, False, False]
+    for func in data['function']: 
+        if func == 'custom': 
+            flag_list[0] = True 
+        if func == 'benchmark': 
+            flag_list[1] = True 
+        if func == 'comparison': 
+            flag_list[2] = True 
+
+
+    # Models 
+    for model in data['models']: 
+        #elements_model.append({'data': {'id': f'Model {counter}', 'label': model, 'sort': 'Node'}})
+        #counter += 1
+        node = g.design.get_new_node('model')
+        print(node)
+        g.design.update_label(node['data'], model)
+        print(node)
+        elements_model.append(node)
+        
+    
+    # Datasets 
+    for base in data['datasets']: 
+        #data_id = f'Data {counter}'
+        #elements_data.append({'data': {'id': data_id, 'label': base, 'sort': 'Node'}})
+        #counter += 1 
+
+        node = g.design.get_new_node('data')
+        g.design.update_label(node['data'], base)
+
+        # Now, for each model, we must create an edge between said model and this dataset 
+        for model in elements_model: 
+            #model_id = model['data']['id']
+
+            #elements_data.append({'data' : {'source' : model_id, 'target' : data_id, 'sort' : 'Edge', 'label' : f"{model_id}-{data_id}", 'flags':flag_list}})
+         
+            g.design.link([model['data'], node['data']])
+
+            print(model['data'])
+            print(node['data'])
+
+            u = g.design.find_node_by_id(model['data']['id'])
+            v = g.design.find_node_by_id(node['data']['id'])
+
+            print(u)
+            print(v)
+            edge = Node.edge_to_callback(u, v)
+            g.design.update_toggle(edge['data'], flag_list[0], flag_list[1], flag_list[2])
+
+
+    #elements = elements_model + elements_data 
+    elements = g.design.get_nodes_edges()
+    # Functions 
+    print(f"Elements: {elements}\n\n")
+
+    return title, elements
 
 
 def build_yaml(title, nodes_edges_list): 
