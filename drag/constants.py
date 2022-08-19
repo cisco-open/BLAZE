@@ -13,6 +13,11 @@ RESOURCE_DESIGN = "design"
 RESOURCE_JOBS = "jobs"
 RESOURCE_MODELS = "models"
 
+CREAM = "#FFE5B4"
+
+FA = "https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+FONT_QUICKSAND = "https://fonts.googleapis.com/css?family=Quicksand&display=swap"
+
 
 class DesignID(Enum):
     """Define IDs of layout props used in design pane."""

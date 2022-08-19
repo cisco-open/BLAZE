@@ -7,18 +7,17 @@ import dash
 import dash_bootstrap_components as dbc
 from dash.dependencies import ALL, Input, Output, State
 
-import global_objects as g
-from constants import DesignID, build_yaml 
+import drag.global_obj as g
+from drag.constants import DesignID, build_yaml 
 
-from layouts_design import dropdown_data_inputs, dropdown_models_inputs, dropdown_models_items, dropdown_data_items
-from layouts_gen import *
+from drag.layouts import dropdown_data_inputs, dropdown_models_inputs, dropdown_models_items, dropdown_data_items
 import yaml 
 
 toast_message = ""
 toast_icon = ""
 
 
-def get_design_callbacks(app): 
+def get_callbacks(app): 
 
 
 

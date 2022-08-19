@@ -1,6 +1,6 @@
 """This contains global objects."""
 
-from design import Design
+from drag.design import Design
 
 design = None
 
