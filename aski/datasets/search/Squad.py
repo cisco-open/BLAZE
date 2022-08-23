@@ -10,4 +10,10 @@ from aski.datasets.interfaces.hugging_face_dataset import HuggingFaceDataset
 class Squad(HuggingFaceDataset):
 
 	def __init__(self):
-		super().__init__(dataset_name='squad', config='plain_text')
+		super().__init__(
+			dataset_name='squad', 
+			config='plain_text', 
+			class_name='Squad', 
+			document_column='text',
+			summary_column=None, 
+			split=None)

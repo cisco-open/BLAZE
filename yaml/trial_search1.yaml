@@ -3,7 +3,7 @@ function:
   task: search
   custom: true
 datasets:
-- SQUAD
+- Squad
 metrics: {}
 models:
 - ElasticBERT
