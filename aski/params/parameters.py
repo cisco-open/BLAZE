@@ -9,13 +9,8 @@ of the dashboard used throughout the code.
 
 import json
 from multiprocessing import Queue
-from aski.utils.helpers import get_list_models
+from aski.utils.helpers import get_list_objects
 from aski.dash_files.app_constants import *
-
-
-# ==============================================================================
-# =========================== AUXILIARY FUNCTIONS ==============================
-# ==============================================================================
 
 # ==============================================================================
 # ============================ PARAMETERS CLASS ================================
@@ -50,9 +45,24 @@ class Parameters:
         self._data_dict['states']['chosen_path'] = None 
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
+        self._data_dict['states']['has_dataset'] = False  
+        self._data_dict['states']['has_metric'] = False  
 
-        self._data_dict['states']['model_objs'] = get_list_models(self._data_dict['models'], self._data_dict['function']['task']) 
-        self._data_dict['states']['model_active'] = [] 
+
+        print(f"\n==== Loading Datasets ===\n")
+
+        self._data_dict['states']['dataset_objs']    = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
+        self._data_dict['states']['dataset_active']  = [] 
+
+        print(f"\n==== Loading Models ===\n")
+        
+        self._data_dict['states']['model_objs']      = get_list_objects(self._data_dict['models'], self._data_dict['function']['task'], 'models') 
+        self._data_dict['states']['model_active']    = [] 
+
+        print(f"\n==== Loading Metrics ===\n")
+        
+        self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
+        self._data_dict['states']['metrics_results'] = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER

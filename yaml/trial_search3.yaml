@@ -1,9 +1,10 @@
 Title: Benchmarking ElasticBERT on SQUAD 2.0
+function:
+  task: search
+  custom: true
+  benchmarking: true 
 datasets:
 - SQUAD
-function:
-  custom: true
-  task: search
 metrics: {}
 models:
 - ElasticBERT

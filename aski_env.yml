@@ -3,10 +3,9 @@ channels:
   - pytorch
   - anaconda
   - defaults
-  - conda-forge
 dependencies:
-  - blas=1.0
-  - bzip2=1.0.8
+  - blas=1.0=mkl
+  - bzip2=1.0.8=h1de35cc_0
   - ca-certificates=2022.4.26
   - cudatoolkit=9.0
   - ffmpeg=4.3
@@ -23,7 +22,7 @@ dependencies:
   - libwebp=1.2.0
   - libwebp-base=1.2.0
   - libxml2=2.9.14
-  - llvm-openmp
+  - llvm-openmp=12.0.0
   - lz4-c=1.9.3
   - mkl=2021.4.0
   - mkl-service=2.4.0
@@ -39,6 +38,7 @@ dependencies:
   - python=3.7.13
   - pytorch=1.9.0
   - setuptools=61.2.0
+  - six=1.16.0
   - sqlite=3.38.5
   - tk=8.6.12
   - torchaudio=0.9.0
@@ -65,8 +65,10 @@ dependencies:
     - backcall==0.2.0
     - backports-zoneinfo==0.2.1
     - beautifulsoup4==4.8.2
+    - bert-score==0.3.11
     - bitarray==2.4.1
     - bleach==5.0.0
+    - bleu==0.3
     - blis==0.7.7
     - brotli==1.0.9
     - cachetools==5.2.0
@@ -77,6 +79,7 @@ dependencies:
     - charset-normalizer==2.0.12
     - click==8.0.4
     - compressed-rtf==1.0.6
+    - cycler==0.11.0
     - cymem==2.0.6
     - dash==2.3.1
     - dash-bootstrap-components==1.1.0
@@ -94,9 +97,11 @@ dependencies:
     - docx2txt==0.8
     - ebcdic==1.1.1
     - editorconfig==0.12.3
+    - efficiency==1.0
     - elasticsearch==7.13.3
     - entrypoints==0.4
     - et-xmlfile==1.1.0
+    - evaluate==0.2.2
     - extract-msg==0.28.7
     - fastjsonschema==2.15.3
     - fastrlock==0.8
@@ -105,6 +110,7 @@ dependencies:
     - flask-caching==1.10.1
     - flask-compress==1.11
     - flatbuffers==1.12
+    - fonttools==4.36.0
     - frozenlist==1.3.0
     - fsspec==2022.7.1
     - fuzzywuzzy==0.18.0
@@ -116,7 +122,7 @@ dependencies:
     - google-pasta==0.2.0
     - grpcio==1.47.0
     - h5py==3.7.0
-    - huggingface-hub==0.5.1
+    - huggingface-hub==0.8.1
     - idna==3.3
     - imagesize==1.4.1
     - imapclient==2.1.0
@@ -144,12 +150,14 @@ dependencies:
     - jupyterlab-widgets==1.1.0
     - keras==2.9.0
     - keras-preprocessing==1.1.2
+    - kiwisolver==1.4.4
     - langcodes==3.3.0
     - libclang==14.0.6
     - lumache==0.0.0
     - lxml==4.8.0
     - markdown==3.4.1
     - markupsafe==2.1.1
+    - matplotlib==3.5.3
     - matplotlib-inline==0.1.3
     - mistune==0.8.4
     - more-itertools==8.12.0
@@ -161,6 +169,7 @@ dependencies:
     - nbconvert==6.5.0
     - nbformat==5.3.0
     - nest-asyncio==1.5.5
+    - nltk==3.7
     - notebook==6.4.10
     - notebook-shim==0.1.0
     - oauthlib==3.2.0
@@ -205,11 +214,11 @@ dependencies:
     - requests==2.27.1
     - requests-oauthlib==1.3.1
     - responses==0.18.0
+    - rouge-score==0.1.2
     - rsa==4.9
     - sacremoses==0.0.49
     - scipy==1.7.3
     - send2trash==1.8.0
-    - six==1.12.0
     - smart-open==5.2.1
     - smmap==5.0.0
     - sniffio==1.2.0
@@ -264,3 +273,4 @@ dependencies:
     - xxhash==3.0.0
     - yarl==1.8.1
     - zipp==3.8.0
+prefix: /Users/tlemenes/opt/anaconda3/envs/aski

@@ -10,7 +10,6 @@ from aski.dash_files.summarization.elements_summarization import SummarizationIn
 
 # === Returns the sidebar. No customization needed (no inputs) === #
 
-
 def get_sidebar(params):
 
     sidebar = html.Div([
@@ -118,12 +117,14 @@ def get_custom_functions_checklist(functions):
 
     for func in functions:
         if func == 'task': continue 
+        if func == 'custom' : 
+            list_options.append({"label": "Custom Demo", "value": "Custom Demo"})
 
-        if func == 'custom': list_options.append({"label": "Custom Demo", "value": "Custom Demo"})
+        if func == 'benchmarking': 
+            list_options.append({"label": "Solo Benchmark", "value": "Solo Benchmark"})
 
-        if func == 'benchmarking': list_options.append({"label": "Solo Benchmark", "value": "Solo Benchmark"})
-
-        if func == "comparing": list_options.append({"label": "Model Comparison", "value": "Model Comparison"})
+        if func == "comparing": 
+            list_options.append({"label": "Model Comparison", "value": "Model Comparison"})
 
     if len(list_options) == 0: 
         list_options.append({"label": "Custom Demo", "value": "Custom Demo"})
