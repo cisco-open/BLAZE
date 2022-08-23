@@ -74,7 +74,7 @@ def create_app(server_config):
     # Initialize models by storing the models in a list in server config
     server_config['model_objs'] = get_list_objects(server_config['models'], server_config['function']['task'], 'models') 
 
-    print("DUMPING SERVER_CONFIG", server_config)
+    print("(create_app) > Server config is ", server_config)
   
 
     # 01) General methods. 

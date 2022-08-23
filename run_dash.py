@@ -1,3 +1,11 @@
+"""
+====================================================
+Run Dash
+====================================================
+This file can be run to only start the Dashboard. 
+
+"""
+
 import argparse
 import yaml
 

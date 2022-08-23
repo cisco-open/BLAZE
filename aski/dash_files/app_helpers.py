@@ -52,7 +52,7 @@ def gen_inputOptions(params):
     #   DEFAULT: 1973_oil_crisis
     #   FILES_PATH: ./data/user_files
 
-    DATA_PATH = './data/squad2_data'
+    DATA_PATH = './data/squad'
     FILES_PATH = './data/user_files'
 
     n_squad, p_squad = [], []
