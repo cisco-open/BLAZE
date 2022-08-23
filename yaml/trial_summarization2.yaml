@@ -6,3 +6,10 @@ function:
 models:
 - T5 
 - Bart
+datasets:
+- XSum
+- BillSum
+- CNNDailyMail
+metrics:
+- Rouge
+- Bleu

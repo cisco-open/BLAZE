@@ -4,3 +4,10 @@ function:
   custom: true 
 models:
 - Bart
+datasets:
+- XSum
+- BillSum
+- CNNDailyMail
+metrics:
+- Rouge
+- Bleu
