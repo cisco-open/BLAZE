@@ -65,13 +65,13 @@ def parse_objects(folder, task):
 
 class Specifications:
 
-    def __init__(self):
+    def __init__(self, model_path='aski/models', datasets_path='aski/datasets'):
 
-        self._list_datasets_summarization = parse_objects('aski/datasets/', 'summarization/')
-        self._list_datasets_search        = parse_objects('aski/datasets/', 'search/')
+        self._list_datasets_summarization = parse_objects(datasets_path, '/summarization/')
+        self._list_datasets_search        = parse_objects(datasets_path, '/search/')
 
-        self._list_models_summarization   = parse_objects('aski/models/', 'summarization/')
-        self._list_models_search          = parse_objects('aski/models/', 'search/')
+        self._list_models_summarization   = parse_objects(model_path, '/summarization/')
+        self._list_models_search          = parse_objects(model_path, '/search/')
 
     def _specs_to_yaml(self, title, task, custom, benchmarking, comparing, yaml_path):
         """ 

@@ -70,6 +70,20 @@ def get_current_model(params):
 
     return current_model
 
+
+def get_model_object_from_name(model_name, data_dict):
+
+    model_active = model_name
+    current_model = None 
+
+    for model in data_dict['model_objs']:
+        model_name = model._get_class_name()
+
+        if model_name == model_active:
+            current_model = model
+
+    return current_model
+
 def get_metrics_tables(params):
 
     metrics_results = params._data_dict['states']['metrics_results']
@@ -112,3 +126,4 @@ def get_metrics_tables(params):
         dash_elements.append(dash_element)
 
     return dash_elements
+

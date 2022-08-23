@@ -11,6 +11,7 @@ interactive.
 import base64 
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
+import requests
 
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_elements import *
@@ -96,16 +97,11 @@ def run_app(data, port):
 
         if file_name is not None:
 
-            # TODO: REST API - Push new file to REST API Server 
-
             content_type, content_string = file_content.split(',')
             decoded = base64.b64decode(content_string).decode("utf-8")
 
-            f_path = USER_FILES_PATH + "/" + file_name
-
-            f = open(f_path, "w")
-            f.write(decoded)
-            f.close()
+            # TODO: REST API - fix url
+            requests.post("localhost:3000/files/upload", data={"file": file_name, "content": decoded})
 
             print(f"> Added file {file_name}.")
 
