@@ -4,6 +4,8 @@ import plotly.express as px
 import numpy as np
 import os
 
+import requests
+
 from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
 
 def get_object_options(params, object_type):
@@ -41,6 +43,28 @@ def get_dataset_options(params):
     return options
 
 def gen_inputOptions(params):
+
+    print(f"(gen_inputOptions) > Entering function, seeing what is available...")
+
+    server_files = {} 
+
+    PORT_REST_API = 3000 # TODO: Make this a global constant! 
+    request = f"http://127.0.0.1:{PORT_REST_API}/files/all_datasets"
+
+    response = requests.get(request)
+    print(f"(run_app) > Received response: {response}, {response.json()}")
+
+    # TODO: this is only for search datasets at the moment!
+
+    for dataset in response.json()['datasets_search']: 
+        print(f"Getting all files from {dataset}...")
+        request = f"http://127.0.0.1:{PORT_REST_API}/files/all_files"
+
+        response = requests.get(request, json={'dataset':dataset})
+        #print(f"(run_app) > Received response: {response}, {response.json()}")
+
+        server_files[dataset] = response.json()['files']
+
 
     # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
 
@@ -91,12 +115,28 @@ def gen_inputOptions(params):
             {"label": files['n_user'][i], "value": files['p_user'][i]})
 
     # Add an unclickable option for it to look nicer
-    options.append({"label": "-- Squad files --", "disabled": True})
+    options.append({"label": "-- Squad files (Local) --", "disabled": True})
 
     # Add the Squad files
     for i in range(len(files['n_squad'])):
         options.append(
             {"label": files['n_squad'][i], "value": files['p_squad'][i]})
+    
+    # TODO: Consolidate/fix these (hacky solution for now, will fix in next commit)
+
+    #get_file_request_prefix = f"http://127.0.0.1:{PORT_REST_API}/files/file"
+
+    for entry in server_files: 
+
+        # Add an unclickable option for it to look nicer
+        options.append({"label": f"-- {entry} files (Server) --", "disabled": True})
+
+        files_list = server_files[entry]
+        # Add the Squad files
+        for i in range(len(files_list)):
+            options.append(
+                {"label": files_list[i], "value": files_list[i]})
+
 
     return options
 

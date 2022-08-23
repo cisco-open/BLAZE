@@ -4,6 +4,7 @@ import os.path as path
 
 from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
+from aski.utils.helpers import get_dataset_object_from_name
 
 
 """
@@ -23,9 +24,34 @@ def all_datasets(request, server_config):
 	specs = Specifications(MODELS_DIR, DATASETS_DIR)
 	return {'datasets_summarization' : specs._list_datasets_summarization, 'datasets_search' : specs._list_datasets_search}, 200
 
+def all_files(request, server_config): 
+    """
+    2) GET files/all_files - all available files from a given dataset 
+        - Input: {"dataset" : str}
+        - Output: {"files" : list}
+        - Use Case: To get titles of all 442 Squad texts (so user can pick one)
+        - Who's Doing: Advit 
+
+    """
+
+    json = request.json
+    if any(param not in json for param in ['dataset']):
+        return "Malformed request", 400
+    
+    dataset_name = str(json['dataset'])
+    print("dataset_name", dataset_name)
+    # TODO: Add error handling/assertion (make sure dataset_name is valid) 
+    dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+    
+    titles = dataset_obj._get_topic_titles()
+
+    return {"files": titles}, 200
+
+
+
 def file(request, server_config):
     """
-    2) GET/files/file - specific file text (details) 
+    3) GET/files/file - specific file text (details) 
         - Input: {"file": str}
         - Output: {"file": str, "content": str, "content-length": int}
         - Use Case: Show preview for files
@@ -50,7 +76,7 @@ def file(request, server_config):
 
 def load(request, server_config): 
     """
-    3) POST/files/load - load datasets 
+    4) POST/files/load - load datasets 
         - Input: {"datasets": [str]}
         - Output: {}
         - Use Case: if user chooses squad + cnn dailymail in yaml
@@ -64,13 +90,13 @@ def load(request, server_config):
 
 def upload(request, server_config):
     """
-    4) POST/files/upload - user uploads file 
+    5) POST/files/upload - user uploads file 
         - Input: {"file": str, "content": str}
         - Output: {}
         - Use Case: when the user uploads a file
         - Who's Doing: Jason
 
-    5) DELETE/files/upload - user deletes file
+    6) DELETE/files/upload - user deletes file
         - Input: {"file": str}
         - Output: {}
         - Use Case: when the user deletes a **CUSTOM** file

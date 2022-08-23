@@ -33,6 +33,7 @@ def run_app(data, port):
 
     models = params._data_dict['models']
     
+
     # Using the parameters class object ONLY! 
     content = html.Div([get_content(params)], id="l0-page-content")
 
@@ -117,6 +118,16 @@ def run_app(data, port):
         else: 
             return page.get_page_custom(params) 
 
+
+    # Next, we ensure that the REST API Server is up and running 
+
+    PORT_REST_API = 3000 # TODO: Make this a global constant! 
+    print(f"(run_app) > Checking if REST API Server at port {PORT_REST_API} is ready...")
+
+    address = f"http://127.0.0.1:{PORT_REST_API}/"
+
+    response = requests.get(address)
+    print(f"(run_app) > Received response: {response}, {response.json()}")
 
     # Finally, after defining all our callbacks, we can run our app
 
