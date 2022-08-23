@@ -79,7 +79,7 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
             print('\n> Finished loading ' + self._info['name'] + ' class.\n')
 
-    def _summarize_dataset(self, dataset, column, split):
+    def _summarize_dataset(self, dataset):
         """ 
         Method that takes in a HuggingFace dataset and the name of the column of
         the dataset that contains the text to summarize. It calls the 
@@ -114,11 +114,11 @@ class HuggingFaceModelSummarization(ModelSummarization):
             summarization_outputs = df[df.columns[0]]
 
             # Add the column to the dataset object to be able to compute metrics
-            dataset._dataset[split] = dataset._dataset[split].add_column(
+            dataset._dataset[dataset._split] = dataset._dataset[dataset._split].add_column(
                 name=('result_' + self._info['class_name']), 
                 column=summarization_outputs)
         else:
-            for output in tqdm(self._pipe(KeyDataset(dataset._dataset[split], column))):
+            for output in tqdm(self._pipe(KeyDataset(dataset._dataset[dataset._split], dataset._document_column))):
 
                 answer = output[0]['summary_text']
                 summarization_outputs.append(answer)
@@ -128,7 +128,7 @@ class HuggingFaceModelSummarization(ModelSummarization):
             df.to_csv(results_file_path, index=False)
 
             # Add the column to the dataset object to be able to compute metrics
-            dataset._dataset[split] = dataset._dataset[split].add_column(
+            dataset._dataset[dataset._split] = dataset._dataset[dataset._split].add_column(
                 name=('result' + self._info['class_name']), 
                 column=summarization_outputs)
 

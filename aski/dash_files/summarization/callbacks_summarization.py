@@ -85,10 +85,7 @@ def get_summarization_callbacks(app, page, params):
             model_active    = get_object_from_name(params._data_dict['states']['model_active'][0], params, 'model')
 
             # Run the summarization and get the update dataset with the results
-            updated_dataset = model_active._summarize_dataset(
-                dataset_active,
-                dataset_active._document_column,
-                dataset_active._split)
+            updated_dataset = model_active._summarize_dataset(dataset_active)
 
             # Replace the old dataset object in the params with the new one
             dataset_index = params._data_dict['states']['dataset_objs'].index(dataset_active)
