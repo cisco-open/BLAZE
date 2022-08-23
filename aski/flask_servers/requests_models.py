@@ -47,7 +47,7 @@ def model(request, server_config):
 def initialize(request, server_config): 
     """
     3) POST/models/initialize - initialize model 
-        - Input: {"model": str}
+        - Input: {"model": str, "filename": str, "filecontent": str} <-- last two are optional!
         - Output: {}
         - Use Case: to initialize a model (make sure no pid/model alr running)
         - Who's Doing: Advit
@@ -67,6 +67,16 @@ def initialize(request, server_config):
 
     for model in server_config['model_objs']: 
         if model._info['class_name'] == model_name: 
+
+            model = get_model_object_from_name(model_name, server_config)
+            
+            if callable(getattr(model, "load_model", None)): 
+
+                if any(param not in json for param in ['filename', 'filecontent']):
+                    return "Malformed request", 400
+
+                model.load_model(str(json['filename']), str(json['filecontent']))
+
             return 200 
 
     return "That model doesn't exist", 404 
@@ -116,24 +126,20 @@ def search(request, server_config):
 def search_file(request, server_config): 
     """
     6) GET/models/search/file - get model answer (if search)
-        - Input: {"model": str, "filename": str, "query": str}
+        - Input: {"model": str, "filename": str, "filecontent": str, "query": str}
         - Output: {"result": str, "latency": float}
         - Use Case: 
         - Who's Doing: Advit    
     """
 
     json = request.json
-    if any(param not in json for param in ['model', 'filename', 'query']):
+    if any(param not in json for param in ['model', 'filename', 'filecontent', 'query']):
         return "Malformed request", 400
 
     model_name = json['model']
     file_name = json['filename']
+    file_content = json['filecontent']
     query = json['query']
-
-    # TODO: Figure out file content <-- will given attribute be file name? 
-    # TODO: What structure will it take? Pass in content directly? TBD
-
-    file_content = None 
 
     model = get_model_object_from_name(model_name, server_config)
 
