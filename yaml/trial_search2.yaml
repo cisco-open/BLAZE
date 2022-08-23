@@ -1,9 +1,12 @@
-Title: "A Comparison of Semantic Search Implementations"
+Title: A Comparison of Semantic Search Implementations
 function: 
   task: search 
   custom: true  
   benchmarking: true 
   comparing: true  
+datasets: 
+- SQUAD 
 models:
 - ColBERT
 - ElasticBERT
+metrics: {} 

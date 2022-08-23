@@ -1,9 +1,9 @@
-Title: "A Comparison of Summarization Implementations"
-function: 
+Title: A Comparison of Summarization Implementations
+function:
   task: summarization
   custom: true 
 models:
-- T5 
+- T5
 - Bart
 datasets:
 - XSum

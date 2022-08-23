@@ -113,6 +113,7 @@ def get_custom_model_checklist(list_models):
 
 def get_custom_functions_checklist(functions): 
     list_options = [] 
+    print(functions)
 
     for func in functions:
         if func == 'task': continue 
@@ -124,6 +125,10 @@ def get_custom_functions_checklist(functions):
 
         if func == "comparing": 
             list_options.append({"label": "Model Comparison", "value": "Model Comparison"})
+
+    if len(list_options) == 0: 
+        list_options.append({"label": "Custom Demo", "value": "Custom Demo"})
+
 
     return dbc.RadioItems(
                 options=list_options ,

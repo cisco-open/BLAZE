@@ -43,8 +43,21 @@ def get_dataset_options(params):
 def gen_inputOptions(params):
 
     # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
+
+    # HARDCODED SINCE WE WILL BE USING SQUAD FOR NOW 
+
+    #     data:
+    #   DATA_PATH: ./data/squad2_data
+    #   DATA_SETS: '1'
+    #   DEFAULT: 1973_oil_crisis
+    #   FILES_PATH: ./data/user_files
+
+    DATA_PATH = './data/squad2_data'
+    FILES_PATH = './data/user_files'
+
     n_squad, p_squad = [], []
     datasets = [dir[0] for dir in os.walk(DATA_PATH)]
+
 
     for dir in datasets[1:]:
         name = dir.split("/")[-1]
@@ -52,11 +65,13 @@ def gen_inputOptions(params):
         p_squad.append(dir + "/story.txt")
 
     n_user, p_user = [], []
+
     datasets = [dir for dir in os.listdir(FILES_PATH)]
 
     for dir in datasets:
         n_user.append(dir)
         p_user.append(FILES_PATH+ "/" + dir)
+
 
     files = {
         'n_squad': n_squad,

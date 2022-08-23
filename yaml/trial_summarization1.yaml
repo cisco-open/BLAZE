@@ -1,5 +1,5 @@
-Title: "Solo Summarization on Custom Text"
-function: 
+Title: Solo Summarization on Custom Text
+function:
   task: summarization
   custom: true 
 models:
