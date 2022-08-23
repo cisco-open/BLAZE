@@ -5,7 +5,7 @@ import subprocess
 
 from aski.flask_servers import requests_files
 from aski.flask_servers import requests_models 
-from aski.utils.helpers import get_list_models
+from aski.utils.helpers import get_list_objects
 
 
 """
@@ -72,7 +72,7 @@ def create_app(server_config):
     app = Flask(__name__)
 
     # Initialize models by storing the models in a list in server config
-    server_config['model_objs'] = get_list_models(server_config['models'], server_config['function']['task']) 
+    server_config['model_objs'] = get_list_objects(server_config['models'], server_config['function']['task'], 'models') 
 
     print("DUMPING SERVER_CONFIG", server_config)
   
