@@ -32,10 +32,6 @@ def run_app(data):
 
     models = params._data_dict['models']
     
-    print(f"(run_app) > Selected models: {models}")
-    print(f"(run_app) > Params: {params._get_params()}\n")
-
-
     # Using the parameters class object ONLY! 
     content = html.Div([get_content(params)], id="l0-page-content")
 
@@ -55,11 +51,9 @@ def run_app(data):
     elif task == 'summarization': 
         page = SummarizationInterface(params) 
         get_summarization_callbacks(app, page, params)
-         
     
     elif task == "search/summarization": 
         pass  
-
     
     # We define one main callback for sidebar functions (universal)
     @app.callback(Output("l0-page-content", "children"), 
@@ -70,10 +64,6 @@ def run_app(data):
                   [State("sidebar-file-button", "filename")])
 
     def sidebar_functionality(model_choice, page_choice, file_content, reset_button, file_name): 
-        
-        print(f"(sidebar_funcionality) > Chosen model(s): {model_choice}")
-        print(f"(sidebar_funcionality) > Chosen page: {page_choice}")
-
 
         # If the user chooses to reset 
         if reset_button == params._data_dict['states']['reset_presses'] + 1: 
@@ -84,10 +74,7 @@ def run_app(data):
             params._data_dict['states']['reset_presses'] = reset_button 
 
             # TODO: REST API - Stop Currently Active Models (kill processes, if active)
-
             return page.get_page_custom(params) 
-
-
 
         # If the user picks a different model than the one(s) in use
         if params._data_dict['states']['model_active'] != sorted(model_choice): 
@@ -105,12 +92,6 @@ def run_app(data):
             
             params._reset_data_dict_states()
 
-            # TODO: REST API - Stop Model that was Deactivated or Activate New Model (kill processes, if active)
-
-            print(f"(sidebar_functionality) > Updated model_active: {params._data_dict['states']['model_active']}")
-
-
-
         # If the user chooses to upload a new file 
 
         if file_name is not None:
@@ -126,12 +107,11 @@ def run_app(data):
             f.write(decoded)
             f.close()
 
-            print(f"(sidebar_functionality) > Added file {file_name}.")
+            print(f"> Added file {file_name}.")
 
         #params.dump_params() <-- write to txt 
             
         # If the user switches to a new page
-
         if page_choice == "Solo Benchmark": 
             return page.get_page_benchmark(params)
         

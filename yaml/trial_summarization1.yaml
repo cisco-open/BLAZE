@@ -2,10 +2,12 @@ Title: "Solo Summarization on Custom Text"
 function: 
   task: summarization
   custom: true 
-data:
-  DATA_PATH: ./data/squad2_data
-  DATA_SETS: '1'
-  DEFAULT: 1973_oil_crisis
-  FILES_PATH: ./data/user_files
 models:
 - Bart
+datasets:
+- XSum
+- BillSum
+- CNNDailyMail
+metrics:
+- Rouge
+- Bleu
