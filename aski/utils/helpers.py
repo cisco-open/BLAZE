@@ -1,5 +1,9 @@
+from dash import Dash, html, dcc, dash_table
+import dash_bootstrap_components as dbc
 from importlib import import_module
 import yaml
+
+from aski.dash_files.app_constants import CREAM, WHITE
 
 def get_list_objects(list_objects_str, task, object_type):
     """ 
@@ -65,3 +69,46 @@ def get_current_model(params):
             current_model = model
 
     return current_model
+
+def get_metrics_tables(params):
+
+    metrics_results = params._data_dict['states']['metrics_results']
+    metrics_used    = params._data_dict['states']['metric_objs']
+
+    dash_elements = []
+
+    for i in range(len(metrics_used)):
+
+        # Get the metric name and the associated dictionnary
+        metric_name   = metrics_used[i]._class_name
+        pre_dict      = metrics_results[i]
+
+        # Keep only the keys specified in the class
+        metric_keep   = metrics_used[i]._metric_keys
+        metric_result = {k: pre_dict[k] for k in metric_keep if k in pre_dict}
+
+        # Round the metrics
+        metric_result = {k : round(metric_result[k], 3) for k in metric_result}
+        metric_name   = metrics_used[i]._class_name
+
+
+        table = dash_table.DataTable(
+            data=[metric_result], 
+            id='tbl' + str(i),
+            cell_selectable=False,
+            column_selectable=False,
+            style_header = {'background-color': '#049FD911', 'color': CREAM, 
+            'textAlign': 'center', 'font-size': 20, 'font-weight': "bold", 'font-family': "Quicksand"},
+            style_cell   = {'background-color': '#049FD911', 'color': WHITE, 
+            'textAlign': 'left',   'font-size': 20, 'font-weight': "bold", 'font-family': "Quicksand"}
+            )
+
+        dash_element = dbc.Col([
+                            html.H6(metric_name, style={"font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem", 'text-align': 'center'}),
+                            table,
+                            html.Br(),
+                        ], width=15, style={"background": "#049FD911", "color": WHITE, "font-family": "Quicksand", "padding": "1rem"}, align="center")
+
+        dash_elements.append(dash_element)
+
+    return dash_elements

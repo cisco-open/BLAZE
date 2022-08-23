@@ -1,9 +1,9 @@
 import dash_bootstrap_components as dbc
-from dash import html, dcc
+from dash import Dash, html, dcc, dash_table
 
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_helpers import *
-from aski.utils.helpers import get_object_from_name
+from aski.utils.helpers import get_object_from_name, get_metrics_tables
 
 class SummarizationInterface(): 
 
@@ -56,9 +56,11 @@ class SummarizationInterface():
             dbc.Row([
                 dbc.Col([
                     self.get_bench_dataset_card(params),
-                    html.Div(self.get_bench_metric_card(params)),
                     html.Div(self.get_begin_summarization_button(params)),
-                ], width=4)
+                ], width=4),
+                dbc.Col(
+                    self.get_bench_metric_card(params)
+                    )
             ])
         ], style=CONTENT_STYLE), id="bench-content")
 
@@ -333,43 +335,14 @@ class SummarizationInterface():
 
     def get_bench_metric_card(self, params):
 
-        default = None
+        print('here')
+        default = "Please select a metric."
 
-        # If no dataset has been selected
-        if len(params._data_dict['states']['metric_active']) == 0:
-            default = "Please select a metric."
-        else:
-            metric  = params._data_dict['states']['metric_active'][0]
-            default = get_object_from_name(metric, params, 'metric')._get_class_name()
+        # If no metric has been selected
+        if len(params._data_dict['states']['metrics_results']) != len(params._data_dict['states']['metric_objs']):
+            return
 
-        return dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5(default, style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    dbc.Row([
-                        dbc.Col([
-                            html.H6
-                            (
-                                "Please choose a valid metric:",
-                                style={"font-family": "Quicksand", "color": WHITE,
-                                    'font-size': "22px", "padding": "1rem"}
-                            ),
-                        ], width=10),
-                        dbc.Col([
-                            dbc.Select(
-                                id="summarization-bench-choose-metric",
-                                options=get_object_options(params, 'metric'),
-                                style={"background": "#888888",
-                                    "color": WHITE, "font-family": "Quicksand"},
-                                placeholder=default
-                            ),
-                        ])
-                    ], align="center", style={'margin-bottom': "10px"})
-                ]),
-        ],  outline=True,
-            color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "margin-bottom": "1rem"}
-        )
+        return get_metrics_tables(params)
 
     def get_begin_summarization_button(self, params):
 

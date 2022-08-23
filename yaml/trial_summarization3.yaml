@@ -4,8 +4,6 @@ function:
   custom: true 
   benchmarking: true 
 models:
-- T5 
-- Pegasus
 - Bart
 datasets:
 - XSum
@@ -13,5 +11,4 @@ datasets:
 - CNNDailyMail
 metrics:
 - Rouge
-- BertScore
 - Bleu

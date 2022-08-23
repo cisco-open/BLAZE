@@ -65,9 +65,8 @@ def get_summarization_callbacks(app, page, params):
 
     @app.callback(Output("bench-content", "children"),[
                   Input("summarization-bench-choose-dataset", "value"),
-                  Input("summarization-bench-choose-metric",  "value"),
                   Input("summarization-bench-begin-summarization",   "n_clicks"),],[])
-    def render_bench_content(dataset_chosen, metric_chosen, bench_button):
+    def render_bench_content(dataset_chosen, bench_button):
 
         print("> Entered bench callback.")
 
@@ -76,48 +75,38 @@ def get_summarization_callbacks(app, page, params):
             params._data_dict['states']['has_dataset']    = True 
             params._data_dict['states']['dataset_active'] = [dataset_chosen] 
         
-        ### CHOOSING A METRIC
-        if metric_chosen is not None:
-            params._data_dict['states']['has_metric'] = True 
-            params._data_dict['states']['metric_active'] = [metric_chosen] 
-        
         ### RUNNING SUMMARIZATION ON AN ENTIRE DATASET
         if (bench_button == 1 and \
-            len(params._data_dict['states']['model_active'])   == 1 and 
-            len(params._data_dict['states']['metric_active'])  == 1  and \
+            len(params._data_dict['states']['model_active'])   == 1 and \
             len(params._data_dict['states']['dataset_active']) == 1):
 
-
-            print(params._data_dict['states']['dataset_active'][0])
-            print(params._data_dict['states']['metric_active'][0])
-            print(params._data_dict['states']['model_active'][0])
-
+            # Get the objects 
             dataset_active  = get_object_from_name(params._data_dict['states']['dataset_active'][0], params, 'dataset')
-            metric_active   = get_object_from_name(params._data_dict['states']['metric_active'][0], params, 'metric')
             model_active    = get_object_from_name(params._data_dict['states']['model_active'][0], params, 'model')
 
-            print('summarizing')
-
+            # Run the summarization and get the update dataset with the results
             updated_dataset = model_active._summarize_dataset(
                 dataset_active,
                 dataset_active._document_column,
                 dataset_active._split)
 
-            print('Updating dataset')
+            # Replace the old dataset object in the params with the new one
             dataset_index = params._data_dict['states']['dataset_objs'].index(dataset_active)
             params._data_dict['states']['dataset_objs'][dataset_index] = updated_dataset
 
-            print(params._data_dict['states']['dataset_objs'][dataset_index])
-            print(params._data_dict['states']['dataset_objs'][dataset_index]['validation'])
+            metrics = []
+
+            # Compute each metric
+            for metric in params._data_dict['states']['metric_objs']:
+
+                final_score = metric._compute_metric(
+                    preds = dataset_active._dataset[dataset_active._split][dataset_active._summary_column],
+                    refs  = dataset_active._dataset[dataset_active._split]['result_' + model_active._info['class_name']])
+                metrics.append(final_score)
+
+                print('Final score:')
+                print(final_score)
+
+            params._data_dict['states']['metrics_results'] = metrics
 
         return page.get_page_benchmark(params) 
-
-
-
-
-
-
-
-
-
-

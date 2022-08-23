@@ -62,7 +62,7 @@ class Parameters:
         print(f"\n==== Loading Metrics ===\n")
         
         self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
-        self._data_dict['states']['metric_active']   = [] 
+        self._data_dict['states']['metrics_results'] = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
