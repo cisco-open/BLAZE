@@ -1,13 +1,14 @@
-Title: "A Comparison of Summarization Implementations"
-function: 
+Title: A Comparison of Summarization Implementations
+function:
   task: summarization
   custom: true 
-  comparing: true 
-data:
-  DATA_PATH: ./data/squad2_data
-  DATA_SETS: '1'
-  DEFAULT: 1973_oil_crisis
-  FILES_PATH: ./data/user_files
 models:
-- T5 
+- T5
 - Bart
+datasets:
+- XSum
+- BillSum
+- CNNDailyMail
+metrics:
+- Rouge
+- Bleu

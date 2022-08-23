@@ -107,7 +107,6 @@ def create_app(server_config):
         nonlocal server_config
         return requests_files.load(request, server_config)
 
-
     @app.route('/files/upload', methods=['POST', 'DELETE'])
     def upload():
         nonlocal server_config

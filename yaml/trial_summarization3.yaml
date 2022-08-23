@@ -1,7 +1,8 @@
-Title: Solo Summarization on Custom Text
-function:
+Title: "A Comparison of Summarization Implementations"
+function: 
   task: summarization
   custom: true 
+  benchmarking: true 
 models:
 - Bart
 datasets:
