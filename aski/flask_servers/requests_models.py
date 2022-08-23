@@ -33,6 +33,7 @@ def model(request, server_config):
     """
 
     json = request.json
+
     if any(param not in json for param in ['model']):
         return "Malformed request", 400
 
@@ -53,6 +54,8 @@ def initialize(request, server_config):
 
     TODO: Figure out whether this should look at processes, or at model_objs
     TODO: Figure out concrete functionality for this method... unsure 
+
+    TODO: This will be for initializing search (indexing on a file!)
 
     """
 

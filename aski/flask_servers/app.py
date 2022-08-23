@@ -37,15 +37,11 @@ def json_input_validators(input_data, fields_to_be_present):
     return {'Success': '0'}
 
 
-def create_app(server_config):
+def create_server_config(data): 
+    # Input: data dictionary (yaml file) 
+    # TODO: Implement this function! 
 
-    app = Flask(__name__)
-
-    # Initialize models by storing the models in a list in server config
-    server_config['model_objs'] = get_list_models(server_config['models'], server_config['function']['task']) 
-
-    print("DUMPING SERVER_CONFIG", server_config)
-    
+  
     """
     
     Things we can cut out of server_config: 
@@ -65,26 +61,33 @@ def create_app(server_config):
     - 'data_objs' : [Squad.py obj, CNNDailyMail.py obj, UserFiles.obj]
     - 'model_names' : [ElasticBERT, T5]
     - 'model_objs' : [ElasticBERT.py obj, T5.py obj]
-    - 'processes' : {'name' : 'ElasticBERT', 'pid' : Process, 'queue' : Queue, 'res' : dict()}
+    - 'processes' : {'ElasticBERT' : [Process, Queue, Res]}
     
     """
+
+    return data
+
+def create_app(server_config):
+
+    app = Flask(__name__)
+
+    # Initialize models by storing the models in a list in server config
+    server_config['model_objs'] = get_list_models(server_config['models'], server_config['function']['task']) 
+
+    print("DUMPING SERVER_CONFIG", server_config)
+  
 
     # 01) General methods. 
     
     @app.route('/', methods=['GET'])
     def default():
         nonlocal server_config
-        return "Working API server"
+        return {'response' : "Working API server"}, 200 
 
     @app.route('/data', methods=['GET'])
     def get_data():
         nonlocal server_config
         return json.dumps({'data': server_config['data']})
-
-    @app.route('/feedback', methods=['POST'])
-    def feedback():
-        # request.json['feedback']
-        return {}, 200
     
 
     # 02) Dataset methods.

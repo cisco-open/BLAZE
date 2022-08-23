@@ -3,7 +3,7 @@ from multiprocessing import Process
 import yaml
 
 from aski.dash_files.app_callbacks import run_app
-from aski.flask_servers.app import create_app, run_app_server
+from aski.flask_servers.app import create_app, run_app_server, create_server_config 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -15,6 +15,7 @@ if __name__ == "__main__":
     with open(args.yaml_file, mode="rt", encoding="utf-8") as file:
         data = yaml.safe_load(file)
 
+    config = create_server_config(data) 
     app = create_app(data)
 
     p_dash = Process(target=run_app, args=(data,))

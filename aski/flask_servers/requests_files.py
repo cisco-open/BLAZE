@@ -21,7 +21,7 @@ def all_datasets(request, server_config):
         - Who's Doing: Thomas
     """
 	specs = Specifications(MODELS_DIR, DATASETS_DIR)
-	return specs._list_datasets_summarization, specs._list_datasets_search
+	return {'datasets_summarization' : specs._list_datasets_summarization, 'datasets_search' : specs._list_datasets_search}, 200
 
 def file(request, server_config):
     """
