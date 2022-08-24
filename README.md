@@ -102,7 +102,7 @@ To run the webex bot server, obtain the necessary bot access token and run the w
 
 `python aski_conversational/webex_bot_server.py`
 
-## Sources for training data
+***Sources for training data***
 - greet: food_ordering/greet/train.txt
 - exit: food_ordering/exit/train.txt
 - ask_question: manual data entry + mindmeld data augmentation
