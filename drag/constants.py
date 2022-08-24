@@ -148,7 +148,8 @@ class JobID(Enum):
     DIV_DATASET = auto()
 
 
-
+# TODO: get these directly from files instead of constants (we do this somewhere already!) 
+    
 supported_models = {
     'search' : {
         'ElasticBERT' : 'This is a sample description for ElasticBERT.', 
@@ -162,7 +163,7 @@ supported_models = {
 
 supported_data = {
     'search' : {
-        'SQUAD' : 'Question-Answering Dataset developed by Stanford. Contains...', 
+        'Squad' : 'Question-Answering Dataset developed by Stanford. Contains...', 
     }, 
     'summarization' : {
         'CNN Dailymail' : 'A collection of over...'
