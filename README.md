@@ -86,6 +86,30 @@ A few heads up, there are **several edge-cases** that are currently being ironed
 
 &nbsp;&nbsp;
 
+## Using the conversational AI
+
+Build the conversational model with
+
+`python -m aski_conversational build`
+
+(This step may take about 15 minutes without a GPU)
+
+And run the AI in the command line with
+
+`python -m aski_conversational converse`
+
+To run the webex bot server, obtain the necessary bot access token and run the webex server with
+
+`python aski_conversational/webex_bot_server.py`
+
+## Sources for training data
+- greet: food_ordering/greet/train.txt
+- exit: food_ordering/exit/train.txt
+- ask_question: manual data entry + mindmeld data augmentation
+- get_summary: manual data entry + mindmeld data augmentation
+- upload_data: manual data entry + mindmeld data augmentation
+
+
 ## Supported Models 
 
 ***Installing Elasticsearch***
