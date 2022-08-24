@@ -8,4 +8,3 @@ MODELS_DIR   = path.realpath(path.join(path.dirname(path.realpath(__file__)), '.
 
 # /ASKI/aski/datasets
 DATASETS_DIR = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', 'datasets/'))
-

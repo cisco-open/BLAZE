@@ -1,9 +1,19 @@
+from base64 import b64decode
 from dash import Dash, html, dcc, dash_table
 import dash_bootstrap_components as dbc
 from importlib import import_module
+import os.path as path
+from os.path import splitext
+import os
+from shutil import copy
+import spacy
+from spacypdfreader import pdf_reader
 import yaml
 
 from aski.dash_files.app_constants import CREAM, WHITE
+
+# ASKI/data
+FILES_DIR = path.realpath(path.join(path.dirname(path.realpath(__file__)), '..', '..', 'data'))
 
 def get_list_objects(list_objects_str, task, object_type):
     """ 
@@ -127,3 +137,53 @@ def get_metrics_tables(params):
 
     return dash_elements
 
+def save_file(file_content, file_name):
+
+    # Get the filename and its extension (either .txt or .pdf)
+    file_name, file_extension = splitext(file_name)
+
+    # Read the binaries of the file
+    content_type, content_string = file_content.split(',')
+    bytes_result = b64decode(content_string, validate=True)
+
+    file_path = FILES_DIR + '/user_files/' + file_name + file_extension
+
+    # Save the file contents to pdf
+    with open(file_path, 'wb') as file:
+        file.write(bytes_result)
+
+def read_file(path):
+
+    # Get the filename and its extension (either .txt or .pdf)
+    file_name = os.path.basename(path)
+    file_name, file_extension = splitext(file_name)
+
+    if file_extension == '.txt':
+
+        f = open(path, "r")
+        lines = f.readlines()[1:]
+        f.close()
+        f_content = "".join(lines)
+        return f_content
+
+    elif file_extension == '.pdf':
+
+        # Pipeline for the document and reading the document
+        pipeline = spacy.load('en_core_web_sm')
+        doc = pdf_reader(path, pipeline)
+
+        text_files = []
+
+        # Iterate over all the pages of the document and append them to a list
+        for i in range(doc._.first_page, doc._.last_page + 1):
+            text_files.append(doc._.page(i))
+
+        # List to store the content of the pages of a document
+        text_files_str = []
+
+        for file in text_files:
+            text_files_str.append(file.text)
+
+        data = "".join(text_files_str)
+
+        return data

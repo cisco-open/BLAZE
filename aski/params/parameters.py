@@ -61,6 +61,7 @@ class Parameters:
 
         print(f"\n==== Loading Metrics ===\n")
         
+        print('here models')
         self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
         self._data_dict['states']['metrics_results'] = [] 
 
