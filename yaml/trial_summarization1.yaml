@@ -1,13 +1,9 @@
 Title: Solo Summarization on Custom Text
+datasets:
+- CNNDailyMail
 function:
+  custom: true
   task: summarization
-  custom: true 
+metrics: {}
 models:
 - Bart
-datasets:
-- XSum
-- BillSum
-- CNNDailyMail
-metrics:
-- Rouge
-- Bleu
