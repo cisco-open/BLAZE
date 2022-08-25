@@ -6,6 +6,8 @@ This module extends the ModelSummary interface to load Hugging Face models.
 
 """
 
+from os.path import exists
+import pandas as pd
 import torch
 from tqdm.auto import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipeline
@@ -77,7 +79,7 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
             print('\n> Finished loading ' + self._info['name'] + ' class.\n')
 
-    def _summarize_dataset(self, dataset, column):
+    def _summarize_dataset(self, dataset):
         """ 
         Method that takes in a HuggingFace dataset and the name of the column of
         the dataset that contains the text to summarize. It calls the 
@@ -98,16 +100,37 @@ class HuggingFaceModelSummarization(ModelSummarization):
             The HuggingFace dataset to summarize with the summarized text column
         """
 
+        # Path where the summarization results are stored
+        results_file_path = 'aski/results/' + self._info['name'] + '_' + dataset._dataset_name + '.csv'
+
+        # To store the summarization results (will later be added to the dataset)
         summarization_outputs = []
 
-        for output in tqdm(self._pipe(KeyDataset(dataset, column))):
+        # If we already ran the model for this dataset, read the saved results
+        if exists(results_file_path):
 
-            answer = output[0]['summary_text']
-            summarization_outputs.append(answer)
+            # Read the first column of the csv file which contains the summaries
+            df = pd.read_csv(results_file_path)
+            summarization_outputs = df[df.columns[0]]
 
-        dataset.add_column(
-            name=('result' + self._info['class_name']), 
-            column=summarization_outputs)
+            # Add the column to the dataset object to be able to compute metrics
+            dataset._dataset[dataset._split] = dataset._dataset[dataset._split].add_column(
+                name=('result_' + self._info['class_name']), 
+                column=summarization_outputs)
+        else:
+            for output in tqdm(self._pipe(KeyDataset(dataset._dataset[dataset._split], dataset._document_column))):
+
+                answer = output[0]['summary_text']
+                summarization_outputs.append(answer)
+
+            # Save the results to a pandas dataframe and dump it to csv
+            df = pd.DataFrame(summarization_outputs)
+            df.to_csv(results_file_path, index=False)
+
+            # Add the column to the dataset object to be able to compute metrics
+            dataset._dataset[dataset._split] = dataset._dataset[dataset._split].add_column(
+                name=('result' + self._info['class_name']), 
+                column=summarization_outputs)
 
         return dataset
 
@@ -123,8 +146,8 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
         Returns
         -------
-        summary_text : str
-            The summarized text
+        summary_text : List of str
+            The summarized text as a list of strings
         """
 
         inputs = self._tokenizer(

@@ -1,0 +1,14 @@
+Title: "A Comparison of Summarization Implementations"
+function: 
+  task: summarization
+  custom: true 
+  benchmarking: true 
+models:
+- Bart
+datasets:
+- XSum
+- BillSum
+- CNNDailyMail
+metrics:
+- Rouge
+- Bleu
