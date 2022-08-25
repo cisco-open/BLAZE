@@ -126,7 +126,7 @@ def upload(request, server_config):
         if any(param not in json for param in ['file', 'content']):
             return "Malformed request", 400
         
-        filepath = path.join(FILES_DIR, 'user_files', json['file'])
+        filepath = path.join(FILES_DIR, json['file'])
         with open(filepath, 'w') as f:
             f.write(json['content'])
         return {}, 201
@@ -135,7 +135,7 @@ def upload(request, server_config):
         if any(param not in json for param in ['file']):
             return "Malformed request", 400
 
-        filepath = path.join(FILES_DIR, 'user_files', json['file'])
+        filepath = path.join(FILES_DIR, json['file'])
         if os.path.exists(filepath):
             os.remove(filepath)
             return {}, 204
