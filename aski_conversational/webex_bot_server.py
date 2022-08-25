@@ -96,15 +96,19 @@ class WebexBotServer:
                 d = r.headers['content-disposition']
                 fname = re.findall("filename=\"(.+)\"", d)[0]
                 self.logger.info(f'Uploading file {fname}')
-                r = requests.post('http://localhost:3000/files/upload', data={'file': fname, 'content': r.content})
-                try:
-                    r.raise_for_status()
-                except requests.exceptions.HTTPError:
-                    self.logger.info('Failed to upload')
-                    responses.append('Something went wrong with the file upload')
+                if fname.endswith('.yaml'):
+                    r = requests.post('http://localhost:3000/files/yaml', data={'file': fname, 'content': r.content})
+                    responses.append(f"Dashboard generated: {r.json['dash']}")
                 else:
-                    self.logger.info('Upload succeeded')
-                    responses.append('File uploaded successfully')
+                    r = requests.post('http://localhost:3000/files/upload', data={'file': fname, 'content': r.content})
+                    try:
+                        r.raise_for_status()
+                    except requests.exceptions.HTTPError:
+                        self.logger.info('Failed to upload')
+                        responses.append('Something went wrong with the file upload')
+                    else:
+                        self.logger.info('Upload succeeded')
+                        responses.append('File uploaded successfully')
 
             if message.text:
                 responses.extend(self.conv.say(message.text))
