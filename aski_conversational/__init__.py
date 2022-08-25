@@ -31,6 +31,8 @@ def exit(request, responder):
 @app.dialogue_flow(intent='get_summary')
 def get_summary(request, responder):
     responder.reply('Which file are we sumarizing?')
+    r = requests.get(api('/files/all_datasets'))
+    responder.reply(', '.join(r.json['datasets_search']))
 
 @get_summary.handle(default=True)
 def summary_loop(request, responder):
