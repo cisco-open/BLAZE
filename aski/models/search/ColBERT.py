@@ -18,11 +18,12 @@ answer_question
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import os, sys, time, torch, shutil
 
-# sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
-# from colbert.infra import Run, RunConfig, ColBERTConfig
-# from colbert import Indexer, Searcher
-# from colbert.data import Queries
-# sys.path.insert(0, f"{os.getcwd()}/")
+print(os.getcwd() + "/ColBERT/")
+sys.path.insert(0, f"{os.getcwd()}/ColBERT/")
+from colbert.infra import Run, RunConfig, ColBERTConfig
+from colbert import Indexer, Searcher
+from colbert.data import Queries
+sys.path.insert(0, f"{os.getcwd()}/")
 
 # ==============================================================================
 # =========================== AUXILIARY FUNCTIONS ==============================

@@ -5,6 +5,7 @@ from importlib import import_module
 import os.path as path
 from os.path import splitext
 import os
+from re import sub
 from shutil import copy
 import spacy
 from spacypdfreader import pdf_reader
@@ -185,5 +186,8 @@ def read_file(path):
             text_files_str.append(file.text)
 
         data = "".join(text_files_str)
+
+        # Remove non-ASCII characters
+        data = sub(r'[^\x00-\x7f]',r'', data) 
 
         return data

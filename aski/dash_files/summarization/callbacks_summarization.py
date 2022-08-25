@@ -18,8 +18,6 @@ def get_summarization_callbacks(app, page, params):
         ### SELECTING FILE FOR SUMMARIZATION
         if file_chosen is not None:
 
-            print('file chosen: ' + file_chosen)
-
             # Update the params object to signify that the user chose a file
             params._data_dict['states']['has_input_file'] = True 
 
@@ -36,7 +34,6 @@ def get_summarization_callbacks(app, page, params):
         ### RUNNING SUMMARIZATION
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
-            print('Chosen data' + params._data_dict['states']['chosen_data'])
             f_content = read_file(params._data_dict['states']['chosen_path'])
 
             model_active = params._data_dict['states']['model_active'][0]

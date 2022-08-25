@@ -39,8 +39,8 @@ class Bart(HuggingFaceModelSummarization):
     def __init__(self):
 
         super().__init__(
-            model_name='facebook/bart-large',
+            model_name='facebook/bart-large-cnn',
             model_info=get_bart_info(),
-            max_length=1020,
-            model_max_length=1020, 
+            max_length=1024,
+            model_max_length=1024, 
             truncation=True)

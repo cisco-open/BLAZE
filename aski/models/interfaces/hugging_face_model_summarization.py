@@ -7,6 +7,8 @@ This module extends the ModelSummary interface to load Hugging Face models.
 """
 
 from os.path import exists
+import nltk
+from nltk import sent_tokenize
 import pandas as pd
 import torch
 from tqdm.auto import tqdm
@@ -14,6 +16,26 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, SummarizationPipe
 from transformers.pipelines.base import KeyDataset
 
 from aski.models.interfaces.model_summarization import ModelSummarization
+
+# generate chunks of text \ sentences <= 1024 tokens
+def nest_sentences(document):
+    print(type(document))
+    nltk.download('punkt')
+    nested = []
+    sent = []
+    length = 0
+    for sentence in sent_tokenize(document):
+        length += len(sentence)
+    if length < 1024:
+        sent.append(sentence)
+    else:
+        nested.append(sent)
+        sent = []
+        length = 0
+
+    if sent:
+        nested.append(sent)
+    return nested
 
 class HuggingFaceModelSummarization(ModelSummarization):
     """
@@ -134,36 +156,61 @@ class HuggingFaceModelSummarization(ModelSummarization):
 
         return dataset
 
-    def _summarize_text(self, text_to_summarize):
+    def _summarize_text(self, document):
         """ 
         Method that takes in a piece of text and summarizes it by calling the 
         tokenizer and model attributes and finally returns it.
 
         Parameters
         ----------
-        text_to_summarize : str
-            The piece of text to summarize
+        document : str
+            The document to summarize
 
         Returns
         -------
-        summary_text : List of str
+        summary : List of str
             The summarized text as a list of strings
         """
 
-        inputs = self._tokenizer(
-            [text_to_summarize], 
-            return_tensors="pt", 
-            max_length=self._max_length,
-            truncation=self._truncation)
+        inputs_no_trunc = self._tokenizer(document, max_length=None, return_tensors='pt', truncation=False)
 
-        summary_ids = self._model.generate(
-            inputs["input_ids"], 
-            num_beams=4, 
-            max_length=self._max_length)
+        chunk_start = 0
+        chunk_end   = self._tokenizer.model_max_length  
+        inputs_batch_lst = []
 
-        summary_text = self._tokenizer.batch_decode(
-            summary_ids,
-            skip_special_tokens=True,
-            clean_up_tokenization_spaces=False)
+        while chunk_start <= len(inputs_no_trunc['input_ids'][0]):
 
-        return summary_text
+            inputs_batch  = inputs_no_trunc['input_ids'][0][chunk_start:chunk_end]  
+            inputs_batch  = torch.unsqueeze(inputs_batch, 0)
+            chunk_start  += self._tokenizer.model_max_length  
+            chunk_end    += self._tokenizer.model_max_length  
+            inputs_batch_lst.append(inputs_batch)
+
+        summary_ids_lst = [self._model.generate(inputs, num_beams=4, min_length=30, max_length=50) for inputs in inputs_batch_lst]
+
+        summary_batch_lst = []
+
+        for summary_id in summary_ids_lst:
+
+            summary_batch = [self._tokenizer.decode(g, skip_special_tokens=True, clean_up_tokenization_spaces=False) for g in summary_id]
+            summary_batch_lst.append(summary_batch[0])
+
+        summary_all = '\n'.join(summary_batch_lst)
+
+        return summary_all
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -189,7 +189,7 @@ class SearchInterface():
                                 dbc.Col(dbc.Input(
                                     className="mb-3", placeholder=params._data_dict['states']['query'], id="search-custom-enter-q-box", style={"color": WHITE, "background": "#88888822"}
                                 ), width=10),
-                                dbc.Col(dbc.Button('Ask Q', color="info", outline=True,
+                                dbc.Col(dbc.Button('Ask', color="info", outline=True,
                                                 id="search-custom-ask-q-button", style={'font-family': "Quicksand"}))
                             ]),
                             dbc.Alert(
