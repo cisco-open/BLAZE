@@ -24,7 +24,8 @@ def get_summarization_callbacks(app, page, params):
             params._data_dict['states']['has_input_file'] = True 
 
             # If the user reads from squad
-            if (file_chosen.split("/")[-1] == "story.txt"): params._data_dict['states']['chosen_data'] = file_chosen.split("/")[-2]
+            if (file_chosen.split("/")[-1] == "story.txt"): 
+                params._data_dict['states']['chosen_data'] = file_chosen.split("/")[-2]
 
             # If the user uses a custom file
             else:
