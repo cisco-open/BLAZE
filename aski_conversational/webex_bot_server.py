@@ -9,9 +9,10 @@ This module contains the Webex Bot Server component.
 import json
 import logging
 
-from webexteamssdk import WebexTeamsAPI
+from webexteamssdk import WebexTeamsAPI, Webhook
 from flask import Flask, request
 import requests
+from urllib.parse import urljoin
 
 from mindmeld.components.dialogue import Conversation
 
@@ -22,6 +23,8 @@ BAD_REQUEST_CODE = 400
 APPROVED_REQUEST_NAME = "OK"
 APPROVED_REQUEST_CODE = 200
 
+WEBHOOK_NAME = "ASKI_conversational"
+WEBHOOK_URL_SUFFIX = "/events"
 
 class WebexBotServerException(Exception):
     pass
@@ -32,18 +35,18 @@ class WebexBotServer:
     A sample server class for Webex Teams integration with any MindMeld application
     """
 
-    def __init__(self, name, app_path, nlp=None, webhook_id=None, access_token=None):
+    def __init__(self, name, app_path, nlp=None, webhook_url=None, access_token=None):
         """
         Args:
             name (str): The name of the server.
             app_path (str): The path of the MindMeld application.
             nlp (NaturalLanguageProcessor): MindMeld NLP component, will try to load from app path
               if None.
-            webhook_id (str): Webex Team webhook id, will raise exception if not passed.
+            ####webhook_id (str): Webex Team webhook id, will raise exception if not passed.
             access_token (str): Webex Team bot access token, will raise exception if not passed.
         """
         self.app = Flask(name)
-        self.webhook_id = webhook_id
+        self.webhook_url = webhook_url
         self.access_token = access_token
         if not nlp:
             self.nlp = NaturalLanguageProcessor(app_path)
@@ -54,92 +57,88 @@ class WebexBotServer:
 
         self.logger = logging.getLogger(__name__)
 
-        if not self.webhook_id:
+        if not self.webhook_url:
             raise WebexBotServerException("WEBHOOK_ID not set")
         if not self.access_token:
             raise WebexBotServerException("BOT_ACCESS_TOKEN not set")
 
         self.teams_api = WebexTeamsAPI(access_token=self.access_token)
-        self.access_token_with_bearer = ACCESS_TOKEN_WITH_BEARER + self.access_token
 
-        @self.app.route("/", methods=["POST"])
+        @self.app.route(WEBHOOK_URL_SUFFIX, methods=["POST"])
         def handle_message():  # pylint: disable=unused-variable
-            me = self.teams_api.people.me()
-            data = request.get_json()
-
-            for key in ["personId", "id", "roomId"]:
-                if key not in data["data"].keys():
-                    payload = {"message": "personId/id/roomID key not found"}
-                    return BAD_REQUEST_NAME, BAD_REQUEST_CODE, payload
-
-            if data["id"] != self.webhook_id:
-                self.logger.debug("Retrieved webhook_id %s doesn't match", data["id"])
+            webhook_obj = Webhook(request.json)
+            '''
+            if webhook_obj.id != self.webhook_id:
+                self.logger.debug("Retrieved webhook_id %s doesn't match", webhook_obj.id)
                 payload = {"message": "WEBHOOK_ID mismatch"}
                 return BAD_REQUEST_NAME, BAD_REQUEST_CODE, payload
+            '''
+            room = self.teams_api.rooms.get(webhook_obj.data.roomId)
+            message = self.teams_api.messages.get(webhook_obj.data.id)
+            person = self.teams_api.people.get(message.personId)
 
-            person_id = data["data"]["personId"]
-            msg_id = data["data"]["id"]
-            txt = self.teams_api.messages.get(msg_id).text
-            room_id = data["data"]["roomId"]
-
-            '''if "text" not in txt:
-                payload = {"message": "Query not found"}
-                return BAD_REQUEST_NAME, BAD_REQUEST_CODE, payload'''
-
-            # Ignore the bot's own responses, else it would go into an infinite loop
-            # of answering it's own questions.
-            if person_id == me.id:
+            # Ignore the bot's own responses
+            me = self.teams_api.people.me()
+            if message.personId == me.id:
                 payload = {
                     "message": "Input query is the bot's previous message, \
                             so don't send it to the bot again"
                 }
                 return APPROVED_REQUEST_NAME, APPROVED_REQUEST_CODE, payload
 
-            responses = self.conv.say(txt)
+            responses = self.conv.say(message.text)
             results = []
             for response in responses:
-                results.append(self.teams_api.messages.create(roomId=room_id, text=response).text)
+                new_message = self.teams_api.messages.create(roomId=room.id, text=response)
+                results.append(new_message.text)
             payload = { "messages": results }
             return APPROVED_REQUEST_NAME, APPROVED_REQUEST_CODE, payload
 
     def run(self, host="localhost", port=7150):
-        self.app.run(host=host, port=port)
+        self.delete_webhooks_with_name()
+        self.create_webhooks(self.webhook_url)
 
-    @staticmethod
-    def _url(path):
-        return "{0}{1}".format(CISCO_API_URL, path)
+        try:
+            self.app.run(host=host, port=port)
+        finally:
+            print('Cleaning webhooks')
+            self.delete_webhooks_with_name()
 
-    def _get_message(self, msg_id):
-        headers = {"Authorization": self.access_token_with_bearer}
-        resp = requests.get(self._url("/messages/{0}".format(msg_id)), headers=headers)
-        response = json.loads(resp.text)
-        response["status_code"] = str(resp.status_code)
-        return response
+    def delete_webhooks_with_name(self):
+        """List all webhooks and delete webhooks created by this script."""
+        for webhook in self.teams_api.webhooks.list():
+            if webhook.name == WEBHOOK_NAME:
+                print("Deleting Webhook:", webhook.name, webhook.targetUrl)
+                self.teams_api.webhooks.delete(webhook.id)
 
-    def _post_message(self, room_id, text):
-        headers = {
-            "Authorization": self.access_token_with_bearer,
-            "content-type": "application/json",
-        }
-        payload = {"roomId": room_id, "text": text}
-        resp = requests.post(url=self._url("/messages"), json=payload, headers=headers)
-        response = json.loads(resp.text)
-        response["status_code"] = str(resp.status_code)
-        return 
+    def create_webhooks(self, webhook_url):
+        """Create the Webex Teams webhooks we need for our bot."""
+        print("Creating Message Created Webhook...")
+        webhook = self.teams_api.webhooks.create(
+            resource="messages",
+            event="created",
+            name=WEBHOOK_NAME,
+            targetUrl=urljoin(webhook_url, WEBHOOK_URL_SUFFIX)
+        )
+        print(webhook)
+        print("Webhook successfully created.")
 
 if __name__ == '__main__':
-    WEBHOOK_ID = os.environ.get('WEBHOOK_ID')
+    WEBHOOK_URL = os.environ.get('WEBHOOK_URL')
     ACCESS_TOKEN = os.environ.get('BOT_ACCESS_TOKEN')
 
     configure_logs()
     nlp = NaturalLanguageProcessor('.')
-    #nlp.build()
+    if not nlp.ready:
+        #nlp.build()
+        pass
+    print(nlp.ready)
 
     server = WebexBotServer(
         name=__name__,
         app_path='.',
         nlp=nlp,
-        webhook_id=WEBHOOK_ID,
+        webhook_url=WEBHOOK_URL,
         access_token=ACCESS_TOKEN
         )
     
