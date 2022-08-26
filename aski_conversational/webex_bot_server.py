@@ -97,10 +97,10 @@ class WebexBotServer:
                 fname = re.findall("filename=\"(.+)\"", d)[0]
                 self.logger.info(f'Uploading file {fname}')
                 if fname.endswith('.yaml'):
-                    r = requests.post('http://localhost:3000/files/yaml', data={'file': fname, 'content': r.content})
-                    responses.append(f"Dashboard generated: {r.json['dash']}")
+                    r = requests.post('http://localhost:3000/files/yaml', json={'file': fname, 'content': r.text})
+                    responses.append(f"Dashboard generated: {r.json()['dash']}")
                 else:
-                    r = requests.post('http://localhost:3000/files/upload', data={'file': fname, 'content': r.content})
+                    r = requests.post('http://localhost:3000/files/upload', json={'file': fname, 'content': r.text})
                     try:
                         r.raise_for_status()
                     except requests.exceptions.HTTPError:
@@ -166,4 +166,4 @@ if __name__ == '__main__':
         access_token=ACCESS_TOKEN
         )
 
-    server.run(host='localhost', port=PORT_NUMBER)
+    server.run(host='0.0.0.0', port=PORT_NUMBER)

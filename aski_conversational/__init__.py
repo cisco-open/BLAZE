@@ -28,13 +28,14 @@ def exit(request, responder):
     responder.reply('Goodbye!')
 
 
-@app.dialogue_flow(intent='get_summary')
+@app.handle(intent='get_summary')
 def get_summary(request, responder):
     responder.reply('Which file are we sumarizing?')
     r = requests.get(api('/files/all_datasets'))
-    responder.reply(', '.join(r.json['datasets_search']))
+    responder.reply(', '.join(r.json()['datasets_search']))
+    responder.params.target_dialogue_state = 'summary_loop'
 
-@get_summary.handle(default=True)
+@app.handle(targeted_only=True)
 def summary_loop(request, responder):
     file = request.text
     try:
@@ -55,7 +56,6 @@ def summary_loop(request, responder):
     responder.reply(summary)
     responder.reply('Was this answer helpful?')
     responder.params.target_dialogue_state = 'provide_feedback'
-    responder.exit_flow()
 
 
 
@@ -118,8 +118,9 @@ def upload_exit(request, responder):
 @app.handle(targeted_only=True)
 def provide_feedback(request, responder):
     try:
-        r = requests.post(api('/feedback'), json={'feedback': request.text})
-        r.raise_for_status()
+        #r = requests.post(api('/feedback'), json={'feedback': request.text})
+        #r.raise_for_status()
+        pass
     except requests.exceptions.HTTPError:
         responder.reply('Something went wrong with the feedback')
     else:
