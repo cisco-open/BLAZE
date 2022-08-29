@@ -120,6 +120,11 @@ def create_app(server_config):
         nonlocal server_config
         return requests_files.upload(request, server_config)
 
+    @app.route('/files/yaml', methods=['POST'])
+    def generate_dash():
+        nonlocal server_config
+        return requests_files.generate_dash(request, server_config)
+
 
 
     # 03) Model methods.

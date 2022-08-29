@@ -141,3 +141,17 @@ def upload(request, server_config):
             return {}, 204
         else:
             return {}, 404
+
+    def generate_dash(request, server_config):
+        """
+        4) POST/files/upload - user uploads file 
+        - Input: {"file": str, "content": str}
+        - Output: {"dash": str}
+        - Use Case: 
+        - Who's Doing: Jason
+        """
+        json = request.json
+        if any(param not in json for param in ['file', 'content']):
+            return "Malformed request", 400
+
+        return {"dash": "http://localhost:5001"}
