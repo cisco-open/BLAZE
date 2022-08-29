@@ -31,15 +31,15 @@ def exit(request, responder):
 @app.handle(intent='get_summary')
 def get_summary(request, responder):
     responder.reply('Which file are we sumarizing?')
-    #r = requests.get(api('/files/all_datasets'))
-    #responder.reply(', '.join(r.json()['datasets_search']))
+    r = requests.get(api('/files/all_files'), json={'dataset':"Squad"})
+    responder.reply(', '.join(r.json()['files'][:5]))
     responder.params.target_dialogue_state = 'summary_loop'
 
 @app.handle(targeted_only=True)
 def summary_loop(request, responder):
     file = request.text
     try:
-        r = requests.get(api('/files/file'), json={'file': file})
+        r = requests.get(api('/files/file'), json={'file': file, 'fileclass': 'user'})
         r.raise_for_status()
         content = r.json()['content']
     except requests.exceptions.HTTPError:
