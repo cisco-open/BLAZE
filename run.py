@@ -24,12 +24,17 @@ if __name__ == "__main__":
     p_dash = Process(target=run_app, args=(data, port, '0.0.0.0'))
     p_serv = Process(target=run_app_server, args=(app,3000,'0.0.0.0'))
 
-    p_dash.start()
+
     
     try: 
         p_serv.start()
-        p_serv.join()
     except: 
         print("Flask server may already be running!") 
         
+    p_dash.start()
     p_dash.join()
+
+    try:
+        p_serv.join()
+    except: 
+        print("Flask server may already be running!")

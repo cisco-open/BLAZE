@@ -108,7 +108,9 @@ class SearchInterface():
 
         if params._data_dict['states']['has_input_file']:
             preview, file_txt = gen_filePreview(
-                params._data_dict['states']['chosen_data'], params._data_dict['states']['chosen_path'])
+                params._data_dict['states']['chosen_data'], 
+                params._data_dict['states']['chosen_path'])
+
             placeholder = params._data_dict['states']['chosen_data']
 
         if len(params._data_dict['states']['model_active']) == 0: 
@@ -404,12 +406,12 @@ class SearchInterface():
             )
 
         m_name = params._data_dict['states']['model_active'][0]
-        print(f"(get_bench_MetricsCard) > {params._data_dict['states']['processes']}")
+
 
 
         # If we haven't started our process, say so 
 
-        if m_name not in params._data_dict['states']['processes']: 
+        if not params._data_dict['states']['has_indexed']:  
             return dbc.Card([
                 html.Div(
                     [
@@ -428,8 +430,16 @@ class SearchInterface():
 
         # If we're starting up, say that we are
 
+        request = f"{PREF_REST_API}{PORT_REST_API}/models/benchmark"
+        response = requests.get(request, json={'model': params._data_dict['states']['model_active'][0], 
+                                                'filename' : params._data_dict['states']['chosen_data'], 
+                                                'dataset' : params._data_dict['states']['chosen_path'],
+                                                'task' : 'read'}
+                                )
 
-        if params._data_dict['states']['has_input_file'] and not params._data_dict['states']['begun_queue'] and params._data_dict['states']['processes'][m_name][1].empty():
+        results = response.json()['res']
+
+        if params._data_dict['states']['has_input_file'] and params._data_dict['states']['has_indexed'] and len(results['cur_q']) == 0:
 
             return dbc.Card([
                 html.Div(
@@ -444,34 +454,18 @@ class SearchInterface():
                     ])
             ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
             )
-        elif params._data_dict['states']['has_input_file'] and not params._data_dict['states']['processes'][m_name][1].empty(): 
-             params._data_dict['states']['begun_queue'] = True
 
 
-        # Try getting results, if not, show old results 
-
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR directly get stats (metrics)
-
-        try:
-            results = params._data_dict['states']['processes'][m_name][1].get_nowait()
-            params._data_dict['states']['processes'][m_name][2] = results
-
-        except:
-            results = params._data_dict['states']['processes'][m_name][2]
-
-
-        # Compute the necessary metrics to be displayed 
-
-        if results == "DONE": 
+        if results['status'] == 'done': 
             return existing_state 
-        else: 
-            percent_correct = round(
-                100 * np.mean(results["metrics"]["correct_arr"]), 2)
-            num_correct = results["metrics"]["correct_arr"].count(1)
-            num_total = results["questions"]["num_qs"]
-            num_curr = results["questions"]["tot_qs"]
-            avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-            progress = round(100.0 * num_curr / (num_total+0.001), 2)
+
+        num_corr = results['cur_q'].count(1) 
+        num_atmp = len(results['cur_q'])
+        num_totl = results['tot_q']
+        avg_time = round(np.mean(results['times']), 2)
+        accuracy = round(100.0 * num_corr / (num_atmp+0.001), 2)
+        progress = round(100.0 * num_corr / (num_totl+0.001), 2)
+
 
         return dbc.Card([
             html.Div(
@@ -491,7 +485,7 @@ class SearchInterface():
                                             style={"font-family": "Quicksand",
                                                 "color": CREAM, 'font-size': "22px"}
                                         ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(percent_correct, style={
+                                dbc.Col(dbc.Badge(html.H1(accuracy, style={
                                     "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
                             ]),
                             html.Br(),
@@ -503,7 +497,7 @@ class SearchInterface():
                                             style={"font-family": "Quicksand",
                                                 "color": WHITE, 'font-size': "22px"}
                                         ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_correct, style={
+                                dbc.Col(dbc.Badge(html.H1(num_corr, style={
                                     "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
                             ]),
                             dbc.Row
@@ -514,11 +508,11 @@ class SearchInterface():
                                             style={"font-family": "Quicksand",
                                                 "color": WHITE, 'font-size': "22px"}
                                         ), width=9),
-                                dbc.Col(dbc.Badge(html.H1(num_total, style={
+                                dbc.Col(dbc.Badge(html.H1(num_atmp, style={
                                     "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
                             ]),
                             html.Hr(style={"color": WHITE}),
-                            self.get_bench_TimeGraph(results["times"]["all_ts"]),
+                            self.get_bench_TimeGraph(results["times"]),
                             html.Br(),
                             dbc.Row
                             ([
@@ -551,9 +545,9 @@ class SearchInterface():
             )
 
 
-        m_name = params._data_dict['states']['model_active'][0]
+        # If we haven't started our process, say so 
 
-        if m_name not in params._data_dict['states']['processes']: 
+        if not params._data_dict['states']['has_indexed']:  
             return dbc.Card([
                 html.Div(
                     [
@@ -569,13 +563,20 @@ class SearchInterface():
             )
 
 
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR all incorrect questions directly 
+        request = f"{PREF_REST_API}{PORT_REST_API}/models/benchmark"
+        response = requests.get(request, json={'model': params._data_dict['states']['model_active'][0], 
+                                                'filename' : params._data_dict['states']['chosen_data'], 
+                                                'dataset' : params._data_dict['states']['chosen_path'],
+                                                'task' : 'read'}
+                                )
 
+        results = response.json()['res']
 
-        results = params._data_dict['states']['processes'][m_name][2]
+        num_corr = results['cur_q'].count(1) 
+        num_atmp = len(results['cur_q'])
+        accuracy = round(100.0 * num_corr / (num_atmp+0.001), 2)
 
-        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        incorrect = results['metrics']['incorrect_d']
+        incorrect = results['incor']
 
         accordion_list = []
         for wrong in incorrect:
@@ -730,13 +731,10 @@ class SearchInterface():
             ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
             )
 
-        m_name = params._data_dict['states']['model_active'][m_num]
-        print(f"(get_compare_MetricsCard) > {params._data_dict['states']['processes']}, processing {m_name}")
-        
-        
+
         # If we haven't started our process, say so 
 
-        if m_name not in params._data_dict['states']['processes']: 
+        if not params._data_dict['states']['has_indexed']: 
             return dbc.Card([
                 html.Div(
                     [
@@ -754,14 +752,24 @@ class SearchInterface():
 
         # If we're starting up, say that we are
 
+        request = f"{PREF_REST_API}{PORT_REST_API}/models/benchmark"
+        response = requests.get(request, json={'model': params._data_dict['states']['model_active'][m_num], 
+                                                'filename' : params._data_dict['states']['chosen_data'], 
+                                                'dataset' : params._data_dict['states']['chosen_path'],
+                                                'task' : 'read'}
+                                )
 
-        if params._data_dict['states']['has_input_file'] and not params._data_dict['states']['begun_queue'] and params._data_dict['states']['processes'][m_name][1].empty():
+        results = response.json()['res']
+
+
+        if params._data_dict['states']['has_input_file'] and params._data_dict['states']['has_indexed'] and len(results['cur_q']) == 0 :
+
             return dbc.Card([
                 html.Div(
                     [
                         html.Center(html.H6
                             (
-                                f"Starting {m_name} model...",
+                                f"Starting {params._data_dict['states']['model_active'][0]} model...",
                                     style={"font-family": "Quicksand",
                                         "color": CREAM, 'font-size': "22px"}
                                     ),
@@ -769,30 +777,14 @@ class SearchInterface():
                     ])
             ], outline=True, color="#049FD911", style={"color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "32rem", "vertical-align": "middle"}
             )
-        elif params._data_dict['states']['has_input_file'] and not params._data_dict['states']['processes'][m_name][1].empty(): 
-            params._data_dict['states']['begun_queue'] = True
 
 
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR directly get stats (metrics)
-
-
-        # Try getting results, if not, show old results 
-
-        try:
-            results = params._data_dict['states']['processes'][m_name][1].get_nowait()
-            params._data_dict['states']['processes'][m_name][2] = results
-
-        except:
-            results = params._data_dict['states']['processes'][m_name][2]
-
-
-        percent_correct = round(
-            100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        num_correct = results["metrics"]["correct_arr"].count(1)
-        num_total = results["questions"]["num_qs"]
-        num_curr = results["questions"]["tot_qs"]
-        avg_time = round(np.mean(results["times"]["all_ts"]), 2)
-        progress = round(100.0 * num_curr / (num_total+0.001), 2)
+        num_corr = results['cur_q'].count(1) 
+        num_atmp = len(results['cur_q'])
+        num_totl = results['tot_q']
+        avg_time = round(np.mean(results['times']), 2)
+        accuracy = round(100.0 * num_corr / (num_atmp+0.001), 2)
+        progress = round(100.0 * num_corr / (num_totl+0.001), 2)
 
         return dbc.Card([
             html.Div(
@@ -812,7 +804,7 @@ class SearchInterface():
                                             style={"font-family": "Quicksand",
                                                 "color": WHITE, 'font-size': "22px"}
                                         ), width=4),
-                                dbc.Col(dbc.Badge(html.H1(num_correct, style={
+                                dbc.Col(dbc.Badge(html.H1(num_corr, style={
                                     "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
 
                                 dbc.Col(html.H6
@@ -821,17 +813,17 @@ class SearchInterface():
                                             style={"font-family": "Quicksand",
                                                 "color": WHITE, 'font-size': "22px"}
                                         ), width=4),
-                                dbc.Col(dbc.Badge(html.H1(num_total, style={
+                                dbc.Col(dbc.Badge(html.H1(num_atmp, style={
                                     "font-family": "Quicksand", 'font-size': "22px"}), color="dark", text_color="primary")),
 
 
                             ]),
                             html.Br(),
                             dbc.Progress(
-                                label=f"Accuracy: {percent_correct}%", value=percent_correct, id="animated-progress", animated=False, striped=True, color="success"
+                                label=f"Accuracy: {accuracy}%", value=accuracy, id="animated-progress", animated=False, striped=True, color="success"
                             ),
                             html.Br(),
-                            self.get_bench_TimeGraph(results["times"]["all_ts"]),
+                            self.get_bench_TimeGraph(results["times"]),
                             html.Br(),
                             dbc.Row
                             ([
@@ -864,9 +856,8 @@ class SearchInterface():
             )
 
 
-        m_name = params._data_dict['states']['model_active'][m_num]
 
-        if m_name not in params._data_dict['states']['processes']: 
+        if not params._data_dict['states']['has_indexed']:  
             return dbc.Card([
                 html.Div(
                     [
@@ -881,13 +872,23 @@ class SearchInterface():
             ], outline=True, color="#049FD911", style={"margin-top": "15px", "color": "dark", "padding": "1rem", 'font-family': "Quicksand", "height": "18rem", "vertical-align": "middle", "overflow": "auto"}
             )
 
-        # TODO: REST API - For given model that is currently being benchmarked, get results OR all incorrect questions directly 
+
+        request = f"{PREF_REST_API}{PORT_REST_API}/models/benchmark"
+        response = requests.get(request, json={'model': params._data_dict['states']['model_active'][0], 
+                                                'filename' : params._data_dict['states']['chosen_data'], 
+                                                'dataset' : params._data_dict['states']['chosen_path'],
+                                                'task' : 'read'}
+                                )
+
+        results = response.json()['res']
+
+        num_corr = results['cur_q'].count(1) 
+        num_atmp = len(results['cur_q'])
+        accuracy = round(100.0 * num_corr / (num_atmp+0.001), 2)
+
+        incorrect = results['incor']
 
 
-        results = params._data_dict['states']['processes'][m_name][2]
-
-        accuracy = round(100 * np.mean(results["metrics"]["correct_arr"]), 2)
-        incorrect = results['metrics']['incorrect_d']
 
         accordion_list = []
         for wrong in incorrect:
@@ -911,7 +912,7 @@ class SearchInterface():
                 [
                         html.Center(html.H6
                                     (
-                                        f"Q's answered incorrectly by {m_name} will appear here.",
+                                        f"Q's answered incorrectly by {params._data_dict['states']['model_active'][0]} will appear here.",
                                         style={"font-family": "Quicksand", "color": WHITE,
                                             'font-size': "22px", "padding": "1rem"}
                                     )),
