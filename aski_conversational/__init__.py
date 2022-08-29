@@ -39,7 +39,7 @@ def get_summary(request, responder):
 def summary_loop(request, responder):
     file = request.text
     try:
-        r = requests.get(api('/files/file'), json={'file': file, 'fileclass': 'user'})
+        r = requests.get(api('/files/file'), json={'filename': file, 'fileclass': 'user'})
         r.raise_for_status()
         content = r.json()['content']
     except requests.exceptions.HTTPError:
@@ -64,6 +64,9 @@ def summary_loop(request, responder):
 def ask_question(request, responder):
     """Send the question to the question-answerer"""
     try:
+        # initialize
+        r = requests.get(api('/files/file'), json={'filename': 'Ashkenazi_Jews', 'fileclass': 'Squad'})
+        r = requests.post(api('/models/initialize'), json={'model':'ElasticBERT', 'filename':'Ashkenazi_Jews', 'filecontent':r.json()['content']})
         r = requests.get(api('/models/search'), json={'model': 'ElasticBERT', 'query': request.text})
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
