@@ -7,7 +7,6 @@ interactive.
 
 """
 
-
 import base64 
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
@@ -21,6 +20,7 @@ from aski.dash_files.summarization.callbacks_summarization import get_summarizat
 from aski.models.summarization import * 
 from aski.models.search import * 
 from aski.params.parameters import Parameters
+from aski.utils.helpers import save_file, read_file
 
 # ==============================================================================
 # ============================ MODEL CALLBACKS =================================
@@ -40,14 +40,12 @@ def run_app(data, port):
     app.layout = html.Div([dcc.Location(id="url"), get_sidebar(params), content])
     app.css.config.serve_locally = True
 
-
     # Determining which callbacks are needed
     task = params._data_dict['function']['task']
 
     if task == 'search': 
         page = SearchInterface(params)
         get_search_callbacks(app, page, params)
-         
     
     elif task == 'summarization': 
         page = SummarizationInterface(params) 
@@ -97,11 +95,9 @@ def run_app(data, port):
 
         if file_name is not None:
 
-            content_type, content_string = file_content.split(',')
-            decoded = base64.b64decode(content_string).decode("utf-8")
-
+            save_file(file_content, file_name)
             # TODO: REST API - fix url
-            requests.post("localhost:3000/files/upload", data={"file": file_name, "content": decoded})
+            #requests.post("localhost:3000/files/upload", data={"file": file_name, "content": data})
 
             print(f"> Added file {file_name}.")
 

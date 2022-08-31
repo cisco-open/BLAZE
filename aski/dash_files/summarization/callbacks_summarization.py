@@ -1,15 +1,14 @@
 from dash import Dash, html, dcc, Input, Output, State
 
 from aski.dash_files.app_constants import * 
-from aski.utils.helpers import get_current_model, get_object_from_name
+from aski.utils.helpers import get_current_model, get_object_from_name, read_file
+
+def get_summarization_callbacks(app, page, params): 
 
 # ==============================================================================
 # ========================== CUSTOM SUMMARIZATION ==============================
 # ==============================================================================
 
-def get_summarization_callbacks(app, page, params): 
-   
-    # === Callback for Custom Summarization page === #
     @app.callback(Output("custom-content", "children"),[
                   Input("summarization-custom-choose-file", "value"),
                   Input("summarization-custom-begin-index", "n_clicks")],
@@ -23,26 +22,19 @@ def get_summarization_callbacks(app, page, params):
             params._data_dict['states']['has_input_file'] = True 
 
             # If the user reads from squad
-            if (file_chosen.split("/")[-1] == "story.txt"):
-                params._data_dict['states']['chosen_data'] = (
-                    file_chosen.split("/")[-2]).replace("_", " ")
+            if (file_chosen.split("/")[-1] == "story.txt"): 
+                params._data_dict['states']['chosen_data'] = file_chosen.split("/")[-2]
 
             # If the user uses a custom file
             else:
-                params._data_dict['states']['chosen_data'] = (
-                    file_chosen.split("/")[-1]).replace("_", " ")
+                params._data_dict['states']['chosen_data'] = (file_chosen.split("/")[-1]).replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
 
         ### RUNNING SUMMARIZATION
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
-            f_name = params._data_dict['states']['chosen_data']
-
-            f = open(params._data_dict['states']['chosen_path'], "r")
-            lines = f.readlines()[1:]
-            f.close()
-            f_content = "".join(lines)
+            f_content = read_file(params._data_dict['states']['chosen_path'])
 
             model_active = params._data_dict['states']['model_active'][0]
             print(f" > Begun summarizing with {model_active}...")

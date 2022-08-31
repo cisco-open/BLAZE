@@ -3,8 +3,11 @@ from dash import html, dcc
 import plotly.express as px
 import numpy as np
 import os
+from os.path import splitext
+
 
 from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
+from aski.utils.helpers import read_file
 
 def get_object_options(params, object_type):
 
@@ -100,18 +103,36 @@ def gen_inputOptions(params):
 
     return options
 
-
 # === (Misc Help) Returns text of a file in preview format === #
-def gen_filePreview(name, path):
+def gen_filePreview(path):
+
+    file_name = os.path.basename(path)
 
     # TODO: REST API - Given a file choice, return text, size, and length information 
+    file_name, file_extension = splitext(file_name)
 
-    f = open(path, "r")
+    if file_extension == '.txt':
 
-    # read the content of file
-    data = f.read()
+        f = open(path, "r")
 
-    # "Preview of File: 17825 chars, 2772 words, 17.3 kilobytes"
-    preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
-    return preview, data
-    
+        # read the content of file
+        data = f.read()
+
+        # "Preview of File: 17825 chars, 2772 words, 17.3 kilobytes"
+        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
+
+        return preview, data
+
+    elif file_extension == '.pdf':
+
+        data = read_file(path)
+
+        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
+
+        return preview, data
+
+
+
+
+
+

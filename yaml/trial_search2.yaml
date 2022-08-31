@@ -5,8 +5,7 @@ function:
   benchmarking: true 
   comparing: true  
 datasets: 
-- SQUAD 
+- Squad 
 models:
 - ColBERT
-- ElasticBERT
 metrics: {} 

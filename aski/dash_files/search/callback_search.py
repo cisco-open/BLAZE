@@ -5,6 +5,7 @@ from multiprocessing import Queue
 
 from aski.dash_files.app_constants import * 
 from aski.models.interfaces.model_search import squad_benchmark 
+from aski.utils.helpers import read_file
 
 
 def get_search_callbacks(app, page, params): 
@@ -26,28 +27,19 @@ def get_search_callbacks(app, page, params):
             params._data_dict['states']['has_input_file'] = True 
 
             if (file_chosen.split("/")[-1] == "story.txt"):
-                params._data_dict['states']['chosen_data'] = (
-                    file_chosen.split("/")[-2]).replace("_", " ")
+                params._data_dict['states']['chosen_data'] = file_chosen.split("/")[-2]
             else:
-                params._data_dict['states']['chosen_data'] = (
-                    file_chosen.split("/")[-1]).replace("_", " ")
+                params._data_dict['states']['chosen_data'] = file_chosen.split("/")[-1].replace("_", " ")
 
             params._data_dict['states']['chosen_path'] = file_chosen
 
-
-
-        ### Component 02 - Indexing (Init) ###
-
+        ### RUNNING SEARCH
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
 
             # TODO: REST API - Start indexing selected file with model 
 
             f_name = params._data_dict['states']['chosen_data']
-
-            f = open(params._data_dict['states']['chosen_path'], "r")
-            lines = f.readlines()[1:]
-            f.close()
-            f_content = "".join(lines)
+            f_content = read_file(params._data_dict['states']['chosen_path'])
 
             print(f"(callback_search) > Begun indexing {params._data_dict['states']['model_active']}")
             
@@ -55,8 +47,6 @@ def get_search_callbacks(app, page, params):
             params._data_dict['states']['has_indexed'] = True 
 
             print(f"(callback_search) > Completed indexing...")
-        
-
 
         ### Component 03 - Clicking "Ask Q" ###
 
@@ -80,11 +70,7 @@ def get_search_callbacks(app, page, params):
             params._data_dict['states']['query'] = query_text
             params._data_dict['states']['result'] = ans
 
-
         return page.get_page_custom(params)
-
-
-
 
     # === Callback for Solo Benchmarking page === #
 
