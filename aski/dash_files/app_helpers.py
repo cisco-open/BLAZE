@@ -3,12 +3,14 @@ from dash import html, dcc
 import plotly.express as px
 import numpy as np
 import os
+from os.path import splitext
+
 
 import requests
 
 from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
 from aski.flask_servers.flask_constants import PORT_REST_API, PREF_REST_API
-
+from aski.utils.helpers import read_file
 
 def get_object_options(params, object_type):
 
@@ -66,8 +68,10 @@ def gen_inputOptions(params):
 
     return options
 
-
 # === (Misc Help) Returns text of a file in preview format === #
+
+# TODO: consolidate the two (REST API and PDF reader ones) 
+
 def gen_filePreview(filename, fileclass):
 
     request = f"{PREF_REST_API}{PORT_REST_API}/files/file"
@@ -82,3 +86,31 @@ def gen_filePreview(filename, fileclass):
     preview = f"Preview of File: {len(file_content)} chars, {len(file_content.split())} words, {file_size} kilobytes"
     return preview, file_content
     
+
+def gen_filePreview_Path(path):
+
+    file_name = os.path.basename(path)
+
+    # TODO: REST API - Given a file choice, return text, size, and length information 
+    file_name, file_extension = splitext(file_name)
+
+    if file_extension == '.txt':
+
+        f = open(path, "r")
+
+        # read the content of file
+        data = f.read()
+
+        # "Preview of File: 17825 chars, 2772 words, 17.3 kilobytes"
+        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
+
+        return preview, data
+
+    elif file_extension == '.pdf':
+
+        data = read_file(path)
+
+        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
+
+        return preview, data
+

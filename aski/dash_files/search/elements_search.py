@@ -10,6 +10,9 @@ class SearchInterface():
     def __init__(self, params):
         self.params = params 
 
+# ==============================================================================
+# ================================== PAGES =====================================
+# ==============================================================================
 
     def get_page(self): 
         return self.get_page_custom(self.params)
@@ -23,10 +26,6 @@ class SearchInterface():
 
         if len(model_objs) == 1: 
             model_title = f"{model_objs[0]._info['desc']}"
-
-        elif len(model_objs) == 2: 
-            model_title = f"{model_objs[0]._info['name']} vs {model_objs[1]._info['name']}"
-
         else:
             model_title = "Please select a model from the left."
 
@@ -193,7 +192,7 @@ class SearchInterface():
                                 dbc.Col(dbc.Input(
                                     className="mb-3", placeholder=params._data_dict['states']['query'], id="search-custom-enter-q-box", style={"color": WHITE, "background": "#88888822"}
                                 ), width=10),
-                                dbc.Col(dbc.Button('Ask Q', color="info", outline=True,
+                                dbc.Col(dbc.Button('Ask', color="info", outline=True,
                                                 id="search-custom-ask-q-button", style={'font-family': "Quicksand"}))
                             ]),
                             dbc.Alert(

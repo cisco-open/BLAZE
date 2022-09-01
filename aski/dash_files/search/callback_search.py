@@ -7,8 +7,9 @@ import requests
 from aski.dash_files.app_constants import *
 from aski.dash_files.app_helpers import gen_filePreview 
 from aski.models.interfaces.model_search import ModelSearch, squad_benchmark 
-
 from aski.flask_servers.flask_constants import PORT_REST_API, PREF_REST_API
+from aski.utils.helpers import read_file
+
 
 
 def get_search_callbacks(app, page, params): 
@@ -33,7 +34,6 @@ def get_search_callbacks(app, page, params):
             params._data_dict['states']['has_input_file'] = True 
 
 
-
         ### Component 02 - Indexing (Init) ###
 
         if index_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_indexed']:
@@ -48,11 +48,13 @@ def get_search_callbacks(app, page, params):
                                                    'filecontent': content}
                                    )
 
+            #f_name = params._data_dict['states']['chosen_data']
+            #f_content = read_file(params._data_dict['states']['chosen_path'])
+
+
             params._data_dict['states']['has_indexed'] = True 
 
             print(f"(callback_search) > Completed indexing...")
-        
-
 
         ### Component 03 - Clicking "Ask Q" ###
 
@@ -73,11 +75,7 @@ def get_search_callbacks(app, page, params):
             params._data_dict['states']['query'] = query_text
             params._data_dict['states']['result'] = ans
 
-
         return page.get_page_custom(params)
-
-
-
 
     # === Callback for Solo Benchmarking page === #
 

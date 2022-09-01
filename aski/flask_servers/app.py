@@ -71,6 +71,7 @@ def create_app(server_config):
 
     app = Flask(__name__)
 
+    print('here server')
     # Initialize models by storing the models in a list in server config
     server_config['model_objs'] = get_list_objects(server_config['models'], server_config['function']['task'], 'models') 
     server_config['dataset_objs'] = get_list_objects(server_config['datasets'], server_config['function']['task'], 'datasets') 

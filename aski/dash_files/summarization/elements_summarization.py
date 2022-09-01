@@ -23,10 +23,6 @@ class SummarizationInterface():
 
         if len(model_objs) == 1: 
             model_title = f"{model_objs[0]._info['desc']}"
-
-        elif len(model_objs) == 2: 
-            model_title = f"{model_objs[0]._info['name']} vs {model_objs[1]._info['name']}"
-
         else:
             model_title = "Please select a model from the left."
 
@@ -84,8 +80,7 @@ class SummarizationInterface():
         placeholder = "Please choose an input file:"
 
         if params._data_dict['states']['has_input_file']:
-            preview, file_txt = gen_filePreview(
-                params._data_dict['states']['chosen_data'], params._data_dict['states']['chosen_path'])
+            preview, file_txt = gen_filePreview(params._data_dict['states']['chosen_path'])
             placeholder = params._data_dict['states']['chosen_data']
 
         if len(params._data_dict['states']['model_active']) == 0: 
@@ -249,7 +244,6 @@ class SummarizationInterface():
         
         else: 
             model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model]
-            print(model_obj)
             link = model_obj[0]._info['link']
             repo = model_obj[0]._info['repo']
 
@@ -335,7 +329,6 @@ class SummarizationInterface():
 
     def get_bench_metric_card(self, params):
 
-        print('here')
         default = "Please select a metric."
 
         # If no metric has been selected
