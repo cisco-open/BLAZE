@@ -11,7 +11,7 @@ from dash.dependencies import ALL, Input, Output, State
 import drag.global_obj as g
 from drag.constants import DesignID, build_yaml, build_elements, master_dict
 
-from drag.layouts import dropdown_data_inputs, dropdown_models_inputs, dropdown_models_items, dropdown_data_items, get_schema 
+from drag.layouts import dropdown_data_inputs, dropdown_models_inputs, dropdown_ui_inputs, dropdown_models_items, dropdown_data_items, get_schema 
 import yaml 
 
 toast_message = ""
@@ -31,6 +31,7 @@ def get_callbacks(app):
         Input(str(DesignID.INPUT_EDIT_EDGE_LABEL), 'value'),
         Input(str(DesignID.BTN_ADD_MODEL), 'n_clicks'),
         Input(str(DesignID.BTN_ADD_DATA), 'n_clicks'),
+        Input(str(DesignID.BTN_ADD_UI), 'n_clicks'),
         Input(str(DesignID.BTN_REMOVE_ELMT), 'n_clicks'),
         Input(str(DesignID.BTN_CONNECT_NODES), 'n_clicks'),
         Input(str(DesignID.BTN_BUILD_SCHEMA), 'n_clicks'),
@@ -46,6 +47,7 @@ def get_callbacks(app):
         input_edge_label,
         btn_add_model,
         btn_add_data,
+        btn_add_ui, 
         btn_remove,
         btn_connect,
         btn_build,
@@ -63,18 +65,33 @@ def get_callbacks(app):
         prop_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
 
-        # COMPONENT 01 - Adding new Models 
+        # COMPONENT 01 - Adding new Datasets 
 
         if prop_id == str(DesignID.BTN_ADD_DATA):
             print(f"(update_elements) > Adding new data...")
-            return elements + [g.design.get_new_node("data")], get_schema(), None, title, yaml_filename 
+            added = g.design.get_new_node("data")
+            return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename 
 
-        # COMPONENT 02 - Adding new Datasets 
+            #return elements + [g.design.get_new_node("data")], get_schema(), None, title, yaml_filename 
+
+        # COMPONENT 02 - Adding new Models 
 
         elif prop_id == str(DesignID.BTN_ADD_MODEL):
             print(f"(update_elements) > Adding new model...")
-            return elements + [g.design.get_new_node("model")], get_schema(), None, title, yaml_filename 
+            added = g.design.get_new_node("model")
+            return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename 
 
+
+            #return elements + [g.design.get_new_node("model")], get_schema(), None, title, yaml_filename 
+
+        # COMPONENT 02.5 - Adding new UI
+
+        elif prop_id == str(DesignID.BTN_ADD_UI):
+            print(f"(update_elements) > Adding new ui...")
+            added = g.design.get_new_node("ui")
+            return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename 
+
+            #return elements + [g.design.get_new_node("ui")], get_schema(), None, title, yaml_filename 
 
         # COMPONENT 03 - Deleting Nodes (either models or datasets)
 
@@ -147,6 +164,8 @@ def get_callbacks(app):
 
 
             return elements, get_schema(f_n), dcc.send_file(f_n, filename=yaml_filename), title, yaml_filename
+            #return elements, get_schema(f_n), dcc.send_file(f_n, filename=yaml_filename), title, yaml_filename
+
 
         # COMPONENT 06 - Editing Node Labels 
 
@@ -174,7 +193,8 @@ def get_callbacks(app):
 
 
         # None has been clicked
-        return elements, get_schema(), None, title, yaml_filename
+        #return g.design.get_nodes_edges(), get_schema(), None, title, yaml_filename
+        return elements, get_schema(), None, title, yaml_filename 
 
     
 
@@ -185,11 +205,12 @@ def get_callbacks(app):
     @app.callback(Output(str(DesignID.TABS_DESIGN), 'active_tab'),
                 Output(str(DesignID.TAB_NODE_MODEL_CONTENT), 'style'),
                 Output(str(DesignID.TAB_NODE_DATA_CONTENT), 'style'),
+                Output(str(DesignID.TAB_NODE_UI_CONTENT), 'style'),
                 Output(str(DesignID.TAB_EDGE_CONTENT), 'style'),
                 Input(str(DesignID.DESIGN_INTERFACE), 'selectedNodeData'),
                 Input(str(DesignID.DESIGN_INTERFACE), 'selectedEdgeData'))
     def switch_tab(nodes, edges):
-        print(f"(switch_tab) > Entered switch tab callback")
+        #print(f"(switch_tab) > Entered switch tab callback")
         """Switch a tab between role and channel."""
         display_on = {'display': 'block'}
         display_off = {'display': 'none'}
@@ -201,16 +222,19 @@ def get_callbacks(app):
 
             if type_node == "model": 
                 print("turning on model tab")
-                return str(DesignID.TAB_NODE_PROPERTY_VALUE), display_on, display_off, display_off
-            else: 
+                return str(DesignID.TAB_NODE_PROPERTY_VALUE), display_on, display_off, display_off, display_off
+            elif type_node == "data": 
                 print("turning on data tab")
-                return str(DesignID.TAB_NODE_PROPERTY_VALUE), display_off, display_on, display_off
+                return str(DesignID.TAB_NODE_PROPERTY_VALUE), display_off, display_on, display_off, display_off
+            else: 
+                print("turning on ui tab")
+                return str(DesignID.TAB_NODE_PROPERTY_VALUE), display_off, display_off, display_on, display_off
 
 
         if edges is not None and len(edges) == 1:
-            return str(DesignID.TAB_EDGE_PROPERTY_VALUE), display_off, display_off, display_on
+            return str(DesignID.TAB_EDGE_PROPERTY_VALUE), display_off, display_off, display_off, display_on
 
-        return "", display_off, display_off, display_off
+        return "", display_off, display_off, display_off, display_off
 
 
     # ========================================================================================= #
@@ -228,7 +252,7 @@ def get_callbacks(app):
                   dropdown_models_inputs
     )
     def dropdown_model_callback(*args):
-        print(f"(dropdown_model_callback) > Entered model tab callback")
+        #print(f"(dropdown_model_callback) > Entered model tab callback")
 
         nodes = args[0]
 
@@ -249,7 +273,7 @@ def get_callbacks(app):
                 dropdown_data_inputs
     )
     def dropdown_data_callback(*args):
-        print(f"(dropdown_data_callback) > Entered model tab callback")
+        #print(f"(dropdown_data_callback) > Entered model tab callback")
 
         nodes = args[0]
 
@@ -266,37 +290,65 @@ def get_callbacks(app):
             g.design.update_label(nodes[0], button_id)
     
     
+    @app.callback(Input(str(DesignID.DESIGN_INTERFACE), 'selectedNodeData'),
+                dropdown_ui_inputs
+    )
+    def dropdown_ui_callback(*args):
+        #print(f"(dropdown_data_callback) > Entered ui tab callback")
+
+        nodes = args[0]
+
+        ctx = dash.callback_context
+        if nodes is None or len(nodes) != 1 or not ctx.triggered:
+            return 
+
+        prop_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        if "dropdown" in prop_id: 
+            print(f"(update_dropdown) > Updating label of {nodes[0]}")
+            button_id = prop_id.split("dropdown_")[-1]
+            print(f"         replacing with {button_id}")
+            g.design.update_label(nodes[0], button_id)
+    
+
 
     @app.callback(Output(str(DesignID.INPUT_MODEL_DISPLAY_ELEMENT), 'value'),
                   Output(str(DesignID.TEXTAREA_MODEL_NODE_DESCRIPTION), 'value'),
                   Output(str(DesignID.INPUT_DATA_DISPLAY_ELEMENT), 'value'),
                   Output(str(DesignID.TEXTAREA_DATA_NODE_DESCRIPTION), 'value'),
+                  Output(str(DesignID.INPUT_UI_DISPLAY_ELEMENT), 'value'),
+                  Output(str(DesignID.TEXTAREA_UI_NODE_DESCRIPTION), 'value'),
                   Input('interval-component', 'n_intervals'),
                   Input(str(DesignID.DESIGN_INTERFACE), 'selectedNodeData'),
     )
     def display_label(n_intervals, nodes): 
         ctx = dash.callback_context
         if g is None or nodes is None or len(nodes) != 1 or not ctx.triggered:
-            return "", "", "", "" 
+            return "", "", "", "", "", ""
         
         (node_label, desc, type_node,
         filenames_in_node) = g.design.get_node_details(nodes[0])
-        print(f"type: {type_node}, label: {node_label}")
-        if "Model" not in node_label and "Data" not in node_label: 
+        #print(f"type: {type_node}, label: {node_label}")
+        if "Model" not in node_label and "Data" not in node_label and "UI" not in node_label: 
             #print(f"We have already sleected: {node_label}")
-            print(f"Returning {node_label}, {master_dict[node_label]}")
+            #print(f"Returning {node_label}, {master_dict[node_label]}")
 
             if type_node == "model": 
-                return node_label, master_dict[node_label], "", "" 
+                return node_label, master_dict[node_label], "", "", "", ""
+            elif type_node == "data": 
+                return "", "", node_label, master_dict[node_label], "", ""
             else: 
-                return "", "", node_label, master_dict[node_label]
+                return "", "", "", "", node_label, master_dict[node_label]
 
         elif type_node == "model": 
-            print("Please sleect model from dataset")
-            return "Please select a model from the dropdown...", "", "", ""
+            #print("Please sleect model from dataset")
+            return "Please select a model from the dropdown...", "", "", "", "", ""
+        elif type_node == "data": 
+            #print("Please select datasetse from dropdown")
+            return "", "", "Please select a knowledge base from the dropdown...", "", "", ""
         else: 
-            print("Please select datasetse from dropdown")
-            return "", "", "Please select a dataset from the dropdown...", ""
+            #print("Please select ui from dropdown")
+            return "", "", "", "", "Please select a user interface from the dropdown", ""
 
 
 
@@ -313,7 +365,7 @@ def get_callbacks(app):
         Input(str(DesignID.DESIGN_INTERFACE), 'selectedEdgeData'),
     )
     def display_edge_tab_content(new_label, toggle_custom, toggle_benchmark, toggle_comparison, edges):
-        print(f"(display_edge_tab_content) > Entered edge tab callback w/ {new_label}")
+        #print(f"(display_edge_tab_content) > Entered edge tab callback w/ {new_label}")
 
         """Display content of edge tab."""
         if edges is None or len(edges) != 1:

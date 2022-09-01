@@ -1,0 +1,13 @@
+Title: Search and Summarization - Made for Thomas
+datasets:
+- User
+function:
+  custom: true
+  task: search/summarization
+interface:
+- Chat Bot
+- Web App
+metrics: {}
+models:
+- ElasticBERT
+- Bart

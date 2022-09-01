@@ -117,7 +117,7 @@ def get_custom_functions_checklist(functions):
     for func in functions:
         if func == 'task': continue 
         if func == 'custom' : 
-            list_options.append({"label": "Custom Demo", "value": "Custom Demo"})
+            list_options.append({"label": "Custom Usage", "value": "Custom Demo"})
 
         if func == 'benchmarking': 
             list_options.append({"label": "Solo Benchmark", "value": "Solo Benchmark"})
