@@ -93,14 +93,14 @@ class WebexBotServer:
             if message.files:
                 file = message.files[0]
                 r = requests.get(file, headers={'Authorization': f'Bearer {self.access_token}'})
-                d = r.headers['content-disposition']
-                fname = re.findall("filename=\"(.+)\"", d)[0]
+                fname = re.findall("filename=\"(.+)\"", r.headers['content-disposition'])[0]
+                fcontent = r.text
                 self.logger.info(f'Uploading file {fname}')
                 if fname.endswith('.yaml'):
-                    r = requests.post('http://localhost:3000/files/yaml', data={'file': fname, 'content': r.content})
-                    responses.append(f"Dashboard generated: {r.json['dash']}")
+                    r = requests.post('http://localhost:3000/files/yaml', json={'file': fname, 'content': fcontent})
+                    responses.append(f"Dashboard generated: {r.json()['dash']}")
                 else:
-                    r = requests.post('http://localhost:3000/files/upload', data={'file': fname, 'content': r.content})
+                    r = requests.post('http://localhost:3000/files/upload', json={'file': fname, 'content': fcontent})
                     try:
                         r.raise_for_status()
                     except requests.exceptions.HTTPError:
@@ -109,6 +109,9 @@ class WebexBotServer:
                     else:
                         self.logger.info('Upload succeeded')
                         responses.append('File uploaded successfully')
+                    # Get summary immediately
+                    r = requests.post('http://localhost:3000/models/summary', json={'model': 'T5', 'content': fcontent})
+                    responses.append(r.json()['result'])
 
             if message.text:
                 responses.extend(self.conv.say(message.text))
@@ -166,4 +169,4 @@ if __name__ == '__main__':
         access_token=ACCESS_TOKEN
         )
 
-    server.run(host='localhost', port=PORT_NUMBER)
+    server.run(host='0.0.0.0', port=PORT_NUMBER)

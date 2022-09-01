@@ -81,6 +81,21 @@ def get_current_model(params):
 
     return current_model
 
+def get_dataset_object_from_name(dataset_name, data_dict): 
+
+    # TODO: Consolidate this and "get_model_object_from_name"
+
+    model_active = dataset_name
+    current_model = None 
+
+    for model in data_dict['dataset_objs']:
+        model_name = model._get_class_name()
+
+        if model_name == model_active:
+            current_model = model
+
+    return current_model
+
 
 def get_model_object_from_name(model_name, data_dict):
 

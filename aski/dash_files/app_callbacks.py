@@ -27,12 +27,13 @@ from aski.utils.helpers import save_file, read_file
 # ==============================================================================
 
 
-def run_app(data, port):
+def run_app(data, port, ip='localhost'):
 
     params = Parameters(data)
 
     models = params._data_dict['models']
     
+
     # Using the parameters class object ONLY! 
     content = html.Div([get_content(params)], id="l0-page-content")
 
@@ -114,10 +115,20 @@ def run_app(data, port):
             return page.get_page_custom(params) 
 
 
+    # Next, we ensure that the REST API Server is up and running 
+
+    PORT_REST_API = 3000 # TODO: Make this a global constant! 
+    print(f"(run_app) > Checking if REST API Server at port {PORT_REST_API} is ready...")
+
+    address = f"http://127.0.0.1:{PORT_REST_API}/"
+
+    response = requests.get(address)
+    print(f"(run_app) > Received response: {response}, {response.json()}")
+
     # Finally, after defining all our callbacks, we can run our app
 
     app.config['suppress_callback_exceptions'] = True
-    app.run_server(port=port, debug=True, use_reloader=False)
+    app.run_server(port=port, host=ip, debug=True, use_reloader=False)
 
 if __name__ == "__main__":
     run_app()
