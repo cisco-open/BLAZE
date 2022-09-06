@@ -45,29 +45,33 @@ class Parameters:
         self._data_dict['states']['chosen_path'] = None 
         self._data_dict['states']['has_input_file'] = False  
         self._data_dict['states']['has_indexed'] = False 
+        self._data_dict['states']['has_summarized'] = False 
+
         self._data_dict['states']['has_dataset'] = False  
         self._data_dict['states']['has_metric'] = False  
 
-
-        print(f"\n==== Loading Datasets ===\n")
-
-        self._data_dict['states']['dataset_objs']    = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
-        self._data_dict['states']['dataset_active']  = [] 
-
         print(f"\n==== Loading Models ===\n")
-        
-        self._data_dict['states']['model_objs']      = get_list_objects(self._data_dict['models'], self._data_dict['function']['task'], 'models') 
-        self._data_dict['states']['model_active']    = [] 
 
-        print(f"\n==== Loading Metrics ===\n")
-        
-        print('here models')
-        self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
-        self._data_dict['states']['metrics_results'] = [] 
+        self._data_dict['states']['model_dict']   = {}
+        self._data_dict['states']['model_active'] = {}
+
+        tasks_list = self._data_dict['function']['task'].split('/')
+
+        for task in tasks_list:
+
+            self._data_dict['states']['model_dict'][task]   = get_list_objects(self._data_dict['models_' + task], task, 'models') 
+            self._data_dict['states']['model_active'][task] = None
+
+        #print(f"\n==== Loading Datasets ===\n")
+        #self._data_dict['states']['dataset_active']  = []     
+        #print(f"\n==== Loading Metrics ===\n")
+        #self._data_dict['states']['model_active'] = []
+        #self._data_dict['states']['metric_objs']     = get_list_objects(self._data_dict['metrics'], self._data_dict['function']['task'], 'metrics') 
+        #self._data_dict['states']['metrics_results'] = [] 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
-        self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER
-
+        self._data_dict['states']['result_search']        = ANSWER_BOX_PLACEHOLDER
+        self._data_dict['states']['result_summarization'] = ANSWER_BOX_PLACEHOLDER
         self._data_dict['states']['reset_presses'] = 0 
 
         self._data_dict['states']['processes'] = {} # Dictionary with: {model_name: [process, queue, old_results]}
