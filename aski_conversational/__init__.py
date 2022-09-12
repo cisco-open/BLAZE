@@ -31,14 +31,15 @@ def exit(request, responder):
 @app.dialogue_flow(intent='get_summary')
 def get_summary(request, responder):
     responder.reply('Which file are we sumarizing?')
-    r = requests.get(api('/files/all_datasets'))
-    responder.reply(', '.join(r.json['datasets_search']))
+    r = requests.get(api('/files/all_files'), json={'dataset':"Squad"})
+    responder.reply(', '.join(r.json()['files'][:5]))
+    responder.params.target_dialogue_state = 'summary_loop'
 
 @get_summary.handle(default=True)
 def summary_loop(request, responder):
     file = request.text
     try:
-        r = requests.get(api('/files/file'), json={'file': file})
+        r = requests.get(api('/files/file'), json={'filename': file, 'fileclass': 'user'})
         r.raise_for_status()
         content = r.json()['content']
     except requests.exceptions.HTTPError:
@@ -64,7 +65,9 @@ def summary_loop(request, responder):
 def ask_question(request, responder):
     """Send the question to the question-answerer"""
     try:
-        #r = requests.post(api('/models/initialize'), json={'model': 'ElasticBERT'})
+        # initialize
+        r = requests.get(api('/files/file'), json={'filename': 'Ashkenazi_Jews', 'fileclass': 'Squad'})
+        r = requests.post(api('/models/initialize'), json={'model':'ElasticBERT', 'filename':'Ashkenazi_Jews', 'filecontent':r.json()['content']})
         r = requests.get(api('/models/search'), json={'model': 'ElasticBERT', 'query': request.text})
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
