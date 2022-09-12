@@ -1,5 +1,7 @@
 # ASKI - Semantic Search Evaluation 
 
+[ASKI Conversational AI README](aski_conversational/README.md)
+
 > NOTE: Curently only supports Elasticsearch, ColBERT (unstable)
 
 The goal of ASKI is to **make the lives of data scientists easier**, filling-in a required niche. 
