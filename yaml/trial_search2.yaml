@@ -3,9 +3,10 @@ function:
   task: search 
   custom: true  
   benchmarking: true 
+  comparing: true  
 datasets: 
-- Squad
-- User  
+- SQUAD 
 models:
+- ColBERT
 - ElasticBERT
 metrics: {} 

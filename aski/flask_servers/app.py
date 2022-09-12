@@ -51,7 +51,7 @@ def create_server_config(data):
 
     Things that are currently in server_config: 
 
-    - 'datasets' " [d1_name]
+    - 'data' : {'DATA_PATH', 'DATA_SETS', 'DEFAULT', 'FILES_PATH'} <-- rework this! 
     - 'models' : ['m1_name']
     - 'model_objs' : [m1_obj]
 
@@ -73,8 +73,6 @@ def create_app(server_config):
 
     # Initialize models by storing the models in a list in server config
     server_config['model_objs'] = get_list_objects(server_config['models'], server_config['function']['task'], 'models') 
-    server_config['dataset_objs'] = get_list_objects(server_config['datasets'], server_config['function']['task'], 'datasets') 
-    server_config['processes'] = {}
 
     print("(create_app) > Server config is ", server_config)
   
@@ -98,12 +96,6 @@ def create_app(server_config):
     def all_datasets(): 
         nonlocal server_config
         return requests_files.all_datasets(request, server_config)
-
-
-    @app.route('/files/all_files', methods=['GET'])
-    def all_files(): 
-        nonlocal server_config
-        return requests_files.all_files(request, server_config)
 
     @app.route('/files/file', methods=['GET'])
     def file(): 

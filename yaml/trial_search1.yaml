@@ -1,10 +1,9 @@
 Title: Solo Question Answering on Custom Text
-datasets:
-- User
-- Squad
 function:
-  custom: true
   task: search
+  custom: true
+datasets:
+- Squad
 metrics: {}
 models:
 - ElasticBERT

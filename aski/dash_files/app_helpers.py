@@ -4,11 +4,7 @@ import plotly.express as px
 import numpy as np
 import os
 
-import requests
-
 from aski.dash_files.app_constants import DATA_PATH, FILES_PATH
-from aski.flask_servers.flask_constants import PORT_REST_API, PREF_REST_API
-
 
 def get_object_options(params, object_type):
 
@@ -46,39 +42,76 @@ def get_dataset_options(params):
 
 def gen_inputOptions(params):
 
-    server_files = {} 
-    for dataset in params._data_dict['datasets']: 
-        request = f"{PREF_REST_API}{PORT_REST_API}/files/all_files"
-        response = requests.get(request, json={'dataset':dataset})
+    # TODO: REST API - Get and Display all File Options (Datasets + Uploaded Files)
 
-        server_files[dataset] = response.json()['files']
+    # HARDCODED SINCE WE WILL BE USING SQUAD FOR NOW 
 
-    options = [] 
-    for entry in server_files: 
+    #     data:
+    #   DATA_PATH: ./data/squad2_data
+    #   DATA_SETS: '1'
+    #   DEFAULT: 1973_oil_crisis
+    #   FILES_PATH: ./data/user_files
 
-        # Add an unclickable option for it to look nicer
-        options.append({"label": f"-- {entry} Files --", "disabled": True})
+    DATA_PATH = './data/squad'
+    FILES_PATH = './data/user_files'
 
-        files_list = server_files[entry]
-        for i in range(len(files_list)):
-            options.append(
-                {"label": files_list[i], "value": f"{entry}|{files_list[i]}"})
+    n_squad, p_squad = [], []
+    datasets = [dir[0] for dir in os.walk(DATA_PATH)]
+
+
+    for dir in datasets[1:]:
+        name = dir.split("/")[-1]
+        n_squad.append(name.replace("_", " "))
+        p_squad.append(dir + "/story.txt")
+
+    n_user, p_user = [], []
+
+    datasets = [dir for dir in os.listdir(FILES_PATH)]
+
+    for dir in datasets:
+        n_user.append(dir)
+        p_user.append(FILES_PATH+ "/" + dir)
+
+
+    files = {
+        'n_squad': n_squad,
+        'p_squad': p_squad,
+        'n_user': n_user,
+        'p_user': p_user
+    }
+
+    options = []
+
+    # Add an unclickable option for it to look nicer
+    options.append({"label": "-- User files --", "disabled": True})
+
+    # Add the user files
+    for i in range(len(files['n_user'])):
+        options.append(
+            {"label": files['n_user'][i], "value": files['p_user'][i]})
+
+    # Add an unclickable option for it to look nicer
+    options.append({"label": "-- Squad files --", "disabled": True})
+
+    # Add the Squad files
+    for i in range(len(files['n_squad'])):
+        options.append(
+            {"label": files['n_squad'][i], "value": files['p_squad'][i]})
 
     return options
 
 
 # === (Misc Help) Returns text of a file in preview format === #
-def gen_filePreview(filename, fileclass):
+def gen_filePreview(name, path):
 
-    request = f"{PREF_REST_API}{PORT_REST_API}/files/file"
-    print(f"filename: {filename}, fileclass: {fileclass}")
+    # TODO: REST API - Given a file choice, return text, size, and length information 
 
-    # Fileclass is simply the dataset class (ex. Squad, user)
-    response = requests.get(request, json={'filename':filename, 'fileclass':fileclass})
+    f = open(path, "r")
 
-    file_content = response.json()['content']
-    file_size = response.json()['size'] # <-- only for user files, if not then "N/A" (in KB)
+    # read the content of file
+    data = f.read()
 
-    preview = f"Preview of File: {len(file_content)} chars, {len(file_content.split())} words, {file_size} kilobytes"
-    return preview, file_content
+    # "Preview of File: 17825 chars, 2772 words, 17.3 kilobytes"
+    preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
+    return preview, data
     

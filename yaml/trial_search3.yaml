@@ -4,8 +4,7 @@ function:
   custom: true
   benchmarking: true 
 datasets:
-- Squad
-- User 
+- SQUAD
 metrics: {}
 models:
 - ElasticBERT

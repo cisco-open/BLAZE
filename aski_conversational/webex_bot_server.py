@@ -93,25 +93,23 @@ class WebexBotServer:
             if message.files:
                 file = message.files[0]
                 r = requests.get(file, headers={'Authorization': f'Bearer {self.access_token}'})
-                fname = re.findall("filename=\"(.+)\"", r.headers['content-disposition'])[0]
-                fcontent = r.text
+                d = r.headers['content-disposition']
+                fname = re.findall("filename=\"(.+)\"", d)[0]
                 self.logger.info(f'Uploading file {fname}')
                 if fname.endswith('.yaml'):
-                    r = requests.post('http://localhost:3000/files/yaml', json={'file': fname, 'content': fcontent})
-                    responses.append(f"Dashboard generated: {r.json()['dash']}")
+                    r = requests.post('http://localhost:3000/files/yaml', data={'file': fname, 'content': r.content})
                 else:
-                    r = requests.post('http://localhost:3000/files/upload', json={'file': fname, 'content': fcontent})
-                    try:
-                        r.raise_for_status()
-                    except requests.exceptions.HTTPError:
-                        self.logger.info('Failed to upload')
-                        responses.append('Something went wrong with the file upload')
-                    else:
-                        self.logger.info('Upload succeeded')
-                        responses.append('File uploaded successfully')
-                    # Get summary immediately
-                    r = requests.post('http://localhost:3000/models/summary', json={'model': 'T5', 'content': fcontent})
-                    responses.append(r.json()['result'])
+                    r = requests.post('http://localhost:3000/files/upload', data={'file': fname, 'content': r.content})
+                try:
+                    r.raise_for_status()
+                except requests.exceptions.HTTPError:
+                    self.logger.info('Failed to upload')
+                    responses.append('Something went wrong with the file upload')
+                else:
+                    self.logger.info('Upload succeeded')
+                    responses.append('File uploaded successfully')
+                    if fname.endswith('.yaml'):
+                        responses.append(r.json['dash'])
 
             if message.text:
                 responses.extend(self.conv.say(message.text))
@@ -169,4 +167,4 @@ if __name__ == '__main__':
         access_token=ACCESS_TOKEN
         )
 
-    server.run(host='0.0.0.0', port=PORT_NUMBER)
+    server.run(host='localhost', port=PORT_NUMBER)

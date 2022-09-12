@@ -11,25 +11,9 @@ class ModelSearch():
     def file_search(self, search_term):
         ''' Load a model from a directory or library'''
         pass
-
-    def _get_model_info(self):
-        return self._info
-
-    def _get_name(self):
-        return self._info['name']
-
-    def _get_class_name(self):
-        return self._info['class_name']
     
-    @classmethod 
-    def _parse_raw_ans(self, res, time): 
-        
-        try:
-            ans = res[0]['res'] + f" ({round(time, 2)}s)"
-        except:
-            ans = "Unable to find an answer."
-        
-        return ans 
+    def _get_model_info(self):
+        pass
 
 """
 
