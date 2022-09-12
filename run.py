@@ -21,8 +21,8 @@ if __name__ == "__main__":
     app = create_app(data)
     port = args.p
 
-    p_dash = Process(target=run_app, args=(data, port))
-    p_serv = Process(target=run_app_server, args=(app,))
+    p_dash = Process(target=run_app, args=(data, port, '0.0.0.0'))
+    p_serv = Process(target=run_app_server, args=(app, 3000, '0.0.0.0'))
 
     p_dash.start()
     
