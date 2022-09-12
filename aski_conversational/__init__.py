@@ -64,6 +64,7 @@ def summary_loop(request, responder):
 def ask_question(request, responder):
     """Send the question to the question-answerer"""
     try:
+        #r = requests.post(api('/models/initialize'), json={'model': 'ElasticBERT'})
         r = requests.get(api('/models/search'), json={'model': 'ElasticBERT', 'query': request.text})
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:

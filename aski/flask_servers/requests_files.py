@@ -80,9 +80,13 @@ def upload(request, server_config):
         json = request.json
         if any(param not in json for param in ['file', 'content']):
             return "Malformed request", 400
+
+        if not any(json['file'].endswith(ext) for ext in ['.txt', '.pdf']):
+            return "Bad file extension", 400
         
         filepath = path.join(FILES_DIR, 'user_files', json['file'])
-        with open(filepath, 'w') as f:
+        isBytes = "" if json['file'].endswith('.txt') else 'b'
+        with open(filepath, f'w{isBytes}') as f:
             f.write(json['content'])
         return {}, 201
     elif request.method == 'DELETE':
