@@ -1,11 +1,11 @@
-Title: A Comparison of Semantic Search Implementations
+Title: Benchmarking Semantic Search Implementations on Squad
 function: 
   task: search 
   custom: true  
   benchmarking: true 
   comparing: true  
 datasets: 
-- SQUAD 
+- Squad 
 models:
 - ColBERT
 - ElasticBERT

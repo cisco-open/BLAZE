@@ -1,4 +1,4 @@
-Title: "A Comparison of Summarization Implementations"
+Title: "Combining Search + Summarization"
 function: 
   task: search/summarization
   custom: true 

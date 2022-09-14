@@ -1,4 +1,4 @@
-Title: A Comparison of Summarization Implementations
+Title: Solo Testing of Summarization Implementations
 function:
   task: summarization
   custom: true 
