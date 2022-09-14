@@ -193,13 +193,6 @@ class SearchInterface():
                         ]),
 
                 ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand"}),
-
-                html.Br(),
-
-                dbc.Row([
-                    html.Div(self.get_latencyCard(params), style={'padding':'1rem'})
-                ]),
-
             ],
                 className="mb-3",
                 style={"width": "100%", "height": "42rem"},
@@ -211,81 +204,6 @@ class SearchInterface():
         )
         return outputBox
 
-
-    def get_latencyCard(self, params):
-
-        # TODO: REST API - For given model, get latency results 
-
-        latencyCard = dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5("Text Summarization", style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    html.Center(dbc.Input(
-                                    className="mb-3", placeholder="                                Generated summary will be displayed here!", style={"color": WHITE, "background": "#88888822", "height":"14rem"}
-                                )),
-                ]),
-
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
-        )
-
-        return latencyCard
-
-
-    def get_accuracyCard(self, params):
-
-        # TODO: REST API - For given model, get accuracy results 
-
-        metrics =  {
-            'latency': [-1, -1, -1],
-            'search_avg': -1,
-            'num_GPUs': 1,
-            'accuracy': [-1, -1]
-        }
-
-        model = params._data_dict['states']['model_active']
-
-        if not model: 
-            link = ""
-            repo = "" 
-
-            model_text = "<>"
-        
-        else: 
-            model_obj = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model]
-            print(model_obj)
-            link = model_obj[0]._info['link']
-            repo = model_obj[0]._info['repo']
-
-            model_text = model[0]
-
-        row21 = html.Tr(
-            [html.Td("% Correct"), html.Td(f"{metrics['accuracy'][0]} %")])
-        row22 = html.Tr(
-            [html.Td("Avg Time"), html.Td(f"{metrics['accuracy'][1]} s")])
-
-        table2_body = [html.Tbody([row21, row22])]
-        table2 = dbc.Table(table2_body, bordered=True, style={"color": WHITE})
-
-        accuracyCard = dbc.Card([
-            html.Div(
-                [
-                    html.Center(html.H5("Accuracy", style={
-                                "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    html.Center(html.H5("Tested on SQUAD questions (only for SQUAD datasets)", style={
-                                "font-family": "Quicksand", "color": WHITE, "padding": "0rem 0rem 1rem 0rem"})),
-                    table2,
-                    html.Br(),
-                    html.Center(html.H5(html.A(f"Learn more about {model_text}.", href=link, target="_blank", style={
-                                "font-family": "Quicksand", "color": WHITE}))),
-                    html.Center(html.H5(html.A(f"View {model_text} Github Repo.", href=repo, target="_blank", style={
-                                "font-family": "Quicksand", "color": WHITE})))
-
-                ]),
-
-        ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
-        )
-        return accuracyCard
 
 
 

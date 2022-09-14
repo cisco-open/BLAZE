@@ -2,7 +2,7 @@ Title: A Comparison of Summarization Implementations
 function:
   task: summarization
   custom: true 
-models:
+models_summarization:
 - T5
 - Bart
 datasets:
