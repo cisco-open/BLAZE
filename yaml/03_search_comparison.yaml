@@ -6,7 +6,7 @@ function:
   comparing: true  
 datasets: 
 - Squad 
-models:
+models_search:
 - ColBERT
 - ElasticBERT
 metrics: {} 

@@ -4,8 +4,8 @@ import os.path as path
 
 from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
-from aski.utils.helpers import get_dataset_object_from_name
-
+from aski.utils.helpers import get_object_from_name
+from aski.params.parameters import Parameters 
 
 """
 
@@ -39,7 +39,9 @@ def all_files(request, server_config):
         return "Malformed request", 400
     
     dataset_name = str(json['dataset'])
-    dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+
+
+    dataset_obj = get_object_from_name(dataset_name, server_config, 'dataset')
 
     if not dataset_obj: 
        return "That dataset doesn't exist", 404 
@@ -63,7 +65,7 @@ def file(request, server_config):
     
     dataset_name = str(json['fileclass'])
 
-    if dataset_name == 'user': 
+    if dataset_name == 'User': 
         filepaths = glob(path.join(FILES_DIR, '**', json['filename']), recursive=True)
             
         if len(filepaths) > 0:
@@ -74,7 +76,8 @@ def file(request, server_config):
         else: 
             return "That file doesn't exist", 404
     else: 
-        dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+        params = Parameters(server_config); print(f"{dataset_name} | {str(json['filename'])}")
+        dataset_obj = get_object_from_name(dataset_name, params, 'dataset')
 
         if dataset_obj._dataset_type == 'search': 
             content = dataset_obj._get_title_story(str(json['filename']))

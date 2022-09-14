@@ -4,7 +4,7 @@ import string
 
 from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
-from aski.utils.helpers import get_model_object_from_name, get_dataset_object_from_name
+from aski.utils.helpers import get_model_object_from_name, get_object_from_name
 
 
 """
@@ -12,6 +12,8 @@ from aski.utils.helpers import get_model_object_from_name, get_dataset_object_fr
 All models-related methods.
 
 """
+
+manager = Manager() 
 
 def all_models(request, server_config):
     """
@@ -57,27 +59,27 @@ def initialize(request, server_config):
     TODO: Figure out concrete functionality for this method... unsure 
     TODO: This will be for initializing search (indexing on a file!)
     """
-
+    print(server_config)
     json = request.json
     if any(param not in json for param in ['model']):
         return "Malformed request", 400
     
     model_name = str(json['model']) 
-    for model in server_config['model_objs']: 
-        print(f"currently examining {model}")
-        if model._info['class_name'] == model_name: 
+    model = get_model_object_from_name(model_name, 'search', server_config)
 
-            model = get_model_object_from_name(model_name, server_config)
-            if callable(getattr(model, "load_model", None)): 
+    if not model:
+        return "That model doesn't exist", 404 
 
-                if any(param not in json for param in ['filename', 'filecontent']):
-                    return "Malformed request", 400
+    if callable(getattr(model, "load_model", None)): 
 
-                model.load_model(str(json['filename']), str(json['filecontent']))
+        if any(param not in json for param in ['filename', 'filecontent']):
+            return "Malformed request", 400
 
-            return {"response" : "success"}, 200 
+        model.load_model(str(json['filename']), str(json['filecontent']))
+        print("INITIALIZEED THE FOLLOWING MODEL", model)
 
-    return "That model doesn't exist", 404 
+    return {"response" : "success"}, 200 
+
 
 def summary(request, server_config):
     """
@@ -108,6 +110,7 @@ def search(request, server_config):
         - Use Case: 
         - Who's Doing: Advit 
     """
+    print(server_config)
 
     json = request.json
     if any(param not in json for param in ['model', 'query']):
@@ -118,7 +121,9 @@ def search(request, server_config):
 
     query = query.translate(string.punctuation)
 
-    model = get_model_object_from_name(model_name, server_config)
+    model = get_model_object_from_name(model_name, 'search', server_config)
+    print("SEARCHING THE FOLLOWING MODEL", model)
+
     res, latency = model.file_search(query)
 
     return {'result' : res, 'latency' : latency}, 200 
@@ -141,7 +146,7 @@ def search_file(request, server_config):
     file_content = json['filecontent']
     query = json['query']
 
-    model = get_model_object_from_name(model_name, server_config)
+    model = get_model_object_from_name(model_name, 'search', server_config)
 
     model.load_model(file_name, file_content)
     res, latency = model.file_search(query)

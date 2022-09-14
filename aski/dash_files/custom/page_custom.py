@@ -1,9 +1,11 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 import os 
+import requests 
 from os.path import splitext
 
 from aski.dash_files.app_constants import *
+from aski.flask_servers.flask_constants import PREF_REST_API, PORT_REST_API
 
 class PageCustom():
 
@@ -138,8 +140,8 @@ class PageCustom():
         placeholder = "Please choose a file:"
 
         if self.params._data_dict['states']['has_input_file']:
-            preview, file_txt = gen_file_preview(self.params._data_dict['states']['chosen_path'])
-            placeholder = self.params._data_dict['states']['chosen_data']
+            preview, file_txt = gen_file_preview(self.params._data_dict['states']['chosen_data'], self.params._data_dict['states']['chosen_path'])
+            placeholder = self.params._data_dict['states']['chosen_path']
 
         inputBox = dbc.Card([
             dbc.CardBody([
@@ -158,7 +160,7 @@ class PageCustom():
                                 dbc.Col([
                                     dbc.Select(
                                         id="custom-choose-file",
-                                        options=gen_input_options(),
+                                        options=gen_input_options(self.params),
                                         style={"background": "#888888", "color": WHITE, "font-family": "Quicksand"},
                                         placeholder=placeholder
                                     ),
@@ -310,69 +312,40 @@ class PageCustom():
 # =============================== FILES ========================================
 # ==============================================================================
 
-def gen_file_preview(path):
+def gen_file_preview(filename, fileclass):
 
-    file_name = os.path.basename(path)
-    file_name, file_extension = splitext(file_name)
+    request = f"{PREF_REST_API}{PORT_REST_API}/files/file"
+    print(f"filename: {filename}, fileclass: {fileclass}")
 
-    if file_extension == '.txt':
+    # Fileclass is simply the dataset class (ex. Squad, user)
+    response = requests.get(request, json={'filename':filename, 'fileclass':fileclass})
 
-        f = open(path, "r")
-        data = f.read()
-        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
-        return preview, data
+    file_content = response.json()['content']
+    file_size = response.json()['size'] # <-- only for user files, if not then "N/A" (in KB)
 
-    elif file_extension == '.pdf':
+    preview = f"Preview of File: {len(file_content)} chars, {len(file_content.split())} words, {file_size} kilobytes"
+    return preview, file_content
+    
 
-        data = read_file(path)
-        preview = f"Preview of File: {len(data)} chars, {len(data.split())} words, {os.path.getsize(path)/1000} kilobytes"
-        return preview, data
+def gen_input_options(params):
 
-def gen_input_options():
+    server_files = {} 
+    for dataset in params._data_dict['datasets']: 
+        request = f"{PREF_REST_API}{PORT_REST_API}/files/all_files"
+        response = requests.get(request, json={'dataset':dataset})
 
-    DATA_PATH = './data/squad'
-    FILES_PATH = './data/user_files'
+        server_files[dataset] = response.json()['files']
 
-    n_squad, p_squad = [], []
-    datasets = [dir[0] for dir in os.walk(DATA_PATH)]
+    options = [] 
+    for entry in server_files: 
 
-    for dir in datasets[1:]:
-        name = dir.split("/")[-1]
-        n_squad.append(name.replace("_", " "))
-        p_squad.append(dir + "/story.txt")
+        # Add an unclickable option for it to look nicer
+        options.append({"label": f"-- {entry} Files --", "disabled": True})
 
-    n_user, p_user = [], []
-
-    datasets = [dir for dir in os.listdir(FILES_PATH)]
-
-    for dir in datasets:
-        n_user.append(dir)
-        p_user.append(FILES_PATH+ "/" + dir)
-
-    files = {
-        'n_squad': n_squad,
-        'p_squad': p_squad,
-        'n_user': n_user,
-        'p_user': p_user
-    }
-
-    options = []
-
-    # Add an unclickable option for it to look nicer
-    options.append({"label": "-- User files --", "disabled": True})
-
-    # Add the user files
-    for i in range(len(files['n_user'])):
-        options.append(
-            {"label": files['n_user'][i], "value": files['p_user'][i]})
-
-    # Add an unclickable option for it to look nicer
-    options.append({"label": "-- Squad files --", "disabled": True})
-
-    # Add the Squad files
-    for i in range(len(files['n_squad'])):
-        options.append(
-            {"label": files['n_squad'][i], "value": files['p_squad'][i]})
+        files_list = server_files[entry]
+        for i in range(len(files_list)):
+            options.append(
+                {"label": files_list[i], "value": f"{entry}|{files_list[i]}"})
 
     return options
 

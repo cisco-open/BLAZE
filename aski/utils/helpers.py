@@ -41,10 +41,15 @@ def call_object_class_from_name(object_name, task, object_type):
 
 def get_object_from_name(object_name, params, object_type):
 
+    try:
+        list_objs = params._data_dict['states'][object_type + '_objs']
+    except: 
+        list_objs = params[object_type + '_objs']
+
     object_active = object_name
     current_object = None 
 
-    for object_iter in params._data_dict['states'][object_type + '_objs']:
+    for object_iter in list_objs:
         object_name = object_iter._get_class_name()
 
         if object_name == object_active:
@@ -73,10 +78,15 @@ def get_current_model(params):
 
 def get_model_object_from_name(model_name, task, data_dict):
 
+    try:
+        list_objs = data_dict['states']['model_dict'][task]
+    except: 
+        list_objs = data_dict['model_objs']
+
     model_active = model_name
     current_model = None 
 
-    for model in data_dict['states']['model_dict'][task]:
+    for model in list_objs: 
         model_name = model._get_class_name()
 
         if model_name == model_active:

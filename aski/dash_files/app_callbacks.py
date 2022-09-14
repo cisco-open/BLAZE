@@ -12,10 +12,10 @@ import base64
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 import requests
+import time 
 
 from aski.dash_files.app_constants import *
 from aski.params.parameters import Parameters
-from aski.utils.helpers import save_file, read_file
 from aski.dash_files.custom.page_custom import PageCustom
 from aski.dash_files.custom.callbacks_custom import get_custom_callbacks
 
@@ -23,8 +23,8 @@ from aski.dash_files.custom.callbacks_custom import get_custom_callbacks
 # ============================ MODEL CALLBACKS =================================
 # ==============================================================================
 
-def run_app(data, port):
-
+def run_app(data, port, host):
+    time.sleep(5)
     # Initialize the parameters and the page
     params = Parameters(data)
     page = PageCustom(params)

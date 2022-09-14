@@ -6,5 +6,5 @@ function:
 datasets:
 - Squad 
 metrics: {}
-models:
+models_search:
 - ElasticBERT

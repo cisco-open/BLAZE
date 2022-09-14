@@ -2,7 +2,7 @@ Title: Solo Summarization on Custom Texts
 function:
   task: summarization
   custom: true 
-models:
+models_summarziation:
 - Bart
 datasets:
 - XSum
