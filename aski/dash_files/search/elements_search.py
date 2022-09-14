@@ -17,18 +17,7 @@ class SearchInterface():
 
     def get_page_custom(self, params): 
         
-        model_active = params._data_dict['states']['model_active']
-        model_objs = [x for x in params._data_dict['states']['model_objs'] if str(x._info['class_name']) in model_active]
-
-
-        if len(model_objs) == 1: 
-            model_title = f"{model_objs[0]._info['desc']}"
-
-        elif len(model_objs) == 2: 
-            model_title = f"{model_objs[0]._info['name']} vs {model_objs[1]._info['name']}"
-
-        else:
-            model_title = "Please select a model from the left."
+        model_title = "Search and Summarization Pipeline - Made for Thomas"
 
         return html.Div(
                     html.Div([
@@ -208,12 +197,7 @@ class SearchInterface():
                 html.Br(),
 
                 dbc.Row([
-                    dbc.Col([
-                        self.get_latencyCard(params)
-                    ]),
-                    dbc.Col([
-                        self.get_accuracyCard(params)
-                    ])
+                    html.Div(self.get_latencyCard(params), style={'padding':'1rem'})
                 ]),
 
             ],
@@ -232,37 +216,14 @@ class SearchInterface():
 
         # TODO: REST API - For given model, get latency results 
 
-        metrics =  {
-            'latency': [-1, -1, -1],
-            'search_avg': -1,
-            'num_GPUs': 1,
-            'accuracy': [-1, -1]
-        }
-
-        table_header = [
-            html.Thead(html.Tr([html.Th("Step"), html.Th("Time (s)")]))
-        ]
-
-        row1 = html.Tr([html.Td("Load"), html.Td(metrics["latency"][0])])
-        row2 = html.Tr([html.Td("Index"), html.Td(metrics["latency"][1])])
-        row3 = html.Tr([html.Td("Search"), html.Td(metrics["latency"][2])])
-
-        table_body = [html.Tbody([row1, row2, row3])]
-
-        table = dbc.Table(table_header + table_body,
-                        bordered=True, style={"color": WHITE})
-
         latencyCard = dbc.Card([
             html.Div(
                 [
-                    html.Center(html.H5("Latency", style={
+                    html.Center(html.H5("Text Summarization", style={
                                 "font-family": "Quicksand", "color": CREAM, 'font-size': "30px", "padding": "1rem"})),
-                    table,
-                    html.Br(),
-                    html.H5(f"Number of GPUs: {metrics['num_GPUs']}", style={
-                            "font-family": "Quicksand", "color": WHITE}),
-                    html.H5(f"Search Time Avg: {metrics['search_avg']}", style={
-                            "font-family": "Quicksand", "color": WHITE})
+                    html.Center(dbc.Input(
+                                    className="mb-3", placeholder="                                Generated summary will be displayed here!", style={"color": WHITE, "background": "#88888822", "height":"14rem"}
+                                )),
                 ]),
 
         ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand", "height": "24rem"}
