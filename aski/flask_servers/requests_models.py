@@ -1,8 +1,10 @@
 from glob import glob
+from multiprocessing import Process, Manager 
+import string 
 
 from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
-from aski.utils.helpers import get_model_object_from_name
+from aski.utils.helpers import get_model_object_from_name, get_dataset_object_from_name
 
 
 """
@@ -51,12 +53,9 @@ def initialize(request, server_config):
         - Output: {}
         - Use Case: to initialize a model (make sure no pid/model alr running)
         - Who's Doing: Advit
-
     TODO: Figure out whether this should look at processes, or at model_objs
     TODO: Figure out concrete functionality for this method... unsure 
-
     TODO: This will be for initializing search (indexing on a file!)
-
     """
 
     json = request.json
@@ -64,12 +63,11 @@ def initialize(request, server_config):
         return "Malformed request", 400
     
     model_name = str(json['model']) 
-
     for model in server_config['model_objs']: 
+        print(f"currently examining {model}")
         if model._info['class_name'] == model_name: 
 
             model = get_model_object_from_name(model_name, server_config)
-            
             if callable(getattr(model, "load_model", None)): 
 
                 if any(param not in json for param in ['filename', 'filecontent']):
@@ -77,7 +75,7 @@ def initialize(request, server_config):
 
                 model.load_model(str(json['filename']), str(json['filecontent']))
 
-            return 200 
+            return {"response" : "success"}, 200 
 
     return "That model doesn't exist", 404 
 
@@ -117,6 +115,8 @@ def search(request, server_config):
 
     model_name = json['model']
     query = json['query']
+
+    query = query.translate(string.punctuation)
 
     model = get_model_object_from_name(model_name, server_config)
     res, latency = model.file_search(query)
@@ -158,26 +158,55 @@ def benchmark(request, server_config):
     """
 
     json = request.json
-    if any(param not in json for param in ['model']):
+    if any(param not in json for param in ['model', 'dataset', 'task', 'filename']):
         return "Malformed request", 400
     
     model_name = str(json['model']) 
+    dataset_name = str(json['dataset'])
+    file_name = str(json['filename'])
+    task = str(json['task'])
 
-    for process in server_config['processes']: 
-        if process == model_name: 
-            # There is a process already running with this model 
+    process_name = f"{model_name}-{dataset_name}"
 
-            # TODO: Reimplement queue, replace with FIFO/Value/List 
-            # TODO: No need to store ALL results (most are empty)
-            # TODO: Just need the last results, which will be returned 
+    # If there is a process already running with this model: 
+    if process_name in server_config['processes']: 
+        if task == 'stop': 
+            server_config['processes'][process_name][0].kill()
+            server_config['processes'][process_name][1] = manager.dict() 
+            server_config['processes'].pop(process_name)
 
-            res = server_config['processes'][process][1].pop()
-            server_config['processes'][process][2] = res
+            return {"response" : "Stopped succesfully"}, 200 
 
-            return {'results': res}, 200 
+        elif task == 'read': 
+            res = server_config['processes'][process_name][1] 
 
+            print(res) 
 
-    return "That model isn't running in a separate process", 404 
+            d = dict() 
+            d = res.copy() 
+
+            return {"res": d}, 200 
+
+        else: 
+            return "Malformed request", 400 
+    
+    else: 
+        if task == 'start':
+
+            dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+
+            results = dict() 
+            print("tryna start it")
+            server_config['processes'][process_name] = [None, manager.dict()]
+            server_config['processes'][process_name][0] = Process(target=dataset_obj._benchmark, args=(model_name, file_name,
+                                                                    server_config['processes'][process_name][1])
+                                                                  )
+            server_config['processes'][process_name][0].start() 
+            #server_config['processes'][process_name][0].join() 
+            return {"response" : "Started succesfully"}, 200 
+
+        else: 
+            return "Malformed request", 400 
 
 def kill(request, server_config): 
     """
@@ -198,10 +227,9 @@ def kill(request, server_config):
         if process == model_name: 
             # There is a process already running with this model 
             server_config['processes'][process][0].kill()
-            server_config['processes'][process][1].empty()
-            server_config['processes'][process][2] = None 
+            server_config['processes'][process][1] = {} 
 
             server_config['processes'].pop(process)
-            return 200 
+            return {"response" : "Killed successfully."}, 200 
 
     return "That model isn't running in a separate process", 404 

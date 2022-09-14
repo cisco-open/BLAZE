@@ -8,9 +8,11 @@ of the dashboard used throughout the code.
 """
 
 import json
+import requests 
 from multiprocessing import Queue
 from aski.utils.helpers import get_list_objects
 from aski.dash_files.app_constants import *
+from aski.flask_servers.flask_constants import PREF_REST_API, PORT_REST_API
 
 # ==============================================================================
 # ============================ PARAMETERS CLASS ================================
@@ -20,21 +22,6 @@ class Parameters:
 
     def __init__(self, data_dict=None):
 
-        """
-        
-        What yml will contain: 
-
-        "Title": "Solo Question Answering on Custom Text", 
-        "function": {"task": "Search", "custom": true, "benchmarking": false, "comparing": false}, 
-        "data": {"DATA_PATH": "./data/squad2_data", "DATA_SETS": "1", "DEFAULT": "1973_oil_crisis", "FILES_PATH": "./data/user_files"}, 
-        "models": ["ElasticBERT"]}
-        
-
-        What will be added by this class: 
-
-        "states" : {"chosen_data": None, "chosen_path": None, "has_input_file": False, "has_indexed": False, "model_objs": []}
-
-        """
 
 
         self._data_dict = data_dict
@@ -49,6 +36,8 @@ class Parameters:
 
         self._data_dict['states']['has_dataset'] = False  
         self._data_dict['states']['has_metric'] = False  
+
+        self._data_dict['states']['dataset_objs'] = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
 
         print(f"\n==== Loading Models ===\n")
 

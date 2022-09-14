@@ -4,6 +4,7 @@ import os.path as path
 
 from aski.flask_servers.flask_constants import FILES_DIR, MODELS_DIR, DATASETS_DIR 
 from aski.params.specifications import Specifications
+from aski.utils.helpers import get_dataset_object_from_name
 
 
 """
@@ -23,30 +24,74 @@ def all_datasets(request, server_config):
 	specs = Specifications(MODELS_DIR, DATASETS_DIR)
 	return {'datasets_summarization' : specs._list_datasets_summarization, 'datasets_search' : specs._list_datasets_search}, 200
 
-def file(request, server_config):
+
+def all_files(request, server_config): 
     """
-    2) GET/files/file - specific file text (details) 
-        - Input: {"file": str}
-        - Output: {"file": str, "content": str, "content-length": int}
+    2) GET files/all_files - all available files from a given dataset 
+        - Input: {"dataset" : str}
+        - Output: {"files" : list}
+        - Use Case: To get titles of all 442 Squad texts (so user can pick one)
+        - Who's Doing: Advit 
+    """
+
+    json = request.json
+    if any(param not in json for param in ['dataset']):
+        return "Malformed request", 400
+    
+    dataset_name = str(json['dataset'])
+    dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+
+    if not dataset_obj: 
+       return "That dataset doesn't exist", 404 
+
+    titles = dataset_obj._get_topic_titles()
+    return {"files": titles}, 200
+
+
+def file(request, server_config):    
+    """
+    3) GET/files/file - specific file text (details) 
+        - Input: {"filename": str, "fileclass": str}
+        - Output: {"content": str, "size": int}
         - Use Case: Show preview for files
         - Who's Doing: Jason
     """
+
     json = request.json
-    if any(param not in json for param in ['file']):
+    if any(param not in json for param in ['filename', 'fileclass']):
         return "Malformed request", 400
     
-    filepaths = glob(path.join(FILES_DIR, '**', json['file']), recursive=True)
-    
-    if len(filepaths) > 0:
-        filepath = filepaths[0]
-        response_data = {}
-        with open(filepath, 'r') as f:
-            response_data['content'] = f.read()
-        response_data['file'] = json['file']
-        response_data['content-length'] = len(response_data['content'])
-        return response_data, 200
-    else:
-        return "That file doesn't exist", 404
+    dataset_name = str(json['fileclass'])
+
+    if dataset_name == 'user': 
+        filepaths = glob(path.join(FILES_DIR, '**', json['filename']), recursive=True)
+            
+        if len(filepaths) > 0:
+            filepath = filepaths[0]
+            with open(filepath, 'r') as f:
+                content = f.read()
+                size = os.path.getsize(filepath) / 1000 
+        else: 
+            return "That file doesn't exist", 404
+    else: 
+        dataset_obj = get_dataset_object_from_name(dataset_name, server_config)
+
+        if dataset_obj._dataset_type == 'search': 
+            content = dataset_obj._get_title_story(str(json['filename']))
+            content = ' '.join(sentence for sentence in content)
+            size = "N/A"
+        elif dataset_obj._dataset_type == 'summarization': 
+            content = None   
+            size = None 
+        else: 
+            return "That file doesn't exist", 404
+
+    response_data = {} 
+    response_data['content'] = content
+    response_data['size'] = size 
+
+    return response_data, 200
+
 
 def load(request, server_config): 
     """

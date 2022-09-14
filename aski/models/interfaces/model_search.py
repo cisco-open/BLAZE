@@ -20,6 +20,16 @@ class ModelSearch():
 
     def _get_class_name(self):
         return self._info['class_name']
+    
+    @classmethod 
+    def _parse_raw_ans(self, res, time): 
+
+        try:
+            ans = res[0]['res'] + f" ({round(time, 2)}s)"
+        except:
+            ans = "Unable to find an answer."
+
+        return ans 
 
 """
 
