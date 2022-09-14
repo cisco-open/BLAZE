@@ -15,13 +15,13 @@ Install requirements in a virtual environment with
 
 Build the application with
 
-`python -m aski_conversational build`
+`python -m conv build`
 
 (This step may take about 15 minutes wihtout a GPU)
 
 And run in the commandline with
 
-`python -m aski_conversational converse`
+`python -m conv converse`
 
 
 ## Sources for training data
