@@ -23,7 +23,7 @@ class Node(object):
 
         self.node_id = node_id # Internal node ID (Model X or Data X)
         self.label = label # Name of node (ex. ColBERT, ElasticBERT, SQUAD 2.0)
-        self.type = type # Either "data" or "model"
+        self.type = type # Either "data" or "model" or "ui"
 
         self.role = Role()
         self.channels = dict()
@@ -124,6 +124,8 @@ class Design(object):
             prefix = "Data"
         elif type == "model": 
             prefix = "Model"
+        elif type == "ui": 
+            prefix = "UI"
         else: 
             prefix = "Role"
 
@@ -197,6 +199,7 @@ class Design(object):
         edge_map = dict()
         for u in self.graph.values():
             cb_node = u.node_to_callback()
+
             nodes_edges.append(cb_node)
 
             for v in u.channels.keys():
