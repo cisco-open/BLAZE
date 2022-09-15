@@ -1,52 +1,78 @@
 # BLAZE - Building Language Applications with eaZE 
 
-- [BLAZE Drag-and-Drop - README](drag/README.md)
-- [BLAZE Conversational AI - README](conv/README.md)
+> [BLAZE Drag-and-Drop - README](drag/README.md) | [BLAZE Conversational AI - README](conv/README.md)
 
 &nbsp;&nbsp;
 
 The goal of BLAZE is to **make the lives of data scientists easier**, filling-in a required niche. 
-BLAZE will allow plug-and-play for *models, datasets, tasks, and other parameters*. Users can 
-quickly see how their model performs, identify what works and what doesn't, and compare their 
-model to other models. 
+
+Natural Language Processing (NLP) pipelines reuse many of the same components arranged in different orders. The purpose each NLP model serves varies from use-case to use-case. However, these NLP models are not standardized in terms of their inputs, outputs, and hardware requirements. As a result, it is very difficult to interchange and combine NLP models, especially without introducing significant amounts of code. This lack of standardization causes NLP pipelines to be very rigid. Their lack of flexibility makes it difficult to compose, modify, and add functionality. 
+
+To solve this problem, Blaze that allows for the modular creation and composition of NLP pipelines. Each component of the NLP Pipeline can be implemented as "building block" (for example, a microservice). These building blocks will have standardized inputs and outputs, and they can easily be assembled in varying orders. The order and choice of these specific blocks result in varying pipelines, built for unique use-cases. 
+
 
 ## Features 
 
 Here's BLAZE's current functionalities:
 
-- **Custom Question-Answering** (ColBERT, Elasticsearch) 
-  - Can use SQUAD texts (ex. 1973 Oil Crisis) or upload custom files (`.txt` support)
-  - Allows users to enter questions, displays model's output
-  - Gives latency, still need to update accuracy card (bottom right) 
+**Use Case #1 - Developer** 
+
+- **Drag-and-Drop Pipeline Builder** 
+  - Visual builder for configuring and deploying pipelines
+  - Allows for building from scratch (adding, connecting components)
+  - Allows for uploading existing pipelines (visualize "recipes") 
+  - Converts custom recipe into downloadable YAML config file 
+  - Generates and launches custom NLP pipeline solution 
+
+- **Conversational AI (Webex Bot)** 
+  - Interface with BLAZE to specify pipeline components
+  - Generate and launch custom NLP pipeline solution 
 
   &nbsp;&nbsp;
 
-  ![Custom](./docs/custom_qna.PNG)
+**Use Case #2 - Business** 
+
+- **Visual Dashboard Web App** 
+  - Visual representation of generated pipeline
+  - Supports semantic search, summarization, file upload, etc. 
+
+- **Conversational AI (Webex Bot)** 
+  - Interact with generated pipeline through natural language
+  - Can choose knowledge base (ex. upload file, view all files) 
+  - Can index model and retrieve results (ex. summarize this doc) 
+  - Can retrieve knowledge base, model, and metrics info 
 
   &nbsp;&nbsp;
 
-- **Solo Benchmarking** (ColBERT, Elasticsearch) 
-  - Can only use SQUAD texts (goes through ALL questions of chosen dataset) 
+**Use Case #3 - Researcher** 
+
+- **Model/Knowledge Base Benchmarking** 
+  - Benchmark selected model on selected knowledge base 
   - Gives latency (avg time/question, as well as generates real-time graph)
   - Gives accuracy (num correct, num total, % correct, % progress) 
   - Displays incorrect questions 
 
-- **Model Comparison** (ColBERT, Elasticsearch)
-  - Goes through all questions of chosen dataset on both models
-  - Gives latency, accuracy, incorrect questions for both 
-  - Allows for side-by-side comparison of performance 
+- **Model/Knowledge Base Comparison** 
+  - Benchmark multiple models on selected knowledge base 
+  - Gives latency (avg time/question, as well as generates real-time graph)
+  - Gives side-by-side accuracy (num correct, num total, % correct, % progress) 
+  - Displays incorrect questions 
+
+- **Model/Knowledge Base Metrics** 
+  - Compute and display scientific metrics 
+  - Currently Supported Metrics: BertScore, Bleu, Rouge 
 
   &nbsp;&nbsp;
+
+> GIFS/Screenshots Coming Soon! 
+
+  ![Custom](./docs/custom_qna.PNG)
 
   ![Comparison](./docs/model_comparison.png)
 
-  &nbsp;&nbsp;
-
-- **Custom Summarization** (Bart-RXF)
-  - Can upload custom files (`.txt` support), with dataset support coming soon 
 
 
-Over the coming weeks, this platform will be further fleshed out with more exciting features 😄. 
+> Over the coming weeks, this platform will be further fleshed out with more exciting features 😄. 
 
 
 &nbsp;&nbsp;
