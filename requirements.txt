@@ -4,7 +4,7 @@ async-timeout==4.0.2
 attrs==21.4.0
 blis==0.7.8
 catalogue==1.0.0
-certifi==2022.6.15
+certifi==2022.12.07
 charset-normalizer==2.1.0
 ciscosparkapi==0.10.1
 click==7.1.2
@@ -22,7 +22,7 @@ idna==3.3
 immutables==0.18
 itsdangerous==1.1.0
 Jinja2==2.11.3
-joblib==1.1.0
+joblib==1.2.0
 MarkupSafe==2.0.1
 marshmallow==3.7.1
 mindmeld==4.5.0
