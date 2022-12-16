@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 """ 
 ====================================================
 Params
@@ -37,18 +56,20 @@ class Parameters:
         self._data_dict['states']['has_dataset'] = False  
         self._data_dict['states']['has_metric'] = False  
 
-        self._data_dict['states']['dataset_objs'] = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
+        # self._data_dict['states']['dataset_objs'] = get_list_objects(self._data_dict['datasets'], self._data_dict['function']['task'], 'datasets') 
 
         print(f"\n==== Loading Models ===\n")
 
         self._data_dict['states']['model_dict']   = {}
         self._data_dict['states']['model_active'] = {}
+        request = f"{PREF_REST_API}{PORT_REST_API}/get_model_checklist"
+        response = requests.get(request)
+        self._data_dict['states']['model_checklist'] = response.json()['data']
 
         tasks_list = self._data_dict['function']['task'].split('/')
-
+        
         for task in tasks_list:
-
-            self._data_dict['states']['model_dict'][task]   = get_list_objects(self._data_dict['models_' + task], task, 'models') 
+            # self._data_dict['states']['model_dict'][task] = get_list_objects(self._data_dict['models_' + task], task, 'models') 
             self._data_dict['states']['model_active'][task] = None
 
         #print(f"\n==== Loading Datasets ===\n")
@@ -76,8 +97,11 @@ class Parameters:
 
         self._data_dict['states']['has_input_file'] = False
         self._data_dict['states']['has_indexed']    = False
+        self._data_dict['states']['has_summarized'] = False 
         self._data_dict['states']['chosen_name']    = None
-        self._data_dict['states']['chosen_path']    = None 
+        self._data_dict['states']['chosen_path']    = None
+        self._data_dict['states']['result_search']        = ANSWER_BOX_PLACEHOLDER
+        self._data_dict['states']['result_summarization'] = ANSWER_BOX_PLACEHOLDER 
 
         self._data_dict['states']['query'] = SEARCH_BOX_PLACEHOLDER
         self._data_dict['states']['result'] = ANSWER_BOX_PLACEHOLDER

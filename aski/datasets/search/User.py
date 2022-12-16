@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 """
 User
 ====================================================
@@ -17,8 +36,10 @@ class User():
 		self._dataset_name = 'User'
 		self._dataset_type = 'search'
 
-		self._topic_content = {} 
-
+		self._topic_content = {}
+		self._get_files()
+		
+	def _get_files(self):
 		for path in os.listdir(FILES_DIR):
 			if os.path.isfile(os.path.join(FILES_DIR, path)) and path.endswith('.txt'):
 
@@ -26,7 +47,17 @@ class User():
 				lines = f.readlines() 
 				f.close() 
 
-				self._topic_content[path] = lines 
+				self._topic_content[path] = lines
+		
+
+	def _update_file(self, file_path):
+		if file_path not in self._topic_content:
+			if os.path.isfile(os.path.join(FILES_DIR, file_path)) and file_path.endswith('.txt'):
+				f = open(os.path.join(FILES_DIR, file_path), 'r', encoding='utf-8')
+				lines = f.readlines()
+				f.close()
+				self._topic_content[file_path] = lines 
+
 
 	def _get_class_name(self):
 		return self._class_name

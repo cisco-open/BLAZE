@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 import os 
@@ -30,14 +49,7 @@ class PageCustom():
 
     def get_sidebar(self):
 
-        model_dict = self.params._data_dict['states']['model_dict']
-
-        list_models = []
-        list_tasks  = []
-        for key in model_dict:
-
-            list_models.append(model_dict[key])
-            list_tasks.append(key)
+        model_checklist = self.params._data_dict['states']['model_checklist']
 
         sidebar = html.Div([
 
@@ -56,7 +68,7 @@ class PageCustom():
             dbc.Card([
                 html.Div(
                     [
-                    get_custom_model_checklist(list_models[i], list_tasks[i]) for i in range(len(list_models))
+                    get_custom_model_checklist(model_checklist[i][0],model_checklist[i][1]) for i in range(len(model_checklist))
                     ]),
             ], color="dark", style={"padding": "1rem", 'font-family': "Quicksand"}),
 
@@ -64,7 +76,7 @@ class PageCustom():
             html.Br(),
             html.P(
                 """Please upload a .txt or .pdf:""", 
-                style={'color': WHITE, 'font-family': "Quicksand"}),
+                style={'color': WHITE, 'font-family': "Quicksand", 'display': 'none' if "User" not in self.params._data_dict["datasets"] else "block"}),
 
             dbc.Card([
                 html.Div(
@@ -73,10 +85,10 @@ class PageCustom():
                             'Upload (.txt or .pdf)', 
                             color="info", 
                             outline=True, 
-                            style={'font-family': "Quicksand"}), 
+                            style={'font-family': "Quicksand", }), 
                             id="sidebar-file-button")),
                     ]),
-            ], color="dark", style={"padding": "1rem"}),
+            ], color="dark", style={"padding": "1rem", 'display': 'none' if "User" not in self.params._data_dict["datasets"] else "block"}),
 
             html.Br(),
             html.P(
@@ -141,7 +153,7 @@ class PageCustom():
 
         if self.params._data_dict['states']['has_input_file']:
             preview, file_txt = gen_file_preview(self.params._data_dict['states']['chosen_data'], self.params._data_dict['states']['chosen_path'])
-            placeholder = self.params._data_dict['states']['chosen_path']
+            placeholder = self.params._data_dict['states']['chosen_data']
 
         inputBox = dbc.Card([
             dbc.CardBody([
@@ -283,7 +295,7 @@ class PageCustom():
 
                 ], color="#88888822", style={"padding": "1rem", 'font-family': "Quicksand"}),
 
-                #html.Br(id="custom-begin-index"),
+                html.Br(id="custom-begin-index"),
                 html.Center(dbc.Button(
                     'Summarize', 
                     color="info", 
@@ -333,7 +345,7 @@ def gen_input_options(params):
     for dataset in params._data_dict['datasets']: 
         request = f"{PREF_REST_API}{PORT_REST_API}/files/all_files"
         response = requests.get(request, json={'dataset':dataset})
-
+        
         server_files[dataset] = response.json()['files']
 
     options = [] 
@@ -353,25 +365,11 @@ def gen_input_options(params):
 # =============================== OPTIONS ======================================
 # ==============================================================================
 
-def get_custom_model_checklist(list_models, task):
-
-    list_options = []
-
-    for model in list_models:
-
-        model_name       = model._info['name']
-        model_class_name = model._info['class_name']
-        option = {
-
-        "label": ' ' + model_name,
-        "value": model_class_name
-
-        }
-
-        list_options.append(option)
+def get_custom_model_checklist(options, task):
 
     check_list = dcc.RadioItems(
-        options=list_options,
+        options=options,
+        value=options[0]['value'],
         id="sidebar-models-checklist-" + task,
         inline=False,
         labelStyle={'display': 'block'},

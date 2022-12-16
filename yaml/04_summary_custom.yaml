@@ -1,12 +1,14 @@
 Title: Solo Summarization on Custom Texts
-function:
-  task: summarization
-  custom: true 
-models_summarziation:
-- Bart
 datasets:
-- XSum
-- User 
-metrics:
-- Rouge
-- Bleu
+- User
+function:
+  custom: true
+  task: summarization
+interface:
+- Chat Bot
+- Web App
+metrics: {}
+models_summarization:
+- Bart
+
+

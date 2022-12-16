@@ -1,12 +1,30 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 from flask import Flask, request
 import json
 import os
 import subprocess
-
+import copy
 from aski.flask_servers import requests_files
 from aski.flask_servers import requests_models 
 from aski.utils.helpers import get_list_objects
-
 
 """
 
@@ -23,7 +41,7 @@ states to retain:
 """
 
 
-def run_app_server(app, port=3000, ip='localhost'):
+def run_app_server(app, port=3000, ip='0.0.0.0'):
 
     print("PID:", os.getpid())
     print("Werkzeug subprocess:", os.environ.get("WERKZEUG_RUN_MAIN"))
@@ -72,26 +90,62 @@ def create_app(server_config):
     app = Flask(__name__)
 
     tasks_list = server_config['function']['task'].split('/')
+    server_config['model_objs'] = {}
     for task in tasks_list:
-        server_config['model_objs'] = get_list_objects(server_config['models_' + task], task, 'models') 
+        server_config['model_objs'][task] = get_list_objects(server_config['models_' + task], task, 'models') 
 
     server_config['dataset_objs'] = get_list_objects(server_config['datasets'], server_config['function']['task'], 'datasets') 
     server_config['processes'] = {}
     
+    initial_server_config = copy.deepcopy(server_config)
     print("(create_app) > Server config is ", server_config)
-  
+
+    def get_select_model_options(list_models,task):
+        list_options = []
+    
+        for model in list_models:
+            model_name       = model._info['name']
+            model_class_name = model._info['class_name']
+            option = {
+                "label": ' ' + model_name,
+                "value": str(model_class_name),
+                }           
+
+            list_options.append(option)
+            
+        return [list_options,task]
 
     # 01) General methods. 
     
     @app.route('/', methods=['GET'])
     def default():
         nonlocal server_config
-        return {'response' : "Working API server"}, 200 
+        return {'response' : "Working API server"}, 200
+    
+    @app.route('/reset', methods=['GET'])
+    def reset():
+        server_config = initial_server_config
+        return {'response' : "reset successful"}, 200
+
 
     @app.route('/data', methods=['GET'])
     def get_data():
         nonlocal server_config
         return json.dumps({'data': server_config['data']})
+
+    @app.route('/get_model_checklist', methods=['GET'])
+    def get_model_checklist():        
+        list_models = []
+        list_tasks  = []
+        for key in server_config['model_objs']:
+            list_models.append(server_config['model_objs'][key])
+            list_tasks.append(key)
+        
+        select_model_options = []
+        for i in range(len(list_models)):
+            select_model_options.append(get_select_model_options(list_models[i],list_tasks[i]))
+        
+        return json.dumps({'data': select_model_options})
     
 
     # 02) Dataset methods.
