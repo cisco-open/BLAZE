@@ -108,9 +108,11 @@ You can use the dashboard to create your own NLP Pipeline !!
 
 &nbsp;&nbsp;
 
-A few heads up, there are **several edge-cases** that are currently being ironed out! 
+Note:
+- There are **several edge-cases** that are currently being ironed out! 
 - If something stops working, try restarting the dashboard and navigating to that page from fresh
 - Make sure to **check the outputs of cmd** (helpful debugging info that might not be shown on the Dash)
+- BLAZE has been developed and tested on Python 3.9 (Python 3.11 and above don't support a few libraries) 
 
 
 &nbsp;&nbsp;
@@ -188,3 +190,5 @@ toggle the "Disabled" option next to ColBERT. You should be good to go now!
 Stay tuned, support for this is coming soon! 
 
 &nbsp;&nbsp;
+
+
