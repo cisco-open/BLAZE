@@ -1,0 +1,28 @@
+version: "3"
+services:
+  aski:
+    build: .    
+    volumes:
+      - ./:/blaze
+      - /blaze/.git
+    ports:
+      - "5010:5010"
+      - "3000:3000"
+      - "5001:5001"
+    depends_on:
+      - elastic-search
+  elastic-search:
+    image: elasticsearch:7.17.6
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - elastic-db:/usr/share/elasticsearch/data
+volumes:
+  elastic-db:
+
+
+
+
+

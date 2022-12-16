@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 import base64 
 from dash import Dash, html, dcc, Input, Output, State
 import requests 
@@ -13,8 +32,10 @@ def get_custom_callbacks(app, page, params):
 
     # Search takes the following: search-custom-ask-q-button, 
     #                             search-custom-enter-q-box, 
-    #                             
-
+    #
+    # 
+    #                              
+    
     callback_inputs = [
             Input("custom-choose-file", "value"),
             Input("custom-begin-index", "n_clicks")
@@ -59,8 +80,6 @@ def get_custom_callbacks(app, page, params):
         file_content = args[1]
         reset_button = args[2]
         file_name = args[3]
-
-
         file_chosen = args[4]
         index_button = args[5]
 
@@ -78,7 +97,7 @@ def get_custom_callbacks(app, page, params):
             summarization_button = 0 
             ask_button = args[6]
             query_text = args[7]
-        
+        params._data_dict['states']['model_active']['summarization'] = args[-1]
         if 'summarization' in task and 'search' in task: 
             model_choice_search = args[-1]
             model_choice_summarization = args[-2]
@@ -89,34 +108,42 @@ def get_custom_callbacks(app, page, params):
             model_choice_search = args[-1]
             model_choice_summarization = 0 
 
-        print(args)
 
         # UPDATE MODEL SEARCH
         if 'search' in task and params._data_dict['states']['model_active']['search'] != model_choice_search:
             params._data_dict['states']['model_active']['search'] = model_choice_search
 
-        # UPDATE MODEL SUMMARIZATION
+        # # UPDATE MODEL SUMMARIZATION
         if 'summarization' in task and params._data_dict['states']['model_active']['summarization'] != model_choice_summarization: 
             params._data_dict['states']['model_active']['summarization'] = model_choice_summarization
 
         # RESET
         if reset_button == params._data_dict['states']['reset_presses'] + 1: 
             print(f"(sidebar_functionality) > Resetting dashboard...")
-
+            
             params._reset_data_dict_states()
-            params._data_dict['states']['model_active'] = [] 
+            response = requests.get(f"{PREF_REST_API}{PORT_REST_API}/reset")          
+
             params._data_dict['states']['reset_presses'] = reset_button 
+            
             return page.get_page() 
+        
+        print(params._data_dict)
 
         # FILE CONTENT
+        
         if file_name is not None:
-
+            
             content_type, content_string = file_content.split(',')
             decoded = base64.b64decode(content_string).decode("utf-8")
 
-            requests.post(f"{PREF_REST_API}{PORT_REST_API}/files/upload", data={"file": file_name, "content": decoded})
+            requests.post(f"{PREF_REST_API}{PORT_REST_API}/files/upload", json={"file": file_name, "content": decoded})
 
             print(f"> Added file {file_name}.")
+            params._data_dict['states']['chosen_data'] = file_name
+            params._data_dict['states']['chosen_path'] = "User" # TODO SWAP AND FIS 
+            params._data_dict['states']['has_input_file'] = True 
+        
 
         ### SELECTING FILE
         if file_chosen is not None:
@@ -126,7 +153,8 @@ def get_custom_callbacks(app, page, params):
             params._data_dict['states']['chosen_data'] = ''.join(w for w in split_file[1:])
             params._data_dict['states']['chosen_path'] = split_file[0] # TODO SWAP AND FIS 
             params._data_dict['states']['has_input_file'] = True 
-
+            print(params._data_dict)
+            
 
         ### RUNNING SUMMARIZATION
         if summarization_button == 1 and params._data_dict['states']['has_input_file'] and not params._data_dict['states']['has_summarized']:
@@ -135,14 +163,14 @@ def get_custom_callbacks(app, page, params):
             
             # Get the name of the model currently active as a string
             model_active_name = params._data_dict['states']['model_active']['summarization']
-            print(f" > Begun summarizing with {model_active_name}...")
-            
-            current_model = get_model_object_from_name(
-                model_active_name, 
-                'summarization', 
-                params._data_dict) 
 
-            result = current_model._summarize_text(content)
+            print(f" > Begun summarizing with {model_active_name}...")
+
+            request = f"{PREF_REST_API}{PORT_REST_API}/models/summary"
+            response = requests.get(request, json={'model': params._data_dict['states']['model_active']['summarization'], 
+                                                   'content': content}
+                                   )
+            result = response.json()['result']
 
             print(result)
 

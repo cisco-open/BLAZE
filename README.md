@@ -77,6 +77,7 @@ Here's BLAZE's current functionalities:
 
 &nbsp;&nbsp;
 
+## Installing Locally
 ## Installation 
 
 First, clone this repository by running:
@@ -99,7 +100,7 @@ Ensure that your elasticsearch client is up and running. For more information, s
 Wait for ElasticSearch to load and ensure that your elasticsearch client is up and running. For more information, see 
 "Supported Models" section. Finally, run the dashboard with: 
 
-`python app_callbacks.py`
+`python build.py`
 
 Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Run this link in your browser to open the dashboard! 
 
@@ -111,6 +112,13 @@ A few heads up, there are **several edge-cases** that are currently being ironed
 
 
 &nbsp;&nbsp;
+
+## Install using Docker: Local Development
+
+Install Docker and Docker Composer following the instructions on the link `https://docs.docker.com/engine/install/`
+
+Run below command to build and run the environment
+`docker compose up -d`
 
 ## Using the Conversational AI
 

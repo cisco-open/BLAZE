@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 """This app creates the drag-and-drop builder."""
 
 import dash_bootstrap_components as dbc
@@ -41,7 +60,7 @@ def run_app():
         return design_layout
 
     # Can't use 5001
-    app.run_server(port='5010', debug=True, use_reloader=False)
+    app.run_server(host='0.0.0.0',port='5010', debug=True, use_reloader=False)
 
 
 if __name__ == "__main__":

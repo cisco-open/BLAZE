@@ -1,3 +1,22 @@
+
+# Copyright 2022 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+
 from glob import glob
 import os
 import os.path as path
@@ -76,8 +95,8 @@ def file(request, server_config):
         else: 
             return "That file doesn't exist", 404
     else: 
-        params = Parameters(server_config); print(f"{dataset_name} | {str(json['filename'])}")
-        dataset_obj = get_object_from_name(dataset_name, params, 'dataset')
+        print(f"{dataset_name} | {str(json['filename'])}")
+        dataset_obj = get_object_from_name(dataset_name, server_config, 'dataset')
 
         if dataset_obj._dataset_type == 'search': 
             content = dataset_obj._get_title_story(str(json['filename']))
@@ -132,10 +151,16 @@ def upload(request, server_config):
         if not any(json['file'].endswith(ext) for ext in ['.txt', '.pdf']):
             return "Bad file extension", 400
         
-        filepath = path.join(FILES_DIR, 'user_files', json['file'])
+        filepath = path.join(FILES_DIR, json['file'])
         isBytes = "" if json['file'].endswith('.txt') else 'b'
         with open(filepath, f'w{isBytes}') as f:
             f.write(json['content'])
+        
+        for dataset_obj in server_config['dataset_objs']:
+            if dataset_obj._dataset_name == "User":
+                dataset_obj._update_file(json['file'])
+                break
+
         return {}, 201
     elif request.method == 'DELETE':
         json = request.json
