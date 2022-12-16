@@ -82,7 +82,7 @@ Here's BLAZE's current functionalities:
 
 First, clone this repository by running:
 
-`git clone https://github.com/jsrinivasa/ASKI.git`
+`git clone https://wwwin-github.cisco.com/jasriniv/blaze.git`
 
 Install faiss-gpu with
 
@@ -94,7 +94,7 @@ Install faiss-gpu with
 
 Then, activate your conda environment with 
 
-`conda activate aski-benchmark`
+`conda activate aski`
 
 Ensure that your elasticsearch client is up and running. For more information, see "Supported Models" section. 
 Wait for ElasticSearch to load and ensure that your elasticsearch client is up and running. For more information, see 
@@ -102,7 +102,9 @@ Wait for ElasticSearch to load and ensure that your elasticsearch client is up a
 
 `python build.py`
 
-Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Run this link in your browser to open the dashboard! 
+Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5010/`). Run this link in your browser to open the dashboard! 
+
+You can use the dashboard to create your own NLP Pipeline !!
 
 &nbsp;&nbsp;
 
@@ -150,14 +152,14 @@ Set the environment variables BOT_ACCESS_TOKEN (received when you register your 
 - upload_data: manual data entry + mindmeld data augmentation
 
 
-## Supported Models, Knowledge Bases
+## Instructions to install and run Supported Models, Knowledge Bases
 
 ***Installing Elasticsearch***
 
 Navigate to [Elasticsearch Installation](https://www.elastic.co/downloads/past-releases/elasticsearch-7-0-0) and 
 follow the instructions according to your specific setup. 
 
-> NOTE: ASKI does **not currently support** Elasticsearch 8 or higher! 
+> NOTE: BLAZE does **not currently support** Elasticsearch 8 or higher! 
 
 In order to launch elasticsearch, open a new terminal, navigate to the elasticsearch directory, and run either of the following: 
 - `./bin/elasticsearch` (Linux/Mac)
