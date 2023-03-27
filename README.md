@@ -206,3 +206,10 @@ Stay tuned, support for this is coming soon!
 &nbsp;&nbsp;
 
 
+## Get in touch
+
+If you would like to contact the team, please feel free to email us at **blaze-github-owners@cisco.com**.
+
+For bugs or other issues, you can also use the **Issues** section of the repository.
+
+Finally, for broader topics around the project, you may also use the **Discussions** section.
