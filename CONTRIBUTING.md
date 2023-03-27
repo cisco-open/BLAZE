@@ -12,12 +12,13 @@ We use github to host code, to track issues and feature requests, as well as acc
 
 Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:
 
-1. Fork the repo and create your branch from `main`.
-2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the documentation.
-4. Ensure the test suite passes.
-5. Make sure your code lints.
-6. Issue that pull request!
+1. Fork the repo and proceed to set up the project locally following the steps detailed [here](./README.md#installation). Ensure you are cloning your fork and not the original repository.
+2. Create a new branch from `main` and implement your changes.
+3. If you've added code that should be tested, add tests.
+4. If you've changed APIs, update the documentation.
+5. If you've changed dependencies, update the `aski_env.yml` file accordingly.
+6. Ensure the test suite passes and the code lints by running `check_code.sh`.
+7. Issue that pull request!
 
 ## Any contributions you make will be under the Apache License, Version 2
 In short, when you submit code changes, your submissions are understood to be under the same [Apache License](LICENSE) that covers the project.
