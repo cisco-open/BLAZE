@@ -8,7 +8,9 @@ The goal of BLAZE is to **make the lives of data scientists easier**, filling-in
 
 Natural Language Processing (NLP) pipelines reuse many of the same components arranged in different orders. The purpose each NLP model serves varies from use-case to use-case. However, these NLP models are not standardized in terms of their inputs, outputs, and hardware requirements. As a result, it is very difficult to interchange and combine NLP models, especially without introducing significant amounts of code. This lack of standardization causes NLP pipelines to be very rigid. Their lack of flexibility makes it difficult to compose, modify, and add functionality. 
 
-To solve this problem, Blaze that allows for the modular creation and composition of NLP pipelines. Each component of the NLP Pipeline can be implemented as "building block" (for example, a microservice). These building blocks will have standardized inputs and outputs, and they can easily be assembled in varying orders. The order and choice of these specific blocks result in varying pipelines, built for unique use-cases. 
+To solve this problem, Blaze that allows for the modular creation and composition of NLP pipelines. Each component of the NLP Pipeline can be implemented as "building block" (for example, a microservice). These building blocks will have standardized inputs and outputs, and they can easily be assembled in varying orders. The order and choice of these specific blocks result in varying pipelines, built for unique use-cases.
+
+BLAZE is a pipeline creation framework, into which other external models and libraries can be incorporated. In the following sections of the Readme, we showcase how to install and use BLAZE with external libraries like ElasticSearch, ColBERT and the WebEx Mindmeld libraries. The instructions to install and run these libraries are highlighted in the respective sections too. 
 
 
 ## Features 
@@ -185,3 +187,13 @@ toggle the "Disabled" option next to ColBERT. You should be good to go now!
 Stay tuned, support for this is coming soon! 
 
 &nbsp;&nbsp;
+
+
+
+## Get in touch
+
+If you would like to contact the team, please feel free to email us at **blaze-github-owners@cisco.com**.
+
+For bugs or other issues, you can also use the **Issues** section of the repository.
+
+Finally, for broader topics around the project, you may also use the **Discussions** section.
