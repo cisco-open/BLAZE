@@ -16,7 +16,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 import os
 from mindmeld.components import NaturalLanguageProcessor
 from mindmeld import configure_logs
@@ -25,7 +24,6 @@ from mindmeld import configure_logs
 This module contains the Webex Bot Server component.
 """
 
-import json
 import logging
 
 from webexteamssdk import WebexTeamsAPI, Webhook
@@ -46,6 +44,7 @@ APPROVED_REQUEST_CODE = 200
 WEBHOOK_NAME = "ASKI_conversational"
 WEBHOOK_URL_SUFFIX = "/events"
 PORT_NUMBER = 8080
+
 
 class WebexBotServerException(Exception):
     pass
@@ -89,12 +88,13 @@ class WebexBotServer:
         @self.app.route(WEBHOOK_URL_SUFFIX, methods=["POST"])
         def handle_message():  # pylint: disable=unused-variable
             webhook_obj = Webhook(request.json)
-            
+
             if webhook_obj.id != self.webhook_id:
-                self.logger.debug("Retrieved webhook_id %s doesn't match", webhook_obj.id)
+                self.logger.debug(
+                    "Retrieved webhook_id %s doesn't match", webhook_obj.id)
                 payload = {"message": "WEBHOOK_ID mismatch"}
                 return BAD_REQUEST_NAME, BAD_REQUEST_CODE, payload
-            
+
             room = self.teams_api.rooms.get(webhook_obj.data.roomId)
             message = self.teams_api.messages.get(webhook_obj.data.id)
             person = self.teams_api.people.get(message.personId)
@@ -111,37 +111,42 @@ class WebexBotServer:
             responses = []
             if message.files:
                 file = message.files[0]
-                r = requests.get(file, headers={'Authorization': f'Bearer {self.access_token}'})
+                r = requests.get(
+                    file, headers={'Authorization': f'Bearer {self.access_token}'})
                 d = r.headers['content-disposition']
                 fname = re.findall("filename=\"(.+)\"", d)[0]
                 fcontent = r.text
                 self.logger.info(f'Uploading file {fname}')
                 if fname.endswith('.yaml'):
-                    r = requests.post('http://localhost:3000/files/yaml', json={'file': fname, 'content': fcontent})
+                    r = requests.post(
+                        'http://localhost:3000/files/yaml', json={'file': fname, 'content': fcontent})
                     responses.append(r.json()['dash'])
                 else:
-                    r = requests.post('http://localhost:3000/files/upload', json={'file': fname, 'content': fcontent})
+                    r = requests.post(
+                        'http://localhost:3000/files/upload', json={'file': fname, 'content': fcontent})
                     # Get summary immediately
-                    r = requests.post('http://localhost:3000/models/summary', json={'model': 'T5', 'content': fcontent})
+                    r = requests.post(
+                        'http://localhost:3000/models/summary', json={'model': 'T5', 'content': fcontent})
                     responses.append(r.json()['result'])
                 try:
                     r.raise_for_status()
                 except requests.exceptions.HTTPError:
                     self.logger.info('Failed to upload')
-                    responses.append('Something went wrong with the file upload')
+                    responses.append(
+                        'Something went wrong with the file upload')
                 else:
                     self.logger.info('Upload succeeded')
                     responses.append('File uploaded successfully')
-                        
 
             if message.text:
                 responses.extend(self.conv.say(message.text))
-            
+
             for response in responses:
-                new_message = self.teams_api.messages.create(roomId=room.id, text=response)
+                new_message = self.teams_api.messages.create(
+                    roomId=room.id, text=response)
                 self.logger.debug(new_message.text)
 
-            payload = { "messages": responses }
+            payload = {"messages": responses}
             return APPROVED_REQUEST_NAME, APPROVED_REQUEST_CODE, payload
 
     def run(self, host="localhost", port=8080):
@@ -159,7 +164,8 @@ class WebexBotServer:
         """List all webhooks and delete webhooks created by this script."""
         for webhook in self.teams_api.webhooks.list():
             if webhook.name == WEBHOOK_NAME:
-                self.logger.debug("Deleting Webhook:", webhook.name, webhook.targetUrl)
+                self.logger.debug("Deleting Webhook:",
+                                  webhook.name, webhook.targetUrl)
                 self.teams_api.webhooks.delete(webhook.id)
 
     def create_webhooks(self, webhook_url):
@@ -175,6 +181,7 @@ class WebexBotServer:
         self.logger.debug(webhook)
         self.logger.info("Webhook successfully created.")
 
+
 if __name__ == '__main__':
     WEBHOOK_URL = os.environ.get('WEBHOOK_URL')
     ACCESS_TOKEN = os.environ.get('BOT_ACCESS_TOKEN')
@@ -188,6 +195,6 @@ if __name__ == '__main__':
         nlp=nlp,
         webhook_url=WEBHOOK_URL,
         access_token=ACCESS_TOKEN
-        )
+    )
 
     server.run(host='0.0.0.0', port=PORT_NUMBER)

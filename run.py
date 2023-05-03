@@ -16,39 +16,44 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 import argparse
 from multiprocessing import Process
 import yaml
 
-from aski.dash_files.app_callbacks import run_app
-from aski.flask_servers.app import create_app, run_app_server, create_server_config 
+from backend.server import create_app, run_app_server, create_server_config
+from frontend.app import run_client
 
 if __name__ == "__main__":
+    # es = Elasticsearch(['http://localhost:9200/'], verify_certs=True)
+    # if not es.ping():
+    #     run_elastic_search_service = subprocess.Popen(
+    #         ["./elasticsearch"], cwd="../elasticsearch/bin")
+
     parser = argparse.ArgumentParser()
     parser.add_argument('yaml_file',
                         help='YAML file that describes the NLP pipeline',
                         )
-    parser.add_argument('-p', type=int, default=5001, required=False, help="defines port ot be used")
+    parser.add_argument('-p', type=int, default=5001,
+                        required=False, help="defines port ot be used")
 
     args = parser.parse_args()
 
     with open(args.yaml_file, mode="rt", encoding="utf-8") as file:
         data = yaml.safe_load(file)
 
-    config = create_server_config(data) 
+    config = create_server_config(data)
     app = create_app(data)
     port = args.p
 
-    p_dash = Process(target=run_app, args=(data, port, '0.0.0.0'))
+    # p_dash = Process(target=run_client, args=(data, port, '0.0.0.0'))
     p_serv = Process(target=run_app_server, args=(app, 3000, '0.0.0.0'))
 
-    p_dash.start()
-    
-    try: 
+    # p_dash.start()
+
+    try:
         p_serv.start()
         p_serv.join()
-    except: 
-        print("Flask server may already be running!") 
-        
-    p_dash.join()
+    except:
+        print("Flask server may already be running!")
+
+    # p_dash.join()

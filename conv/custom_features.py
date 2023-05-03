@@ -16,7 +16,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 from mindmeld.models.helpers import register_query_feature, register_entity_feature
 
 

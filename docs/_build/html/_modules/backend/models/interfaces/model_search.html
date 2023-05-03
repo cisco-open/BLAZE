@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.models.interfaces.model_search &mdash; Blaze 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> Blaze
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../BlazeModule/GettingStarted.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../BlazeModule/Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../BlazeModule/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../BlazeModule/Contributing.html">Contributing to Blaze</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">backend</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Blaze</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>backend.models.interfaces.model_search</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for backend.models.interfaces.model_search</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1"># Copyright 2022 Cisco Systems, Inc. and its affiliates</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">RequestsHttpConnection</span>
+<span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span>
+<span class="kn">from</span> <span class="nn">email.parser</span> <span class="kn">import</span> <span class="n">Parser</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+
+<div class="viewcode-block" id="ModelSearch"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch">[docs]</a><span class="k">class</span> <span class="nc">ModelSearch</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="ModelSearch.load_model"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">file_content</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_content</span> <span class="o">=</span> <span class="n">file_content</span></div>
+
+<div class="viewcode-block" id="ModelSearch.file_search"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch.file_search">[docs]</a>    <span class="k">def</span> <span class="nf">file_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_term</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a model from a directory or library&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ModelSearch._get_model_info"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch._get_model_info">[docs]</a>    <span class="k">def</span> <span class="nf">_get_model_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ModelSearch._get_name"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch._get_name">[docs]</a>    <span class="k">def</span> <span class="nf">_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ModelSearch._get_class_name"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch._get_class_name">[docs]</a>    <span class="k">def</span> <span class="nf">_get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">[</span><span class="s1">&#39;class_name&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ModelSearch._parse_raw_ans"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.ModelSearch._parse_raw_ans">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_raw_ans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;res&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">s)&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;Unable to find an answer.&quot;</span>
+
+        <span class="k">return</span> <span class="n">ans</span></div></div>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">This file contains several helper functions utilized by the ASKI dashboard. </span>
+
+<span class="sd">All functions (as well as their descriptions) are listed below: </span>
+
+<span class="sd">    answer_question(question, answer_text, model, tokenizer) - internal </span>
+<span class="sd">    dedup(hits) - returns list of potential hits in document, internal </span>
+<span class="sd">    summarize_answer(candidate_docs, summarized=None) - summarizer, internal </span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Internal helper function used by BERT/ColBERT </span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="answer_question"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.answer_question">[docs]</a><span class="k">def</span> <span class="nf">answer_question</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">answer_text</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+    <span class="c1">#global model, tokenizer</span>
+
+    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">question</span><span class="p">,</span> <span class="n">answer_text</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># ======== Set Segment IDs ========</span>
+    <span class="c1"># Search the input_ids for the first instance of the `[SEP]` token.</span>
+    <span class="n">sep_index</span> <span class="o">=</span> <span class="n">input_ids</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">sep_token_id</span><span class="p">)</span>
+
+    <span class="c1"># The number of segment A tokens includes the [SEP] token istelf.</span>
+    <span class="n">num_seg_a</span> <span class="o">=</span> <span class="n">sep_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># The remainder are segment B.</span>
+    <span class="n">num_seg_b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_seg_a</span>
+
+    <span class="c1"># Construct the list of 0s and 1s.</span>
+    <span class="n">segment_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">num_seg_a</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">num_seg_b</span>
+
+    <span class="c1"># There should be a segment_id for every input token.</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_ids</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">input_ids</span><span class="p">]),</span>  <span class="c1"># The tokens representing our input text.</span>
+                    <span class="c1"># The segment IDs to differentiate question from answer_text</span>
+                    <span class="n">token_type_ids</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">segment_ids</span><span class="p">]),</span>
+                    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">start_scores</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">start_logits</span>
+    <span class="n">end_scores</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">end_logits</span>
+
+    <span class="c1"># ======== Reconstruct Answer ========</span>
+    <span class="c1"># Find the tokens with the highest `start` and `end` scores.</span>
+    <span class="n">answer_start</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">start_scores</span><span class="p">)</span>
+    <span class="n">answer_end</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">end_scores</span><span class="p">)</span>
+
+    <span class="c1"># Get the string versions of the input tokens.</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+
+    <span class="c1"># Start with the first token.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">answer_start</span><span class="p">]</span>
+    <span class="c1"># print(tokens)</span>
+    <span class="n">beg</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tokens</span><span class="p">[</span><span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># Select the remaining answer tokens and join them with whitespace.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">answer_start</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+       <span class="c1"># print(f&#39;{i},{tokens[i]}&#39;)</span>
+        <span class="c1"># If it&#39;s a subword token, then recombine it with the previous token.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;##&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">answer_start</span><span class="p">:</span>
+                <span class="n">beg</span> <span class="o">+=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">answer_start</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">+=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+
+        <span class="c1"># Otherwise, add a space then the token.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">answer_start</span><span class="p">:</span>
+                <span class="n">beg</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">answer_start</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">]:</span>
+                    <span class="n">answer</span> <span class="o">+=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">answer</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">answer_end</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Answer: &quot;&#39;</span> <span class="o">+</span> <span class="n">answer</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="s2">&quot;[CLS]&quot;</span><span class="p">:</span>
+        <span class="n">answer</span><span class="p">,</span> <span class="n">beg</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">answer_text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">beg</span> <span class="o">=</span> <span class="n">answer_text</span><span class="p">[:</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">answer_text</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">():</span><span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">()]</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">answer_text</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">answer</span><span class="p">,</span> <span class="n">beg</span><span class="p">,</span> <span class="n">end</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="dedup"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.dedup">[docs]</a><span class="k">def</span> <span class="nf">dedup</span><span class="p">(</span><span class="n">hits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns list of potential hits in candidate document</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">candidate_docs</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;message_body&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">]</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">candidate_docs</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">tmp</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="summarize_answer"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.summarize_answer">[docs]</a><span class="k">def</span> <span class="nf">summarize_answer</span><span class="p">(</span><span class="n">candidate_docs</span><span class="p">,</span> <span class="n">summarizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Summarized answer found in candidate documents &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">summarizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">summarizer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">)</span>
+    <span class="n">sum_docs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">candidate_docs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">:</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[:</span><span class="mi">300</span><span class="p">]</span>
+        <span class="n">sum_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">summarizer</span><span class="p">(</span>
+            <span class="n">doc</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="p">),</span> <span class="mi">50</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="p">),</span> <span class="mi">300</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">sum_docs</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">This file contains several helper functions utilized by the ASKI dashboard. </span>
+
+<span class="sd">All functions (as well as their descriptions) are listed below: </span>
+
+<span class="sd">    create_index() - cleans up index, creates fresh new one </span>
+<span class="sd">    putMapping() - puts mapping, returns config dictionary </span>
+<span class="sd">    index_into_elasticsearch(contents) - indexes inputted document </span>
+<span class="sd">    basic_search(query) - converts english question into search query</span>
+<span class="sd">    search(query) - performs a search, returns results</span>
+<span class="sd">    print_index_dump(query) - helper function, verbose print</span>
+
+<span class="sd">    segement_documents(doc, doc_max_length=300) - splits document into chunks</span>
+
+
+<span class="sd">A reference: http://praveendiary.blogspot.com/2014/10/elastic-search-experimentation-with.html</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># Global Variables utilized by the following helper functions (elasticsearch client)</span>
+
+<span class="n">INDEX_NAME</span> <span class="o">=</span> <span class="s1">&#39;text_file_search&#39;</span>
+<span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">9200</span><span class="p">,</span> <span class="s1">&#39;scheme&#39;</span><span class="p">:</span> <span class="s1">&#39;http&#39;</span><span class="p">}],</span>
+                   <span class="n">verify_certs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">connection_class</span><span class="o">=</span><span class="n">RequestsHttpConnection</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">()</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+
+<div class="viewcode-block" id="create_index"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.create_index">[docs]</a><span class="k">def</span> <span class="nf">create_index</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Cleans up the index if exists &amp; then creates a fresh index</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+
+    <span class="k">if</span> <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX_NAME</span><span class="p">):</span>
+        <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX_NAME</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DELETED EXISTING INDEX </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s1"> to create new one &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">INDEX_NAME</span><span class="p">))</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">putMapping</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX_NAME</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="putMapping"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.putMapping">[docs]</a><span class="k">def</span> <span class="nf">putMapping</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Puts new mapping and returns config dictionary </span>
+
+<span class="sd">    :return: config dictionary</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;settings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;analysis&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;analyzer&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;stopwords&#39;</span><span class="p">:</span> <span class="s1">&#39;_english_&#39;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mappings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dynamic&quot;</span><span class="p">:</span> <span class="s2">&quot;strict&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_source&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="index_into_elasticsearch"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.index_into_elasticsearch">[docs]</a><span class="k">def</span> <span class="nf">index_into_elasticsearch</span><span class="p">(</span><span class="n">contents</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Indexes into elasticsearh given the current document </span>
+
+<span class="sd">    :param contents: input the content of current document</span>
+<span class="sd">    :type contents: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">global</span> <span class="n">count</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parsestr</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+    <span class="n">jsonMapDoc</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">jsonMapDoc</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contents</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">es</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX_NAME</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">jsonMapDoc</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">exit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to index the document </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">jsonMapDoc</span><span class="p">))</span>
+    <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="basic_search"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.basic_search">[docs]</a><span class="k">def</span> <span class="nf">basic_search</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Returns an english query in the form of an elastic query</span>
+
+<span class="sd">    :param query: input query</span>
+<span class="sd">    :type query: str</span>
+<span class="sd">    :return: Elastic query</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">q</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;query_string&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">q</span></div>
+
+
+
+
+<div class="viewcode-block" id="search"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.search">[docs]</a><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Performs a search given an query, returns results </span>
+
+
+<span class="sd">    :param query: Input query</span>
+<span class="sd">    :type query: str</span>
+<span class="sd">    :return: Results</span>
+<span class="sd">    :rtype: object</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">INDEX</span> <span class="o">=</span> <span class="s1">&#39;text_file_search&#39;</span>
+
+    <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX</span><span class="p">)</span>  <span class="c1"># THIS WAS THE MAGIC LINE THAT FIXED IT!</span>
+
+    <span class="n">query_body</span> <span class="o">=</span> <span class="n">basic_search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">INDEX</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">query_body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="print_index_dump"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.print_index_dump">[docs]</a><span class="k">def</span> <span class="nf">print_index_dump</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;(Elastic) Helper function given a query, returns dump of retrieved index </span>
+
+<span class="sd">    :param query: Input query</span>
+<span class="sd">    :type query: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+
+    <span class="n">all_indices</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">get_alias</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+    <span class="n">all_docs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------&quot;</span><span class="p">)</span>
+    <span class="c1"># iterate over the index names</span>
+    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">all_indices</span><span class="p">:</span>
+
+        <span class="c1"># skip hidden indices with &#39;.&#39; in name</span>
+        <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">[:</span><span class="mi">1</span><span class="p">]:</span>
+
+            <span class="c1"># nest another dictionary for index inside</span>
+            <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="c1"># print the index name</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">index:&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+
+            <span class="c1"># get 20 of the Elasticsearch documents from index</span>
+            <span class="n">docs</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># for pagination</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">ind</span><span class="p">,</span>
+                <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="c1"># pass query paramater</span>
+                        <span class="s1">&#39;match_all&#39;</span><span class="p">:</span> <span class="p">{}</span>
+                    <span class="p">}</span>
+                <span class="p">})</span>
+
+            <span class="c1"># get just the doc &quot;hits&quot;</span>
+            <span class="n">docs</span> <span class="o">=</span> <span class="n">docs</span><span class="p">[</span><span class="s2">&quot;hits&quot;</span><span class="p">][</span><span class="s2">&quot;hits&quot;</span><span class="p">]</span>
+
+            <span class="c1"># print the list of docs</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;index:&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="s2">&quot;has&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">),</span> <span class="s2">&quot;num of docs.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># put the list of docs into a dict key</span>
+            <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;docs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">docs</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># returns dict object of the index _mapping schema</span>
+                <span class="n">raw_data</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">get_mapping</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;get_mapping() response type:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">raw_data</span><span class="p">))</span>
+
+                <span class="c1"># returns dict_keys() obj in Python 3</span>
+                <span class="n">mapping_keys</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;mappings&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">_mapping keys():&quot;</span><span class="p">,</span> <span class="n">mapping_keys</span><span class="p">)</span>
+
+                <span class="c1"># get the index&#39;s doc type</span>
+                <span class="n">doc_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping_keys</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;doc_type:&quot;</span><span class="p">,</span> <span class="n">doc_type</span><span class="p">)</span>
+
+                <span class="c1"># get the schema by accessing index&#39;s _doc type</span>
+                <span class="n">schema</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;mappings&quot;</span><span class="p">][</span><span class="n">doc_type</span><span class="p">][</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;all fields:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+                <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema</span>
+                <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;doc_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">doc_type</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;client.indices error:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">all_docs</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s2">&quot;doc_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">doc_type</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------------&quot;</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="segment_documents"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.segment_documents">[docs]</a><span class="k">def</span> <span class="nf">segment_documents</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">max_doc_length</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;(General) Segments a given document (into list, if beyond max_doc_length)</span>
+
+<span class="sd">    :param docs: Input the entire document</span>
+<span class="sd">    :type docs: str</span>
+<span class="sd">    :param max_doc_length: Specify the max length of document, defaults to 300</span>
+<span class="sd">    :type max_doc_length: int, optional</span>
+<span class="sd">    :return: Segmented docs</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># List containing full and segmented docs</span>
+    <span class="n">segmented_docs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>
+        <span class="c1"># Split document by spaces to obtain a word count that roughly approximates the token count</span>
+        <span class="n">split_to_words</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="c1"># If the document is longer than our maximum length, split it up into smaller segments and add them to the list</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_to_words</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_doc_length</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">doc_segment</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_to_words</span><span class="p">),</span> <span class="n">max_doc_length</span><span class="p">):</span>
+                <span class="n">segmented_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_to_words</span><span class="p">[</span><span class="n">doc_segment</span><span class="p">:</span><span class="n">doc_segment</span> <span class="o">+</span> <span class="n">max_doc_length</span><span class="p">]))</span>
+
+        <span class="c1"># If the document is shorter than our maximum length, add it to the list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">segmented_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">segmented_docs</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">This file contains several helper functions used to benchmark. </span>
+
+<span class="sd">All functions (as well as their descriptions) are listed below: </span>
+
+<span class="sd">    squad_benchmark(pQueue, name, dir, m_name) - main function called by ASKI</span>
+<span class="sd">    was_correct(m_ans, q_ansl) - given list of answers, determines correctness</span>
+
+
+<span class="sd">.. note::</span>
+<span class="sd">      ASKI&#39;s solo benchmarking feature may not work at the moment </span>
+<span class="sd">      due to ongoing changes in this file (no longer stable). Will</span>
+<span class="sd">      be fixed shortly in a future commit! </span>
+<span class="sd">   </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+
+
+
+<div class="viewcode-block" id="was_correct"><a class="viewcode-back" href="../../../../backend.models.interfaces.html#backend.models.interfaces.model_search.was_correct">[docs]</a><span class="k">def</span> <span class="nf">was_correct</span><span class="p">(</span><span class="n">m_ans</span><span class="p">,</span> <span class="n">q_ansl</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determines whether the model&#39;s answer matches the ground truth </span>
+
+
+<span class="sd">    :param m_ans: _description_</span>
+<span class="sd">    :type m_ans: _type_</span>
+<span class="sd">    :param q_ansl: _description_</span>
+<span class="sd">    :type q_ansl: _type_</span>
+<span class="sd">    :return: _description_</span>
+<span class="sd">    :rtype: _type_</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+
+    <span class="n">m_ans</span> <span class="o">=</span> <span class="n">m_ans</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">m_ans</span> <span class="o">=</span> <span class="n">m_ans</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">poss_ans</span> <span class="ow">in</span> <span class="n">q_ansl</span><span class="p">:</span>
+        <span class="n">poss_ans</span> <span class="o">=</span> <span class="n">poss_ans</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">poss_ans</span> <span class="o">=</span> <span class="n">poss_ans</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">m_ans</span> <span class="ow">in</span> <span class="n">poss_ans</span> <span class="ow">or</span> <span class="n">poss_ans</span> <span class="ow">in</span> <span class="n">m_ans</span> <span class="ow">or</span> <span class="n">fuzz</span><span class="o">.</span><span class="n">partial_ratio</span><span class="p">(</span><span class="n">m_ans</span><span class="p">,</span> <span class="n">poss_ans</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="mi">0</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cisco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

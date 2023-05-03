@@ -2,8 +2,6 @@
 
 ### Installation
 
-With `blaze/conv` as the working directory, proceed with the following steps.
-
 Create a virtual environment with Python 3.8.10
 
 ```
@@ -26,7 +24,7 @@ And run in the commandline with
 `python -m conv converse`
 
 
-### Sources for training data
+## Sources for training data
 - greet: food_ordering/greet/train.txt
 - exit: food_ordering/exit/train.txt
 - ask_question: manual data entry + mindmeld data augmentation

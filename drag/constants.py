@@ -16,7 +16,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 """This defines a list of constants used in the dashboard."""
 
 from enum import Enum, auto

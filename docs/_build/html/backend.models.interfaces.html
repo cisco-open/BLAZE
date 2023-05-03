@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.models.interfaces package &mdash; Blaze 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.models.knowledge_graphs package" href="backend.models.knowledge_graphs.html" />
+    <link rel="prev" title="backend.models package" href="backend.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Blaze
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/GettingStarted.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Contributing.html">Contributing to Blaze</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">backend</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="backend.datasets.html">backend.datasets package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend.config">backend.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Blaze</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">backend</a> &raquo;</li>
+          <li><a href="backend.html">backend package</a> &raquo;</li>
+          <li><a href="backend.models.html">backend.models package</a> &raquo;</li>
+      <li>backend.models.interfaces package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/backend.models.interfaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backend-models-interfaces-package">
+<h1>backend.models.interfaces package<a class="headerlink" href="#backend-models-interfaces-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-backend.models.interfaces.hugging_face_model_summarization">
+<span id="backend-models-interfaces-hugging-face-model-summarization-module"></span><h2>backend.models.interfaces.hugging_face_model_summarization module<a class="headerlink" href="#module-backend.models.interfaces.hugging_face_model_summarization" title="Permalink to this heading"></a></h2>
+<section id="hugging-face-model-summary">
+<h3>Hugging Face Model Summary<a class="headerlink" href="#hugging-face-model-summary" title="Permalink to this heading"></a></h3>
+<p>This module extends the ModelSummary interface to load Hugging Face models.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.hugging_face_model_summarization.</span></span><span class="sig-name descname"><span class="pre">HuggingFaceModelSummarization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_max_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/hugging_face_model_summarization.html#HuggingFaceModelSummarization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.models.interfaces.model_summarization.ModelSummarization" title="backend.models.interfaces.model_summarization.ModelSummarization"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSummarization</span></code></a></p>
+<p>A Superclass used to build HuggingFace models for summarization</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._info">
+<span class="sig-name descname"><span class="pre">_info</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._info" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionnary containing the name, class name, description, paper link
+and GitHub repo link of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dictionnary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._max_length">
+<span class="sig-name descname"><span class="pre">_max_length</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._max_length" title="Permalink to this definition"></a></dt>
+<dd><p>The maximum length parameter of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._truncation">
+<span class="sig-name descname"><span class="pre">_truncation</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._truncation" title="Permalink to this definition"></a></dt>
+<dd><p>Whether or not to truncate input sequences</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._model">
+<span class="sig-name descname"><span class="pre">_model</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._model" title="Permalink to this definition"></a></dt>
+<dd><p>A HuggingFace model for summarization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>AutoModelForSeq2SeqLM</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._tokenizer">
+<span class="sig-name descname"><span class="pre">_tokenizer</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._tokenizer" title="Permalink to this definition"></a></dt>
+<dd><p>A HuggingFace tokenizer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>AutoTokenizer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._pipe">
+<span class="sig-name descname"><span class="pre">_pipe</span></span><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._pipe" title="Permalink to this definition"></a></dt>
+<dd><p>A HuggingFace pipeline for summarization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>SummarizationPipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_summarize_dataset(self,</span> <span class="pre">dataset,</span> <span class="pre">column):</span></span></dt>
+<dd><p>Summarizes a dataset and appends to it a column with the summarized text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_summarize_text(self,</span> <span class="pre">text_to_summarize):</span></span></dt>
+<dd><p>Summarizes a piece of text and returns it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._summarize_dataset">
+<span class="sig-name descname"><span class="pre">_summarize_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/hugging_face_model_summarization.html#HuggingFaceModelSummarization._summarize_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._summarize_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Method that takes in a HuggingFace dataset and the name of the column of
+the dataset that contains the text to summarize. It calls the
+summarization pipeline attribute and runs it on the whole dataset. It
+saves the results in a list and adds this list to the dataset object and
+returns it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>a HuggingFace dataset object</em>) – The HuggingFace dataset to summarize</p></li>
+<li><p><strong>column</strong> (<em>str</em>) – The name of the column ofthe dataset with the text to summarize</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dataset</strong> – The HuggingFace dataset to summarize with the summarized text column</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>a HuggingFace dataset object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._summarize_text">
+<span class="sig-name descname"><span class="pre">_summarize_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_to_summarize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/hugging_face_model_summarization.html#HuggingFaceModelSummarization._summarize_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization._summarize_text" title="Permalink to this definition"></a></dt>
+<dd><p>Method that takes in a piece of text and summarizes it by calling the
+tokenizer and model attributes and finally returns it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text_to_summarize</strong> (<em>str</em>) – The piece of text to summarize</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>summary_text</strong> – The summarized text as a list of strings</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List of str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.models.interfaces.model_search">
+<span id="backend-models-interfaces-model-search-module"></span><h2>backend.models.interfaces.model_search module<a class="headerlink" href="#module-backend.models.interfaces.model_search" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">ModelSearch</span></span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch._get_class_name">
+<span class="sig-name descname"><span class="pre">_get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch._get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch._get_class_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch._get_model_info">
+<span class="sig-name descname"><span class="pre">_get_model_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch._get_model_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch._get_model_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch._get_name">
+<span class="sig-name descname"><span class="pre">_get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch._get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch._get_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch._parse_raw_ans">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_parse_raw_ans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch._parse_raw_ans"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch._parse_raw_ans" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch.file_search">
+<span class="sig-name descname"><span class="pre">file_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_term</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch.file_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch.file_search" title="Permalink to this definition"></a></dt>
+<dd><p>Load a model from a directory or library</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.ModelSearch.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#ModelSearch.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.ModelSearch.load_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.answer_question">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">answer_question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">question</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#answer_question"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.answer_question" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.basic_search">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">basic_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#basic_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.basic_search" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Returns an english query in the form of an elastic query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – input query</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Elastic query</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.create_index">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">create_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#create_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.create_index" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Cleans up the index if exists &amp; then creates a fresh index</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.dedup">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">dedup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#dedup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.dedup" title="Permalink to this definition"></a></dt>
+<dd><p>Returns list of potential hits in candidate document</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.index_into_elasticsearch">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">index_into_elasticsearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#index_into_elasticsearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.index_into_elasticsearch" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Indexes into elasticsearh given the current document</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>contents</strong> (<em>str</em>) – input the content of current document</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.print_index_dump">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">print_index_dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#print_index_dump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.print_index_dump" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Helper function given a query, returns dump of retrieved index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – Input query</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.putMapping">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">putMapping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#putMapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.putMapping" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Puts new mapping and returns config dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>config dictionary</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.search">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.search" title="Permalink to this definition"></a></dt>
+<dd><p>(Elastic) Performs a search given an query, returns results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – Input query</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.segment_documents">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">segment_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_doc_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#segment_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.segment_documents" title="Permalink to this definition"></a></dt>
+<dd><p>(General) Segments a given document (into list, if beyond max_doc_length)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>docs</strong> (<em>str</em>) – Input the entire document</p></li>
+<li><p><strong>max_doc_length</strong> (<em>int</em><em>, </em><em>optional</em>) – Specify the max length of document, defaults to 300</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Segmented docs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.summarize_answer">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">summarize_answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_docs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#summarize_answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.summarize_answer" title="Permalink to this definition"></a></dt>
+<dd><p>Summarized answer found in candidate documents</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_search.was_correct">
+<span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_search.</span></span><span class="sig-name descname"><span class="pre">was_correct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m_ans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_ansl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_search.html#was_correct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_search.was_correct" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether the model’s answer matches the ground truth</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m_ans</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>q_ansl</strong> (<em>_type_</em>) – _description_</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-backend.models.interfaces.model_summarization">
+<span id="backend-models-interfaces-model-summarization-module"></span><h2>backend.models.interfaces.model_summarization module<a class="headerlink" href="#module-backend.models.interfaces.model_summarization" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.interfaces.model_summarization.</span></span><span class="sig-name descname"><span class="pre">ModelSummarization</span></span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization._get_class_name">
+<span class="sig-name descname"><span class="pre">_get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization._get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization._get_class_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization._get_model_info">
+<span class="sig-name descname"><span class="pre">_get_model_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization._get_model_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization._get_model_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization._get_name">
+<span class="sig-name descname"><span class="pre">_get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization._get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization._get_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization._summarize_dataset">
+<span class="sig-name descname"><span class="pre">_summarize_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization._summarize_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization._summarize_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.models.interfaces.model_summarization.ModelSummarization._summarize_text">
+<span class="sig-name descname"><span class="pre">_summarize_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/interfaces/model_summarization.html#ModelSummarization._summarize_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.interfaces.model_summarization.ModelSummarization._summarize_text" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-backend.models.interfaces">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-backend.models.interfaces" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend.models.html" class="btn btn-neutral float-left" title="backend.models package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend.models.knowledge_graphs.html" class="btn btn-neutral float-right" title="backend.models.knowledge_graphs package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cisco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.models.summarization package &mdash; Blaze 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.server package" href="backend.server.html" />
+    <link rel="prev" title="backend.models.search package" href="backend.models.search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Blaze
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/GettingStarted.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Contributing.html">Contributing to Blaze</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">backend</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="backend.datasets.html">backend.datasets package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend.config">backend.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Blaze</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">backend</a> &raquo;</li>
+          <li><a href="backend.html">backend package</a> &raquo;</li>
+          <li><a href="backend.models.html">backend.models package</a> &raquo;</li>
+      <li>backend.models.summarization package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/backend.models.summarization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backend-models-summarization-package">
+<h1>backend.models.summarization package<a class="headerlink" href="#backend-models-summarization-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-backend.models.summarization.Bart">
+<span id="backend-models-summarization-bart-module"></span><h2>backend.models.summarization.Bart module<a class="headerlink" href="#module-backend.models.summarization.Bart" title="Permalink to this heading"></a></h2>
+<section id="bart">
+<h3>BART<a class="headerlink" href="#bart" title="Permalink to this heading"></a></h3>
+<p>This module loads a BART model and makes it available for the
+dashboard to use.</p>
+<p><a class="reference external" href="https://huggingface.co/docs/transformers/model_doc/bart">https://huggingface.co/docs/transformers/model_doc/bart</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.summarization.Bart.Bart">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.summarization.Bart.</span></span><span class="sig-name descname"><span class="pre">Bart</span></span><a class="reference internal" href="_modules/backend/models/summarization/Bart.html#Bart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.Bart.Bart" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.models.interfaces.html#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization" title="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceModelSummarization</span></code></a></p>
+<p>BART model from ‘Denoising Sequence-to-Sequence Pre-training for Natural
+Language Generation, Translation, and Comprehension’ paper</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.summarization.Bart.get_bart_info">
+<span class="sig-prename descclassname"><span class="pre">backend.models.summarization.Bart.</span></span><span class="sig-name descname"><span class="pre">get_bart_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/summarization/Bart.html#get_bart_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.Bart.get_bart_info" title="Permalink to this definition"></a></dt>
+<dd><p>Function to return a dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the BART model. It is used
+throughout the code to get various information about the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model_info</strong> – A dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the T5 model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>a dictionnary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.models.summarization.Pegasus">
+<span id="backend-models-summarization-pegasus-module"></span><h2>backend.models.summarization.Pegasus module<a class="headerlink" href="#module-backend.models.summarization.Pegasus" title="Permalink to this heading"></a></h2>
+<section id="pegasus">
+<h3>Pegasus<a class="headerlink" href="#pegasus" title="Permalink to this heading"></a></h3>
+<p>This module loads a Pegasus model and makes it available for the
+dashboard to use.</p>
+<p><a class="reference external" href="https://huggingface.co/docs/transformers/main/model_doc/pegasus">https://huggingface.co/docs/transformers/main/model_doc/pegasus</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.summarization.Pegasus.Pegasus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.summarization.Pegasus.</span></span><span class="sig-name descname"><span class="pre">Pegasus</span></span><a class="reference internal" href="_modules/backend/models/summarization/Pegasus.html#Pegasus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.Pegasus.Pegasus" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.models.interfaces.html#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization" title="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceModelSummarization</span></code></a></p>
+<p>Pegasus model from ‘Pre-training with Extracted Gap-sentences for
+Abstractive Summarization’ paper</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.summarization.Pegasus.get_pegasus_info">
+<span class="sig-prename descclassname"><span class="pre">backend.models.summarization.Pegasus.</span></span><span class="sig-name descname"><span class="pre">get_pegasus_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/summarization/Pegasus.html#get_pegasus_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.Pegasus.get_pegasus_info" title="Permalink to this definition"></a></dt>
+<dd><p>Function to return a dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the Pegasus model. It is
+used throughout the code to get various information about the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model_info</strong> – A dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the T5 model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>a dictionnary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.models.summarization.T5">
+<span id="backend-models-summarization-t5-module"></span><h2>backend.models.summarization.T5 module<a class="headerlink" href="#module-backend.models.summarization.T5" title="Permalink to this heading"></a></h2>
+<section id="t5">
+<h3>T5<a class="headerlink" href="#t5" title="Permalink to this heading"></a></h3>
+<p>This module loads a T5 model and makes it available for the
+dashboard to use.</p>
+<p><a class="reference external" href="https://huggingface.co/docs/transformers/model_doc/t5">https://huggingface.co/docs/transformers/model_doc/t5</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.models.summarization.T5.T5">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.models.summarization.T5.</span></span><span class="sig-name descname"><span class="pre">T5</span></span><a class="reference internal" href="_modules/backend/models/summarization/T5.html#T5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.T5.T5" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.models.interfaces.html#backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization" title="backend.models.interfaces.hugging_face_model_summarization.HuggingFaceModelSummarization"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceModelSummarization</span></code></a></p>
+<p>T5 model from ‘Exploring the Limits of Transfer Learning with a Unified
+Text-to-Text Transformer’ paper</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.models.summarization.T5.get_t5_info">
+<span class="sig-prename descclassname"><span class="pre">backend.models.summarization.T5.</span></span><span class="sig-name descname"><span class="pre">get_t5_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/models/summarization/T5.html#get_t5_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.models.summarization.T5.get_t5_info" title="Permalink to this definition"></a></dt>
+<dd><p>Function to return a dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the T5 model. It is used
+throughout the code to get various information about the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model_info</strong> – A dictionnary containing the name, class name,
+description, paper link and GitHub repo link of the T5 model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>a dictionnary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.models.summarization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-backend.models.summarization" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend.models.search.html" class="btn btn-neutral float-left" title="backend.models.search package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend.server.html" class="btn btn-neutral float-right" title="backend.server package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cisco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

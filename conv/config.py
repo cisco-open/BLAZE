@@ -16,7 +16,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 # -*- coding: utf-8 -*-
 """This module contains a template MindMeld app configuration"""
 
