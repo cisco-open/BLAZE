@@ -16,12 +16,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 """This contains global objects."""
 
 from drag.design import Design
 
 design = None
+
 
 def init_design():
     """Instantiate a design instance."""

@@ -16,15 +16,16 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 # -*- coding: utf-8 -*-
 """This module contains a template MindMeld application"""
 from mindmeld import Application
 import requests
 import os
 
+
 def api(endpoint):
     return f'http://localhost:3000{endpoint}'
+
 
 app = Application(__name__)
 
@@ -50,34 +51,35 @@ def exit(request, responder):
 @app.handle(intent='get_summary')
 def get_summary(request, responder):
     responder.reply('Which file are we sumarizing?')
-    r = requests.get(api('/files/all_files'), json={'dataset':"Squad"})
+    r = requests.get(api('/files/all_files'), json={'dataset': "Squad"})
     responder.reply(', '.join(r.json()['files'][:5]))
     responder.params.target_dialogue_state = 'summary_loop'
+
 
 @app.handle(targeted_only=True)
 def summary_loop(request, responder):
     file = request.text
     try:
-        r = requests.get(api('/files/file'), json={'filename': file, 'fileclass': 'user'})
+        r = requests.get(api('/files/file'),
+                         json={'filename': file, 'fileclass': 'user'})
         r.raise_for_status()
         content = r.json()['content']
     except requests.exceptions.HTTPError:
         responder.reply('That file was not found')
         return
     try:
-        r = requests.get(api('/models/summary'), json={'model': 'T5', 'content': content})
+        r = requests.get(api('/models/summary'),
+                         json={'model': 'T5', 'content': content})
         r.raise_for_status()
         summary = r.json()['result']
     except requests.exceptions.HTTPError:
         responder.reply('Something went wrong with the summarization')
         return
-    
+
     responder.reply(summary)
     responder.reply('Was this answer helpful?')
     responder.params.target_dialogue_state = 'provide_feedback'
     responder.exit_flow()
-
-
 
 
 @app.handle(intent='ask_question')
@@ -85,9 +87,12 @@ def ask_question(request, responder):
     """Send the question to the question-answerer"""
     try:
         # initialize
-        r = requests.get(api('/files/file'), json={'filename': 'Ashkenazi_Jews', 'fileclass': 'Squad'})
-        r = requests.post(api('/models/initialize'), json={'model':'ElasticBERT', 'filename':'Ashkenazi_Jews', 'filecontent':r.json()['content']})
-        r = requests.get(api('/models/search'), json={'model': 'ElasticBERT', 'query': request.text})
+        r = requests.get(
+            api('/files/file'), json={'filename': 'Ashkenazi_Jews', 'fileclass': 'Squad'})
+        r = requests.post(api('/models/initialize'), json={
+                          'model': 'ElasticBERT', 'filename': 'Ashkenazi_Jews', 'filecontent': r.json()['content']})
+        r = requests.get(api('/models/search'),
+                         json={'model': 'ElasticBERT', 'query': request.text})
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         responder.reply('Sorry, I wasn\'t able to answer your question')
@@ -127,7 +132,8 @@ def upload_loop(request, responder):
         else:
             responder.slots['count'] = count
             responder.frame['count'] = count
-            responder.reply('That is not a valid location. Please try again ({count}/3)')
+            responder.reply(
+                'That is not a valid location. Please try again ({count}/3)')
     else:  # After 3 failed attempts
         responder.reply('Sorry, these locations do not appear to work.')
         responder.exit_flow()
@@ -142,7 +148,7 @@ def upload_exit(request, responder):
 def provide_feedback(request, responder):
     try:
         #r = requests.post(api('/feedback'), json={'feedback': request.text})
-        #r.raise_for_status()
+        # r.raise_for_status()
         pass
     except requests.exceptions.HTTPError:
         responder.reply('Something went wrong with the feedback')
@@ -161,14 +167,16 @@ def _upload_files(location):
         if os.path.isfile(location):  # single file
             with open(location, 'r') as f:
                 file = os.path.split(location)[1]
-                r = requests.post(api('/files/upload'), json={'file': file, 'content': f.read()})
+                r = requests.post(api('/files/upload'),
+                                  json={'file': file, 'content': f.read()})
             r.raise_for_status()
         elif os.path.isdir(location):  # directory -> multiple files
             for file in os.path.listdir(location):
                 file_loc = os.path.join(location, file)
                 if os.path.isfile(file_loc):
                     with open(file_loc, 'r') as f:
-                        r = requests.post(api('/files/upload'), json={'file': file, 'content': f.read()})
+                        r = requests.post(
+                            api('/files/upload'), json={'file': file, 'content': f.read()})
                     r.raise_for_status()
     except requests.exceptions.HTTPError:
         return False

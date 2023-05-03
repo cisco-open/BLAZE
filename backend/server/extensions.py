@@ -1,0 +1,1 @@
+'''This file is used to manage flask extensions, that we'll use in this application'''
