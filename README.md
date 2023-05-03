@@ -116,6 +116,18 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Run
 
 &nbsp;&nbsp;
 
+## Install using conda: Local development 
+
+## NOTE: The use of Conda may require the use of Anaconda Commercial Edition to comply with Anaconda's Terms of Service if your use is considered commercial according to Anaconda. More information about Anaconda's Terms of Service and what qualifies as commercial usage can be found here: https://www.anaconda.com/blog/anaconda-commercial-edition-faq/ 
+
+Create your conda environment with
+
+conda env create -f aski_env.yml
+
+Then, activate your conda environment with
+
+conda activate aski
+
 ## Using the Conversational AI
 
 Build the conversational model with
