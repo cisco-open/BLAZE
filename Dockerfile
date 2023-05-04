@@ -4,5 +4,5 @@ RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y python3-pip 
 RUN apt-get install -y python3-dev build-essential
 COPY . .
-RUN pip install -r dev_requirements.txt
+RUN pip install -r requirements.txt
 SHELL ["python", "run.py", " yaml/04_summary_custom.yaml"]
