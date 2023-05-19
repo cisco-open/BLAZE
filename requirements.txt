@@ -15,7 +15,7 @@ torch==1.9.0
 tqdm==4.64.0
 transformers==4.21.0
 webexteamssdk==1.6.1
-Werkzeug==1.0.1
+Werkzeug==2.2.3
 yarl==1.7.2
 flasgger==0.9.5
 elasticsearch~=7.13.3
