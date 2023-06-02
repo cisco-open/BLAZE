@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.datasets.summarization package &mdash; Blaze 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.models package" href="backend.models.html" />
+    <link rel="prev" title="backend.datasets.search package" href="backend.datasets.search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Blaze
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/GettingStarted.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Contributing.html">Contributing to Blaze</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">backend</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="backend.datasets.html">backend.datasets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend.config">backend.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Blaze</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">backend</a> &raquo;</li>
+          <li><a href="backend.html">backend package</a> &raquo;</li>
+          <li><a href="backend.datasets.html">backend.datasets package</a> &raquo;</li>
+      <li>backend.datasets.summarization package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/backend.datasets.summarization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backend-datasets-summarization-package">
+<h1>backend.datasets.summarization package<a class="headerlink" href="#backend-datasets-summarization-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-backend.datasets.summarization.BillSum">
+<span id="backend-datasets-summarization-billsum-module"></span><h2>backend.datasets.summarization.BillSum module<a class="headerlink" href="#module-backend.datasets.summarization.BillSum" title="Permalink to this heading"></a></h2>
+<section id="billsum">
+<h3>BillSum<a class="headerlink" href="#billsum" title="Permalink to this heading"></a></h3>
+<p>This module extends the Dataset Class and is used to load specifically from the
+BillSum Dataset.</p>
+<p><a class="reference external" href="https://huggingface.co/datasets/billsum">https://huggingface.co/datasets/billsum</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.datasets.summarization.BillSum.BillSum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.datasets.summarization.BillSum.</span></span><span class="sig-name descname"><span class="pre">BillSum</span></span><a class="reference internal" href="_modules/backend/datasets/summarization/BillSum.html#BillSum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.BillSum.BillSum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.datasets.interfaces.html#backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset" title="backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceDataset</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.datasets.summarization.CNNDailyMail">
+<span id="backend-datasets-summarization-cnndailymail-module"></span><h2>backend.datasets.summarization.CNNDailyMail module<a class="headerlink" href="#module-backend.datasets.summarization.CNNDailyMail" title="Permalink to this heading"></a></h2>
+<section id="cnn-dailymail-dataset">
+<h3>CNN/DailyMail Dataset<a class="headerlink" href="#cnn-dailymail-dataset" title="Permalink to this heading"></a></h3>
+<p>This module extends the Dataset Class and is used to load specifically from the
+CNN/DailyMail Dataset.</p>
+<p><a class="reference external" href="https://huggingface.co/datasets/cnn_dailymail">https://huggingface.co/datasets/cnn_dailymail</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.datasets.summarization.CNNDailyMail.CNNDailyMail">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.datasets.summarization.CNNDailyMail.</span></span><span class="sig-name descname"><span class="pre">CNNDailyMail</span></span><a class="reference internal" href="_modules/backend/datasets/summarization/CNNDailyMail.html#CNNDailyMail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.CNNDailyMail.CNNDailyMail" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.datasets.interfaces.html#backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset" title="backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceDataset</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.datasets.summarization.User">
+<span id="backend-datasets-summarization-user-module"></span><h2>backend.datasets.summarization.User module<a class="headerlink" href="#module-backend.datasets.summarization.User" title="Permalink to this heading"></a></h2>
+<section id="user">
+<h3>User<a class="headerlink" href="#user" title="Permalink to this heading"></a></h3>
+<p>This module is used to load custom text files uploaded by user(s).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.datasets.summarization.User.</span></span><span class="sig-name descname"><span class="pre">User</span></span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_class_name">
+<span class="sig-name descname"><span class="pre">_get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_class_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_dataset_name">
+<span class="sig-name descname"><span class="pre">_get_dataset_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_dataset_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_dataset_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_files">
+<span class="sig-name descname"><span class="pre">_get_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_files" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_title_info">
+<span class="sig-name descname"><span class="pre">_get_title_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_title_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_title_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_title_story">
+<span class="sig-name descname"><span class="pre">_get_title_story</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_title_story"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_title_story" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._get_topic_titles">
+<span class="sig-name descname"><span class="pre">_get_topic_titles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._get_topic_titles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._get_topic_titles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.datasets.summarization.User.User._update_file">
+<span class="sig-name descname"><span class="pre">_update_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/datasets/summarization/User.html#User._update_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.User.User._update_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.datasets.summarization.XSum">
+<span id="backend-datasets-summarization-xsum-module"></span><h2>backend.datasets.summarization.XSum module<a class="headerlink" href="#module-backend.datasets.summarization.XSum" title="Permalink to this heading"></a></h2>
+<section id="xsumdataset">
+<h3>XSumDataset<a class="headerlink" href="#xsumdataset" title="Permalink to this heading"></a></h3>
+<p>This module extends the Dataset Class and is used to load specifically from the
+XSum Dataset.</p>
+<p><a class="reference external" href="https://huggingface.co/datasets/xsum">https://huggingface.co/datasets/xsum</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.datasets.summarization.XSum.XSum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.datasets.summarization.XSum.</span></span><span class="sig-name descname"><span class="pre">XSum</span></span><a class="reference internal" href="_modules/backend/datasets/summarization/XSum.html#XSum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.datasets.summarization.XSum.XSum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.datasets.interfaces.html#backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset" title="backend.datasets.interfaces.hugging_face_dataset.HuggingFaceDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">HuggingFaceDataset</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-backend.datasets.summarization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-backend.datasets.summarization" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend.datasets.search.html" class="btn btn-neutral float-left" title="backend.datasets.search package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend.models.html" class="btn btn-neutral float-right" title="backend.models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cisco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

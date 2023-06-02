@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.server.core package &mdash; Blaze 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.server.utils package" href="backend.server.utils.html" />
+    <link rel="prev" title="backend.server package" href="backend.server.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Blaze
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/GettingStarted.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlazeModule/Contributing.html">Contributing to Blaze</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">backend</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">backend package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="backend.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="backend.datasets.html">backend.datasets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend.config">backend.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#module-backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Blaze</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">backend</a> &raquo;</li>
+          <li><a href="backend.html">backend package</a> &raquo;</li>
+          <li><a href="backend.server.html">backend.server package</a> &raquo;</li>
+      <li>backend.server.core package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/backend.server.core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backend-server-core-package">
+<h1>backend.server.core package<a class="headerlink" href="#backend-server-core-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-backend.server.core.dataset_views">
+<span id="backend-server-core-dataset-views-module"></span><h2>backend.server.core.dataset_views module<a class="headerlink" href="#module-backend.server.core.dataset_views" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.dataset_views.</span></span><span class="sig-name descname"><span class="pre">DatasetFilesDetails</span></span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesDetails" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesDetails.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesDetails.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesDetails.get" title="Permalink to this definition"></a></dt>
+<dd><ol class="arabic simple" start="3">
+<li><dl class="simple">
+<dt>GET dataset/files/file - specific file text (details)</dt><dd><ul class="simple">
+<li><p>Input: {“filename”: str, “fileclass”: str}</p></li>
+<li><p>Output: {“content”: str, “size”: int}</p></li>
+<li><p>Use Case: Show preview for files</p></li>
+<li><p>Who’s Doing: Jason</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesDetails.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesDetails.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.dataset_views.</span></span><span class="sig-name descname"><span class="pre">DatasetFilesList</span></span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesList" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesList.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesList.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesList.delete" title="Permalink to this definition"></a></dt>
+<dd><p>5) DELETE  /dataset/files/ - user deletes file
+- Input: {“file”: str}
+- Output: {}
+- Use Case: when the user deletes a <strong>CUSTOM</strong> file
+- Who’s Doing: Jason</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesList.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesList.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesList.get" title="Permalink to this definition"></a></dt>
+<dd><p>GET /dataset/files/ - all available files from a given dataset
+- Input-&gt;Query Params: {“file”: str, “content”: str}
+- Output: {}
+- Use Case: when the user uploads a file
+- Who’s Doing: Jason</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesList.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'DELETE',</span> <span class="pre">'GET',</span> <span class="pre">'POST'}</span></em><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesList.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetFilesList.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetFilesList.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetFilesList.post" title="Permalink to this definition"></a></dt>
+<dd><p>POST /dataset/files/ - user uploads file
+- Input: {“file”: str, “content”: str}
+- Output: {}
+- Use Case: when the user uploads a file
+- Who’s Doing: Jason</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetsList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.dataset_views.</span></span><span class="sig-name descname"><span class="pre">DatasetsList</span></span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetsList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetsList" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetsList.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/dataset_views.html#DatasetsList.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.dataset_views.DatasetsList.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get all available datasets
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Dataset Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: successful operation
+schema:</p>
+<blockquote>
+<div><dl>
+<dt>properties:</dt><dd><dl>
+<dt>datasets_summarization:</dt><dd><p>type: object
+properties:</p>
+<blockquote>
+<div><p>type: string</p>
+</div></blockquote>
+</dd>
+<dt>datasets_search:</dt><dd><p>type: object
+properties:</p>
+<blockquote>
+<div><p>type: string</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.dataset_views.DatasetsList.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.dataset_views.DatasetsList.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-backend.server.core.model_views">
+<span id="backend-server-core-model-views-module"></span><h2>backend.server.core.model_views module<a class="headerlink" href="#module-backend.server.core.model_views" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelDetail">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.model_views.</span></span><span class="sig-name descname"><span class="pre">ModelDetail</span></span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelDetail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelDetail" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelDetail.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelDetail.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelDetail.get" title="Permalink to this definition"></a></dt>
+<dd><p>Model Details
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Model Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>-</em>) – <p>model
+in: query
+description: Enter the name of the model
+required: true
+schema:</p>
+<blockquote>
+<div><p>type: string</p>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: successful operation
+schema:</p>
+<blockquote>
+<div><dl>
+<dt>properties:</dt><dd><dl>
+<dt>model_info:</dt><dd><p>type: object
+properties:</p>
+<blockquote>
+<div><p>type: string
+description: model info.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelDetail.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.model_views.ModelDetail.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelInitilize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.model_views.</span></span><span class="sig-name descname"><span class="pre">ModelInitilize</span></span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelInitilize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelInitilize" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelInitilize.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'POST'}</span></em><a class="headerlink" href="#backend.server.core.model_views.ModelInitilize.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelInitilize.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelInitilize.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelInitilize.post" title="Permalink to this definition"></a></dt>
+<dd><p>Model Initilize
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Model Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in</strong> (<em>-</em>) – <p>body
+name: body
+schema:</p>
+<blockquote>
+<div><p>type: object
+properties:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model:</dt><dd><p>type: string
+example: ElasticBERT</p>
+</dd>
+<dt>filename:</dt><dd><p>type: string
+example: red-riding-hood.txt</p>
+</dd>
+<dt>filecontent:</dt><dd><p>type: string
+example: There was once a sweet little maid who lived with her father and mother in a pretty little cottage at the edge of the village. At the further end of the wood was another pretty cottage and in it lived her grandmother.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: successful operation
+schema:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>properties:</dt><dd><dl class="simple">
+<dt>response:</dt><dd><p>type: string</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.model_views.</span></span><span class="sig-name descname"><span class="pre">ModelSearch</span></span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelSearch" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSearch.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'POST'}</span></em><a class="headerlink" href="#backend.server.core.model_views.ModelSearch.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSearch.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelSearch.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelSearch.post" title="Permalink to this definition"></a></dt>
+<dd><p>Model Search
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Model Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in</strong> (<em>-</em>) – <p>body
+name: body
+schema:</p>
+<blockquote>
+<div><p>type: object
+properties:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model:</dt><dd><p>type: string
+example: ElasticBERT</p>
+</dd>
+<dt>query:</dt><dd><p>type: string
+example: With whome did sweet little maid lived with?</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: successful operation
+schema:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>properties:</dt><dd><dl class="simple">
+<dt>result:</dt><dd><p>type: string</p>
+</dd>
+<dt>latency:</dt><dd><p>type: string</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSummary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.model_views.</span></span><span class="sig-name descname"><span class="pre">ModelSummary</span></span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelSummary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelSummary" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSummary.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'POST'}</span></em><a class="headerlink" href="#backend.server.core.model_views.ModelSummary.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelSummary.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelSummary.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelSummary.post" title="Permalink to this definition"></a></dt>
+<dd><p>Model Summarization
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Model Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in</strong> (<em>-</em>) – <p>body
+name: body
+schema:</p>
+<blockquote>
+<div><p>type: object
+properties:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model:</dt><dd><p>type: string
+example: Bart</p>
+</dd>
+<dt>content:</dt><dd><p>type: string
+example: There was once a sweet little maid who lived with her father and mother in a pretty little cottage at the edge of the village. At the further end of the wood was another pretty cottage and in it lived her grandmother.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: successful operation
+schema:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>properties:</dt><dd><dl class="simple">
+<dt>response:</dt><dd><p>type: string</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelsList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.model_views.</span></span><span class="sig-name descname"><span class="pre">ModelsList</span></span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelsList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelsList" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelsList.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/model_views.html#ModelsList.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.model_views.ModelsList.get" title="Permalink to this definition"></a></dt>
+<dd><p>List all available models
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Model Endpoints</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: Lists all the available models
+schema:</p>
+<blockquote>
+<div><dl>
+<dt>properties:</dt><dd><dl>
+<dt>models_summarization:</dt><dd><p>type: array
+items:</p>
+<blockquote>
+<div><p>string: string</p>
+</div></blockquote>
+</dd>
+<dt>models_search:</dt><dd><p>type: array
+items:</p>
+<blockquote>
+<div><p>string: string</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.model_views.ModelsList.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.model_views.ModelsList.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-backend.server.core.routes">
+<span id="backend-server-core-routes-module"></span><h2>backend.server.core.routes module<a class="headerlink" href="#module-backend.server.core.routes" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-backend.server.core.views">
+<span id="backend-server-core-views-module"></span><h2>backend.server.core.views module<a class="headerlink" href="#module-backend.server.core.views" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.views.Default">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.views.</span></span><span class="sig-name descname"><span class="pre">Default</span></span><a class="reference internal" href="_modules/backend/server/core/views.html#Default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Default" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.views.Default.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#Default.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Default.get" title="Permalink to this definition"></a></dt>
+<dd><p>This is an example
+—
+tags:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Basic</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>responses:</dt><dd><dl>
+<dt>200:</dt><dd><p>description: Returns message if api is working
+schema:</p>
+<blockquote>
+<div><p>id: Basic
+properties:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>response:</dt><dd><p>type: string
+default: Working API server</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.views.Default.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET',</span> <span class="pre">'POST'}</span></em><a class="headerlink" href="#backend.server.core.views.Default.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.views.Default.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#Default.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Default.post" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.views.Models">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.views.</span></span><span class="sig-name descname"><span class="pre">Models</span></span><a class="reference internal" href="_modules/backend/server/core/views.html#Models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Models" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.views.Models.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#Models.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Models.get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.views.Models.get_select_model_options">
+<span class="sig-name descname"><span class="pre">get_select_model_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#Models.get_select_model_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.Models.get_select_model_options" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.views.Models.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.views.Models.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.server.core.views.ResetServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.server.core.views.</span></span><span class="sig-name descname"><span class="pre">ResetServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#ResetServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.ResetServer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.server.core.views.ResetServer.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/server/core/views.html#ResetServer.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.server.core.views.ResetServer.get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.server.core.views.ResetServer.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'GET'}</span></em><a class="headerlink" href="#backend.server.core.views.ResetServer.methods" title="Permalink to this definition"></a></dt>
+<dd><p>A list of methods this view can handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-backend.server.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-backend.server.core" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend.server.html" class="btn btn-neutral float-left" title="backend.server package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend.server.utils.html" class="btn btn-neutral float-right" title="backend.server.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cisco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
