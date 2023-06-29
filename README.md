@@ -66,9 +66,9 @@ Here's BLAZE's current functionalities:
 
 > GIFS/Screenshots Coming Soon! 
 
-  ![Custom](./docs/custom_qna.PNG)
+  ![Custom](./docs/images/custom_qna.PNG)
 
-  ![Comparison](./docs/model_comparison.png)
+  ![Comparison](./docs/images/model_comparison.png)
 
 
 
