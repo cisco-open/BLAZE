@@ -57,7 +57,7 @@ def create_app(server_config,config_class=TestingConfig):
     swagger = Swagger(app)
 
     # Initialize Flask extensions here
-
+    frontend_config = copy.deepcopy(server_config)
     tasks_list = server_config['function']['task'].split('/')
     server_config['model_objs'] = {}
     if 'profiling' in server_config['function']:
@@ -80,6 +80,7 @@ def create_app(server_config,config_class=TestingConfig):
 
     
     app.config.update(
+        frontend_config=frontend_config,
         server_config=server_config  
     )
 
