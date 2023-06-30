@@ -1,4 +1,4 @@
-from .views import Default,ResetServer,Models
+from .views import Default,ResetServer,Models,Config
 from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary
 from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails
 
@@ -7,6 +7,10 @@ routes_dict = [
     {
         "endpoint": ['/'],
         "resource":Default
+    },
+    {
+        "endpoint": ['/config'],
+        "resource":Config
     },
     {
         "endpoint": ['/get_model_checklist'],
