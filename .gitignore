@@ -5,3 +5,4 @@ COLBERT/
 tmp.yaml
 .generated/
 log/
+node_modules
