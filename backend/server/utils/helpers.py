@@ -69,7 +69,7 @@ def get_list_objects(list_objects_str, task, object_type):
 
 @profile
 def call_object_class_from_name(object_name, task, object_type):
-    print("comingHere")
+    print("calling_object_class_from_name")
     # Get the class as a variable
     object_class = import_module(
         "backend." + object_type + '.' + task + '.' + object_name).__getattribute__(object_name)
