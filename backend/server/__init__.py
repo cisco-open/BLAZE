@@ -1,18 +1,31 @@
 import copy,os
 from flask import Flask
+from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, emit
+import multiprocessing
+# from backend.server.app import app,socketio
 from flask_restful import Resource, Api
 from backend.server.core.views import Default, Models
 from backend.config import TestingConfig,ProductionConfig,DevelopmentConfig
 from backend.server.utils.helpers import get_list_objects
+from backend.models.search.ElasticBERT import ElasticBERT
+from backend.models.interfaces.model_search import squad_benchmarkV2
 from backend.server.routes import routes
 from flasgger import Swagger
+from gevent import monkey,sleep
+from threading import Event
+import time
 
-def run_app_server(app, port=3000, ip='0.0.0.0'):
+thread_event = Event()
 
+# monkey.patch_all()
+def run_app_server(app,socketio, port=3000, ip='0.0.0.0'):
+    
     print("PID:", os.getpid())
     print("Werkzeug subprocess:", os.environ.get("WERKZEUG_RUN_MAIN"))
     print("Inherited FD:", os.environ.get("WERKZEUG_SERVER_FD"))
-    app.run(debug=False, host=ip, port=port)
+    # app.run(debug=False, host=ip, port=port)
+    socketio.run(app,host=ip,port=port,debug=False)
 
 def json_input_validators(input_data, fields_to_be_present):
     for f in fields_to_be_present:
@@ -52,11 +65,12 @@ def create_server_config(data):
 
 def create_app(server_config,config_class=TestingConfig):
     app = Flask(__name__)
+    CORS(app) # This will enable CORS for all routes
+    socketio = SocketIO(app,cors_allowed_origins="*") 
+    
     app.config.from_object(config_class)
     api = Api(app)
     swagger = Swagger(app)
-
-    # Initialize Flask extensions here
     frontend_config = copy.deepcopy(server_config)
     tasks_list = server_config['function']['task'].split('/')
     server_config['model_objs'] = {}
@@ -89,6 +103,32 @@ def create_app(server_config,config_class=TestingConfig):
     
     # api.add_resource(Default, '/',resource_class_kwargs={'server_config':server_config})
 
+    @socketio.on('connect')
+    def test_connect():
+        emit('response', {'data': 'Connected'})
+    
+    @socketio.on('disconnect')
+    def test_disconnect():
+        print('Client disconnected')
 
-    return app
+    @socketio.on('benchmark')
+    def benchmark(data):
+        print(data)
+        emit('benchmark',{"response":"Starting elastic model"})
+        socketio.sleep(1)
+        file = data["file"]
+        model_obj = server_config["model_objs"]["search"][0]        
+        squad_benchmarkV2(file_name=file,model_obj=model_obj,sio=socketio,channel="benchmark")
+    
+    @socketio.on('benchmark2')
+    def benchmark2(data):
+        print(data)
+        emit('benchmark',{"response":"Starting elastic model"})
+        socketio.sleep(1)
+        file = data["file"]
+        model_obj = server_config["model_objs"]["search"][0]        
+        squad_benchmarkV2(file_name=file,model_obj=model_obj,sio=socketio,channel="benchmark2")
+        
+
+    return app,socketio
 

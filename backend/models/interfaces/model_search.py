@@ -20,7 +20,6 @@ import re
 import torch
 import traceback
 import collections
-from fuzzywuzzy import fuzz
 import numpy as np
 import json
 import os
@@ -28,8 +27,8 @@ from elasticsearch import RequestsHttpConnection
 from elasticsearch import Elasticsearch
 from email.parser import Parser
 from transformers import pipeline
-
-
+from backend.datasets.search import Squad
+from flask_socketio import send, emit
 class ModelSearch():
 
     def __init__(self):
@@ -460,6 +459,138 @@ All functions (as well as their descriptions) are listed below:
    
 """
 
+
+CONST_RESULTS = {
+    "m_name": "",
+    "f_name": "",
+    "root": "",
+    "questions": {
+        "num_qf": 0,
+        "num_qs": 0,
+        "all_qs": [],
+        "tot_qs": 0,
+    },
+    "times": {
+        "avg_ts": 0,
+        "all_ts": [],
+    },
+    "metrics": {
+        "correct_arr": [],
+        "incorrect_d": {},
+        "accuracy_num": 0,
+        "accuracy_prc": 0,
+    }
+}
+
+
+def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
+    dataset = Squad.Squad()
+    # Load all questions/files for associated dataset (SQUAD)
+    # socketio.emit("response","emit is working here too")
+    file_content = ""
+    content_list = []
+    questions = []
+    for row in dataset._dataset["train"]:
+        if file_name == row["title"]:
+            questions.append(row)
+            content_list.append(row["context"])
+    file_content = " ".join(content_list)
+
+
+    # Creating results dictionary (use to store/dump in queue)
+
+    results = CONST_RESULTS
+
+    results['m_name'] = model_obj._info['class_name']
+    results['f_name'] = file_name
+
+    results['questions']['num_qf'] = len(questions)
+    results['questions']['all_qs'] = questions
+
+    model_obj.load_model(file_name, file_content)
+
+    # Find number of answerable questions (some are impossible)
+
+    tot_q = 0
+    for question in questions:
+        if(len(question["answers"]["text"])==0):
+            continue
+        else:
+            tot_q = tot_q + 1
+
+    results["questions"]["num_qs"] = tot_q
+
+    # TODO: go through all files and index at once (giant txt)
+    # TODO: make this a new function ^^ (test retriever + q/a)
+    # TODO: currently retriever has little work to do
+
+    # Start iterating through all answerable questions
+    incorrect_d = []
+    for question in questions:
+        if(len(question["answers"]["text"])!=0):
+            try:
+                q_text = question['question']
+                q_anss = question['answers']
+                q_ansl = []
+                for ans in q_anss["text"]:
+                    q_ansl.append(ans)
+                if len(q_ansl) == 0:
+                    break
+
+                print(f"(squad_benchmark) > Question: {q_text}")
+                print(f"(squad_benchmark) > Valid ans: {q_ansl}")
+
+                res, time = model_obj.file_search(q_text)
+                m_ans = res[0]['res']
+
+                valid = was_correct(m_ans, q_ansl)
+
+                print(f"(squad_benchmark) > Time Taken: {time}")
+                print(f"(squad_benchmark) > Corect?: {valid}")
+
+                results["questions"]["tot_qs"] = results["questions"]["tot_qs"] + 1
+                results["times"]["all_ts"].append(time)
+                results["metrics"]["correct_arr"].append(valid)
+
+                if valid == 0:
+                    results["metrics"]["incorrect_d"][q_text] = [
+                        m_ans, q_ansl, question['context']]
+                    
+                    incorrect_d.append({
+                        "question":q_text,
+                        "model_answer":m_ans,
+                        "correct_answer":q_ansl,
+                        "context":question['context']
+                    })
+                    
+                if sio:
+                    sio_response = {
+                        'percent_questions_correct':round(100 * np.mean(results["metrics"]["correct_arr"]), 2),
+                        'number_of_questions_correct':results["metrics"]["correct_arr"].count(1),
+                        'number_of_questions_total':results["questions"]["num_qs"],
+                        'average_time_per_question':round(np.mean(results["times"]["all_ts"]), 2),
+                        'progress':round(100.0 * results["metrics"]["correct_arr"].count(1) / (results["questions"]["num_qs"]+0.001), 2),
+                        'incorrect':incorrect_d
+                    }
+                    sio.emit(channel,sio_response)
+                    sio.sleep(1)
+            except:
+                print(f"(squad_benchmark) > Exited prematurely, skipping question.")
+
+    results["times"]["avg_ts"] = np.mean(results["times"]["all_ts"])
+    results["metrics"]["accuracy_num"] = results["metrics"]["correct_arr"].count(
+        1)
+    results["metrics"]["accuracy_prc"] = np.mean(
+        results["metrics"]["correct_arr"])
+
+    if sio:
+        sio_response = {
+                        'percent_questions_correct':round(100 * np.mean(results["metrics"]["correct_arr"]), 2),
+                        'number_of_questions_correct':results["metrics"]["correct_arr"].count(1),
+                        'number_of_questions_total':results["questions"]["num_qs"],
+                        'average_time_per_question':round(np.mean(results["times"]["all_ts"])),
+                        'progress':round(100.0 * results["metrics"]["correct_arr"].count(1) / (results["questions"]["num_qs"]+0.001), 2)
+                    }
 
 
 
