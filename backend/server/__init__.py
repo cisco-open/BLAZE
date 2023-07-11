@@ -95,7 +95,6 @@ def create_app(server_config,config_class=TestingConfig):
     
     app.config.update(
         frontend_config=frontend_config,
-        frontend_config=frontend_config,
         server_config=server_config  
     )
 
