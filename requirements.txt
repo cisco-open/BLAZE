@@ -16,7 +16,7 @@ redis==4.5.4
 setuptools==61.2.0
 torch==1.9.0
 tqdm==4.64.0
-transformers==4.21.0
+transformers==4.30.0
 webexteamssdk==1.6.1
 Werkzeug==2.1.1
 yarl==1.7.2
