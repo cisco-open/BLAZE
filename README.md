@@ -178,19 +178,6 @@ Now, leave this terminal window open!
 
 &nbsp;&nbsp;
 
-***Installing ColBERT***
-
-Clone the following [GitHub Repo (new-api branch)](https://github.com/stanford-futuredata/ColBERT/tree/new_api) into the `ColBERT` folder. 
-
-> NOTE: There might be some issues with environments, these will be resolved by next commit! 
-
-Once downloading the ColBERT files, make sure to uncomment the three lines near the top 
-of the file `ColBERTSearch.py`. More instructions are detailed at the top of this file. 
-
-After this, navigate to the `get_sidebar()` function in `app_elements.py` and make sure to 
-toggle the "Disabled" option next to ColBERT. You should be good to go now! 
-
-&nbsp;&nbsp;
 
 ***Installing Knowledge Graph***
 
