@@ -42,18 +42,20 @@ if __name__ == "__main__":
         data = yaml.safe_load(file)
 
     config = create_server_config(data)
-    app = create_app(data)
+    app,sockio = create_app(data)
     port = args.p
 
+    run_app_server(app,sockio,3000,'0.0.0.0')
+
     # p_dash = Process(target=run_client, args=(data, port, '0.0.0.0'))
-    p_serv = Process(target=run_app_server, args=(app, 3000, '0.0.0.0'))
+    # p_serv = Process(target=run_app_server, args=(app,sockio, 3000, '0.0.0.0'))
 
     # p_dash.start()
 
-    try:
-        p_serv.start()
-        p_serv.join()
-    except:
-        print("Flask server may already be running!")
+    # try:
+    #     p_serv.start()
+    #     p_serv.join()
+    # except:
+    #     print("Flask server may already be running!")
 
     # p_dash.join()
