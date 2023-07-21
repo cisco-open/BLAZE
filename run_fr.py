@@ -48,6 +48,7 @@ if __name__ == "__main__":
     # p_dash = Process(target=run_client, args=(data, port, '0.0.0.0'))
     # p_serv = Process(target=run_app_server, args=(app, 3000, '0.0.0.0'))
     run_client(data,port,'0.0.0.0')
+    
     # p_dash.start()
 
     
