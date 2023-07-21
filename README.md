@@ -114,6 +114,25 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Run
 
 `python run.py yaml/<file-name>.yaml`
 
+
+## To run React Frontend
+Install node in Windows/Mac/Linux
+Goto https://nodejs.org/en/download/ install nodejs and npm, check installation with
+`node -v and npm -v`
+
+Goto /client dir using
+`cd client`
+
+Install node_modules using command 
+`npm install`
+
+Run Frontend with 
+`npm start`
+
+## To run dash Frontend
+`python run_fr.py yaml/<file-name>.yaml`
+
+
 &nbsp;&nbsp;
 
 ## Install using conda: Local development 
