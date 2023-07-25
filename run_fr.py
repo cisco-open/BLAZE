@@ -45,11 +45,12 @@ if __name__ == "__main__":
     # app = create_app(data)
     port = args.p
 
-    p_dash = Process(target=run_client, args=(data, port, '0.0.0.0'))
+    # p_dash = Process(target=run_client, args=(data, port, '0.0.0.0'))
     # p_serv = Process(target=run_app_server, args=(app, 3000, '0.0.0.0'))
-
-    p_dash.start()
+    run_client(data,port,'0.0.0.0')
+    
+    # p_dash.start()
 
     
 
-    p_dash.join()
+    # p_dash.join()
