@@ -1,36 +1,70 @@
-# BLAZE - Building Language Applications with eaZE 
-
-> [BLAZE Drag-and-Drop - README](drag/README.md) | [BLAZE Conversational AI - README](conv/README.md)
+# BLAZE - Building Language Applications Easily 🔥
 
 &nbsp;&nbsp;
 
-The goal of BLAZE is to **make the lives of data scientists easier**, filling-in a required niche. 
+> ***tl;dr*** - Cisco Research proudly presents BLAZE, a **flexible, standardized, no-code, open-source platform** to easily *assemble, modify, and deploy* various NLP models, datasets, and components
 
-Natural Language Processing (NLP) pipelines reuse many of the same components arranged in different orders. The purpose each NLP model serves varies from use-case to use-case. However, these NLP models are not standardized in terms of their inputs, outputs, and hardware requirements. As a result, it is very difficult to interchange and combine NLP models, especially without introducing significant amounts of code. This lack of standardization causes NLP pipelines to be very rigid. Their lack of flexibility makes it difficult to compose, modify, and add functionality. 
+> Check out our [TechBlog](https://techblog.cisco.com/) and [Homepage](https://research.cisco.com/research-projects/blaze) for more information and exciting applications!
 
-To solve this problem, Blaze that allows for the modular creation and composition of NLP pipelines. Each component of the NLP Pipeline can be implemented as "building block" (for example, a microservice). These building blocks will have standardized inputs and outputs, and they can easily be assembled in varying orders. The order and choice of these specific blocks result in varying pipelines, built for unique use-cases. 
+&nbsp;&nbsp;
+
+## What is BLAZE? 
+
+BLAZE is designed to **streamline the integration of Natural Language Pipelines into software solutions**[^1]. We offer an open, extensible framework to benchmark existing solutions and compare them with novel ones before a production shift. 
+
+[^1]: Check out our first [TechBlog](https://techblog.cisco.com/) to learn more about BLAZE's background! 
+
+The building blocks of BLAZE are **flexible blocks of the NLP pipeline**. The functionality of different stages in the pipeline are abstracted out to create *flexible, Lego-like blocks that can be combined in various ways*. Users can add and arrange these building blocks to create new recipes of varying NLP pipelines. In such, BLAZE will help democratize NLP applications, providing a no-code solution to experiment with SOTA research and serving as a framework to implement NLP pipeline recipes into usable solutions. 
 
 
-## Features 
+&nbsp;&nbsp;
 
-Here's BLAZE's current functionalities:
+## Current Features
 
-**Use Case #1 - Developer** 
+BLAZE currently supports the following building blocks and sample applications: 
+
+| **Data(sets)** | SQUAD 2.0, BillSum, XSum, CNN Dailymail, HuggingFace* |
+|:--------------:|:-----------------------------------------------------:|
+|  **User Data** | TXT files, WebEx Transcripts (Live, Pre-Recorded)     |
+| **Processing** |         *Enterprise LLM Gateway, coming soon!*        |
+|   **Models**   |   GPT-3 Variants, ColBERT, ElasticBERT, HuggingFace*  |
+| **Interfaces** | React App, Dash App, WebEx Bot, WebEx Plugin, POSTMAN |
+
+> Huggingface\* - BLAZE's flexible design enables seamless integration of new components, many of which are underway! 
+
+&nbsp;&nbsp;
+
+In addition, we have several sample applications, each of which are detailed below: 
+
+1. **Semantic Search on User-Uploaded Documents** - [TechBlog: Building WebApps with BLAZE](https://techblog.cisco.com/)
+2. **Benchmarking ElasticBERT Q/A on SQUAD 2.0** - [TechBlog: Building WebApps with BLAZE](https://techblog.cisco.com/)
+3. **Transcript Analysis with WebEx ChatBot** - [TechBLog: Building ChatBot with BLAZE](https://techblog.cisco.com/)
+4. **Embedded WebEx Meeting Assistant Plugin** - [TechBlog: Building Plugins with BLAZE](https://techblog.cisco.com/)
+
+
+&nbsp;&nbsp;
+
+Some of our more-specific offerings include: 
 
 - **Drag-and-Drop Pipeline Builder** 
   - Visual builder for configuring and deploying pipelines
   - Allows for building from scratch (adding, connecting components)
   - Allows for uploading existing pipelines (visualize "recipes") 
   - Converts custom recipe into downloadable YAML config file 
-  - Generates and launches custom NLP pipeline solution 
+  - Generates and launches custom NLP pipeline solution
+
+<!-- <ul><li>item1</li><li>item2</li></ul> --> 
+
+ ![Custom](./docs/images/custom_qna.PNG "Custom Q/A")
+![Comparison](./docs/images/model_comparison.png)
+
+
+
+
 
 - **Conversational AI (Webex Bot)** 
   - Interface with BLAZE to specify pipeline components
   - Generate and launch custom NLP pipeline solution 
-
-  &nbsp;&nbsp;
-
-**Use Case #2 - Business** 
 
 - **Visual Dashboard Web App** 
   - Visual representation of generated pipeline
@@ -41,10 +75,6 @@ Here's BLAZE's current functionalities:
   - Can choose knowledge base (ex. upload file, view all files) 
   - Can index model and retrieve results (ex. summarize this doc) 
   - Can retrieve knowledge base, model, and metrics info 
-
-  &nbsp;&nbsp;
-
-**Use Case #3 - Researcher** 
 
 - **Model/Knowledge Base Benchmarking** 
   - Benchmark selected model on selected knowledge base 
@@ -62,17 +92,26 @@ Here's BLAZE's current functionalities:
   - Compute and display scientific metrics 
   - Currently Supported Metrics: BertScore, Bleu, Rouge 
 
-  &nbsp;&nbsp;
 
-> GIFS/Screenshots Coming Soon! 
+&nbsp;&nbsp;
 
-  ![Custom](./docs/images/custom_qna.PNG)
+## Usage - As Easy as 1, 2, 3
 
-  ![Comparison](./docs/images/model_comparison.png)
+The BLAZE framework operates in three stages: **Build**, **Execute**, and **Interact**
+
+### Build 
 
 
 
-> Over the coming weeks, this platform will be further fleshed out with more exciting features 😄. 
+### Execute 
+
+### Interact 
+
+
+
+&nbsp;&nbsp;
+
+## Installation 
 
 
 &nbsp;&nbsp;
@@ -198,8 +237,7 @@ Now, leave this terminal window open!
 &nbsp;&nbsp;
 
 
-***Installing Knowledge Graph***
+> [BLAZE Drag-and-Drop - README](drag/README.md) | [BLAZE Conversational AI - README](conv/README.md)
 
-Stay tuned, support for this is coming soon! 
 
 &nbsp;&nbsp;
