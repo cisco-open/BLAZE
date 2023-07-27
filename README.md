@@ -6,7 +6,7 @@
 
 > Check out our [TechBlog](https://techblog.cisco.com/) and [Homepage](https://research.cisco.com/research-projects/blaze) for more information and exciting applications!
 
-> Make sure to use the Table of Contents (the three horizontal lines next to README.md) for easier viewing!
+> Make sure to use the **Table of Contents** (the three horizontal lines next to README.md) for easier viewing!
 
 &nbsp;&nbsp;
 
@@ -53,10 +53,10 @@ Some of our more-specific offerings include:
 
 | Feature | Sample | 
 | ----------------|:---------------:|
-| **(Tool) Drag-and-Drop Builder** <ul><li>Visual builder for configuring and deploying pipelines</li><li>Allows for building from scratch or uploading existing pipelines (visualize "recipes")</li><li>Converts recipe into downloadable YAML config file</li><li>Generates and launches custom NLP pipeline solution</li></ul> | ![Builder](./docs/images/yaml_builder.png) | 
+| **(Tool) Drag-and-Drop Builder** <ul><li>Visual builder for configuring and deploying pipelines</li><li>Allows for building from scratch or uploading existing pipelines (visualize "recipes")</li><li>Converts recipe into downloadable YAML config file</li><li>Generates and launches custom NLP pipeline solution</li></ul> | ![Builder](./docs/images/drag-and-drop-best-big-gif.gif) | 
 | **(Interface) Dashboard WebApp** <ul><li>Visual representation of generated pipeline</li><li>Supports semantic search, summarization, file upload, etc.</ul> |  ![Custom](./docs/images/custom_qna.PNG "Custom Q/A") | 
-| **(Interface) Conversational AI** <ul><li>Interact with generated pipeline through natural language</li><li>Can be purely functional or conversational</li><li>Powered by Cisco MindMeld</li></ul>| ![ChatBot](./docs/images/chatbot.png) |
-| **(Function) Model Benchmarking** <ul><li>Benchmark selected model on select knowledge base(s)</li><li>Gives metrics such as latency, accuracy (real-time graphs)</li><li>Displays incorrect questions and trends in performance</li></ul>| ![Benchmark](./docs/images/benchmark.png)|
+| **(Interface) Conversational AI** <ul><li>Interact with generated pipeline through natural language</li><li>Can be purely functional or conversational</li><li>Powered by Cisco MindMeld</li></ul>| ![ChatBot](./docs/images/Slide16.jpg) |
+| **(Function) Model Benchmarking** <ul><li>Benchmark selected model on select knowledge base(s)</li><li>Gives metrics such as latency, accuracy (real-time graphs)</li><li>Displays incorrect questions and trends in performance</li></ul>| ![Benchmark](./docs/images/better-benchmark-gif.gif)|
 | **(Function) Model Comparison** <ul><li>Benchmark multiple models on selected knowledge base(s)</li><li>Gives metrics such as latency, accuracy (real-time graphs)</li><li>Compares trends in performance (ex. areas of strength)</li></ul>| ![Comparison](./docs/images/model_comparison.png)|
 
 
