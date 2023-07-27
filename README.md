@@ -6,6 +6,8 @@
 
 > Check out our [TechBlog](https://techblog.cisco.com/) and [Homepage](https://research.cisco.com/research-projects/blaze) for more information and exciting applications!
 
+> Make sure to use the Table of Contents (the three horizontal lines next to README.md) for easier viewing!
+
 &nbsp;&nbsp;
 
 ## What is BLAZE? 
@@ -33,7 +35,7 @@ BLAZE currently supports the following building blocks and sample applications:
 | **Metrics**    |   BertScore, Bleu, Rouge, Accuracy, Latency           |
 | **Interfaces** | React App, Dash App, WebEx Bot, WebEx Plugin, POSTMAN |
 
-> Huggingface\* - BLAZE's flexible design enables seamless integration of new components, many of which are underway! 
+> HF* - BLAZE's flexible design enables seamless integration of new components, many of which are underway! 
 
 &nbsp;&nbsp;
 
