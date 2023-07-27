@@ -75,7 +75,7 @@ In the Build stage, users can **specify the models, data, and processing compone
 
 Upon completing the drag-and-drop step, users can examine their generated YAML recipes. For example, here we can examine what the generated YAML recipe looks like for a virtual meeting assistant. 
 
-[YamlExample](./docs/images/yaml_slide.png)
+[YamlExample](./docs/images/YAML_Example.PNG)
 
 > We provide several pre-made YAML files recipes in the `yaml` folder as well! 
 
@@ -87,7 +87,7 @@ In the Execute stage, BLAZE utilizes the YAML file generated or chosen in the pr
 
 The following diagram represnts the architecture, illustrating how the server enables pipeline functionality. 
 
-[Architecture](./docs/images/architecture.png)
+[Architecture](./docs/images/Architecture.PNG)
 
 > YAML files can be executed via the `run.py` script, which is discussed in **Installation** below! 
 
