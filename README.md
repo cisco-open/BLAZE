@@ -206,7 +206,7 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Fol
 
 Make sure to check-out the instructions found in [BLAZE Drag-and-Drop - README](drag/README.md) for using the YAML Builder. 
 
-
+Additionally, depending on the model chosen, make sure to check out model-specific instructions found in [BLAZE Models - README](backend/models/README.md)! 
 
 &nbsp;&nbsp;
 
@@ -286,25 +286,5 @@ python run_fr.py <path-to-yaml-file>
 Thank you so much for checking us out! 
 
 &nbsp;&nbsp;
-
-&nbsp;&nbsp;
-
-
-
-
-***TODO: Move this section into ElasticBERT README***
-
-Navigate to [Elasticsearch Installation](https://www.elastic.co/downloads/past-releases/elasticsearch-7-0-0) and 
-follow the instructions according to your specific setup. 
-
-In order to launch elasticsearch, open a new terminal, navigate to the elasticsearch directory, and run either of the following: 
-
-place the elastic folder as same hirerachy as ASKI project folder to start elastic service when running run.py file insted of running it manually using the commands below
-
-- `./bin/elasticsearch` (Linux/Mac)
-- `.\bin\elasticsearch.bat` (Windows)
-
-Now, leave this terminal window open! 
-
 
 &nbsp;&nbsp;
