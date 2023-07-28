@@ -17,8 +17,8 @@ test:
 
 run_search:
 	echo "Running search model"
-	python run.py yaml/01_search_custom.yaml
+	python run_backend.py yaml/01_search_custom.yaml
 
 run_summ:
 	echo "Running summarization model"
-	python run.py yaml/05_summary_datasets.yaml
+	python run_backend.py yaml/05_summary_datasets.yaml
