@@ -5,7 +5,6 @@ function:
   custom: true
   task: summarization
 interface:
-- Chat Bot
 - Web App
 metrics: {}
 models_summarization:

@@ -7,6 +7,5 @@ function:
 datasets: 
 - Squad 
 models_search:
-- ColBERT
 - ElasticBERT
 metrics: {} 

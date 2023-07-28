@@ -15,8 +15,11 @@ from flasgger import Swagger
 from gevent import monkey,sleep
 from threading import Event
 import time
+import multiprocessing as mp
 
 thread_event = Event()
+transcripts = mp.Queue()
+
 
 # monkey.patch_all()
 def run_app_server(app,socketio, port=3000, ip='0.0.0.0'):
@@ -67,7 +70,7 @@ def create_app(server_config,config_class=TestingConfig):
     app = Flask(__name__)
     CORS(app) # This will enable CORS for all routes
     socketio = SocketIO(app,cors_allowed_origins="*") 
-    
+    app.config["transcriptsQueue"] = transcripts
     app.config.from_object(config_class)
     api = Api(app)
     swagger = Swagger(app)
@@ -99,7 +102,7 @@ def create_app(server_config,config_class=TestingConfig):
     )
 
     for route in routes:
-        api.add_resource(route["resource"],*route["endpoint"])
+        api.add_resource(route["resource"],*route["endpoint"],endpoint=route.get("endpointName",None))
     
     # api.add_resource(Default, '/',resource_class_kwargs={'server_config':server_config})
 
