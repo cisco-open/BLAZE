@@ -6,6 +6,8 @@
 
 > Check out our [TechBlog](https://techblog.cisco.com/) and [Homepage](https://research.cisco.com/research-projects/blaze) for more information and exciting applications!
 
+> Further technical documentation can also be found at our [Cisco Research GitHub Pages](https://cisco-open.github.io/BLAZE/). 
+
 > Make sure to use the **Table of Contents** (the three horizontal lines next to README.md) for easier viewing!
 
 &nbsp;&nbsp;
@@ -26,16 +28,18 @@ In such, BLAZE will help democratize NLP applications, providing a no-code solut
 ## Current Features
 
 BLAZE currently supports the following building blocks and sample applications: 
-
-| **Data(sets)** | SQUAD 2.0, BillSum, XSum, CNN Dailymail, HuggingFace* |
+| Category     | Current Components|
 |:--------------:|:-----------------------------------------------------:|
+| **Data(sets)** | SQUAD 2.0, *BillSum, XSum, CNN Dailymail*, HuggingFace* |
 |  **User Data** | TXT files, WebEx Transcripts (Live, Pre-Recorded)     |
 | **Processing** |         *Enterprise LLM Gateway, coming soon!*        |
 |   **Models**   |   GPT-3 Variants, ColBERT, ElasticBERT, HuggingFace*  |
 | **Metrics**    |   BertScore, Bleu, Rouge, Accuracy, Latency           |
 | **Interfaces** | React App, Dash App, WebEx Bot, WebEx Plugin, POSTMAN |
 
-> HF* - BLAZE's flexible design enables seamless integration of new components, many of which are underway! 
+> HF* - BLAZE's flexible design enables seamless integration of new components, many of which are underway!
+
+> Data(sets)* - Summarization datasets are currently being stabilized, but will be ready with a few tweaks! 
 
 &nbsp;&nbsp;
 
@@ -228,9 +232,17 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Fol
 
 &nbsp;&nbsp;
 
-### **4. (Interact) Checking POSTMAN** 
+### **4. (Interact) Checking POSTMAN/Swagger** 
 
 To verify that the server hosting the pipeline is running correctly, one can do so using POSTMAN.
+
+> POSTMAN instructions coming soon! 
+
+&nbsp;&nbsp;
+
+Additionally, one can use Swagger by simply appending `/apidocs/` upon launching the backend. For example, if the backend server is running on `https://localhost:3000`, then we can simply navigate to `https://localhost:3000/apidocs/` in any browser to view the REST server via Swagger. 
+
+> Image of Swagger use coming soon! 
 
 &nbsp;&nbsp;
 
