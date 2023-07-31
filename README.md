@@ -193,12 +193,12 @@ cd Blaze
 
 Create your conda environment with
 ```
-conda env create -f aski_env.yml
+conda env create -f blaze_env.yml
 ```
 
 Then, activate your conda environment with
 ```
-conda activate aski
+conda activate blaze
 ```
 
 &nbsp;&nbsp;
