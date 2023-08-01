@@ -1,4 +1,4 @@
-name: aski
+name: blaze
 channels:
   - pytorch
   - anaconda
