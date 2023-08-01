@@ -241,7 +241,8 @@ Now, a link should appear (ex. `Dash is running on http://127.0.0.1:5000/`). Fol
 
 To verify that the server hosting the pipeline is running correctly, one can do so using POSTMAN.
 
-> POSTMAN instructions coming soon! 
+> Run in Postman! 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/24743348-8a57bb34-f110-427b-92a5-0f92ad9097b7?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D24743348-8a57bb34-f110-427b-92a5-0f92ad9097b7%26entityType%3Dcollection%26workspaceId%3D06c9b848-815d-4d34-92cf-5bc9f5e3fbb1)
 
 &nbsp;&nbsp;
 
