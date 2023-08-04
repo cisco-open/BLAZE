@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblaze=self.webpackChunkblaze||[]).push([[471],{8687:e=>{e.exports=JSON.parse('{"permalink":"/BLAZE/blog/tags/hola","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

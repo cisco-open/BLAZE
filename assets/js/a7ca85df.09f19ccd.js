@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblaze=self.webpackChunkblaze||[]).push([[15],{5044:a=>{a.exports=JSON.parse('{"label":"facebook","permalink":"/BLAZE/blog/tags/facebook","allTagsPath":"/BLAZE/blog/tags","count":1}')}}]);

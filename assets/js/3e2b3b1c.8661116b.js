@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblaze=self.webpackChunkblaze||[]).push([[470],{8096:a=>{a.exports=JSON.parse('{"label":"docusaurus","permalink":"/BLAZE/blog/tags/docusaurus","allTagsPath":"/BLAZE/blog/tags","count":4}')}}]);
