@@ -6,7 +6,7 @@ from flask_restful import Resource, Api, fields, marshal_with, request
 from flask import current_app
 from backend.params.specifications import Specifications
 from backend.server.utils.helpers import get_object_from_name
-
+import requests
 
 class DatasetsList(Resource):
     
@@ -154,4 +154,54 @@ class DatasetFilesDetails(Resource):
         response_data['size'] = size
 
         return response_data, 200
+
+
+class DownloadWebExMeetingTranscripts(Resource):
+
+    def get(self):
+        
+        webex_api_endpoint = "https://webexapis.com/v1"
+        headers = {"Authorization": f"Bearer " + current_app.config.get('WEBEX_ACCESS_TOKEN'), "Content-Type": "application/json", "Scope" : "meeting:recordings_read"}
+
+        meetings_url = f"{webex_api_endpoint}/meetingTranscripts"
+        response = requests.get(meetings_url, headers=headers)
+
+        print("Loaded in all transcripts...", json.loads(response.text))
+        self.meetings = json.loads(response.text)["items"]
+
+        self.transcripts = {}
+        self.names = {}
+        self.merged_text = ""
+        self.file_name = "webex_transcripts.txt"
+
+        for meeting in self.meetings: 
+            id = meeting['id']
+            timestamped_text = {}
+
+            transcript_url = f"{webex_api_endpoint}/meetingTranscripts/{id}/download"
+            response = requests.get(transcript_url, headers=headers)
+            lines = response.text.split("\n\n")
+
+            lines = lines[1:]
+
+            for line in lines: 
+                split_again = line.split("\n")
+                timestamped_text[split_again[2]] = split_again[1]
+                self.merged_text = self.merged_text + split_again[2]
+                
+            
+            self.transcripts[id] = timestamped_text
+            self.names[id] = meeting['meetingId']
+    
+        filepath = path.join(current_app.config.get("FILES_DIR"), self.file_name)
+        with open(filepath,"w") as f:
+            f.write(self.merged_text)
+
+        return {"response": "success","fileName":self.file_name}, 200
+
+
+class LoadWebExMeetingTranscripts(Resource):
+
+    def get(self):
+        pass
 

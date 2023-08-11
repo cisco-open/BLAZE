@@ -87,10 +87,11 @@ def create_app(server_config,config_class=TestingConfig):
     for task in tasks_list:
         server_config['model_objs'][task] = get_list_objects(
             server_config['models_' + task], task, 'models')
-
-    server_config['dataset_objs'] = get_list_objects(
-        server_config['datasets'], server_config['function']['task'], 'datasets')
-    server_config['processes'] = {}
+        
+    if 'datasets' in server_config:
+        server_config['dataset_objs'] = get_list_objects(
+            server_config['datasets'], server_config['function']['task'], 'datasets')
+        server_config['processes'] = {}
 
     initial_server_config = copy.deepcopy(server_config)
     print("(create_app) > Server config is ", server_config)

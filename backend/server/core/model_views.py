@@ -1,5 +1,6 @@
 import json
 from glob import glob
+import os
 import os.path as path
 import string
 from flask_restful import Resource, request
@@ -121,10 +122,19 @@ class ModelInitilize(Resource):
 
         if callable(getattr(model, "load_model", None)):
 
-            if any(param not in request_json for param in ['filename', 'filecontent']):
-                return "Malformed request", 400
+            if 'from_file' in request.json:
+              filepaths = glob(
+                  path.join(current_app.config.get("FILES_DIR"), '**', request_json['from_file']), recursive=True)
 
-            model.load_model(str(request_json['filename']), str(request_json['filecontent']))
+              if len(filepaths) > 0:
+                  filepath = filepaths[0]
+                  with open(filepath, 'r') as f:
+                      content = f.read()
+                      size = os.path.getsize(filepath) / 1000
+              model.load_model(str(request_json['from_file']), content)
+            else:             
+
+              model.load_model(str(request_json['filename']), str(request_json['filecontent']))
             print("INITIALIZEED THE FOLLOWING MODEL", model)
 
         return {"response": "success"}, 200
@@ -160,11 +170,23 @@ class ModelSummary(Resource):
         """
 
         request_json = request.json
-        if any(param not in request_json for param in ['model', 'content']):
-            return "Malformed request", 400
+      
 
         model_name = request_json['model']
-        text_to_summarize = request_json['content']
+        
+        if 'from_file' in request.json:
+            filepaths = glob(
+                path.join(current_app.config.get("FILES_DIR"), '**', request_json['from_file']), recursive=True)
+
+            if len(filepaths) > 0:
+                filepath = filepaths[0]
+                with open(filepath, 'r') as f:
+                    content = f.read()
+                    size = os.path.getsize(filepath) / 1000
+                text_to_summarize = content
+        else:
+            text_to_summarize = request_json['content']
+            
         model = get_model_object_from_name(
             model_name, 'summarization', current_app.config.get("server_config"))
         summarized_text = model._summarize_text(text_to_summarize)
