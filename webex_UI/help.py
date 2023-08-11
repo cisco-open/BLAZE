@@ -24,6 +24,21 @@ def LoadTranscripts():
 HELPER FUNCTIONS LISTED BELOW 
 
 """
+def InitilizeTranscripts(transcriptFileName):
+
+    url = CONSTANTS.get("webex_api_endpoint")+"/models/model/initialize"
+
+    payload = json.dumps({
+        "model": "ElasticBERT",
+        "from_file": transcriptFileName
+    })
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    print(response.text)
+
 def SummarizeTranscripts(transcriptFileName): 
         print(transcriptFileName)
         payload = json.dumps({
@@ -38,3 +53,20 @@ def SummarizeTranscripts(transcriptFileName):
 
         print(response.text)
         return json.loads(response.text)["result"]
+
+
+def SearchTranscripts(query):
+     
+        payload = json.dumps({
+            "model": "ElasticBERT",
+            "query": query
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/search", headers=headers, data=payload)
+
+        print(response.text)
+        return json.loads(response.text)["result"][0]["res"]
+     

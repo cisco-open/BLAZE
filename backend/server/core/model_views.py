@@ -122,10 +122,19 @@ class ModelInitilize(Resource):
 
         if callable(getattr(model, "load_model", None)):
 
-            if any(param not in request_json for param in ['filename', 'filecontent']):
-                return "Malformed request", 400
+            if 'from_file' in request.json:
+              filepaths = glob(
+                  path.join(current_app.config.get("FILES_DIR"), '**', request_json['from_file']), recursive=True)
 
-            model.load_model(str(request_json['filename']), str(request_json['filecontent']))
+              if len(filepaths) > 0:
+                  filepath = filepaths[0]
+                  with open(filepath, 'r') as f:
+                      content = f.read()
+                      size = os.path.getsize(filepath) / 1000
+              model.load_model(str(request_json['from_file']), content)
+            else:             
+
+              model.load_model(str(request_json['filename']), str(request_json['filecontent']))
             print("INITIALIZEED THE FOLLOWING MODEL", model)
 
         return {"response": "success"}, 200

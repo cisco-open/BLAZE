@@ -38,8 +38,8 @@ Hello! Getting this webex bot up-and-running just requires a few steps:
 """
 
 from webex_bot.webex_bot import WebexBot
-from cmds import  SummarAcross,  EmptySpace
-from help import LoadTranscripts
+from cmds import  SummarAcross,  EmptySpace, SearchAcross
+from help import LoadTranscripts, InitilizeTranscripts
 from constants import CONSTANTS
 # THIS LINE WILL NEED TO CHANGE BASED ON YOUR WEBEX BOT!
 bot_token = CONSTANTS.get("bot_token")
@@ -47,11 +47,12 @@ bot_token = CONSTANTS.get("bot_token")
 
 
 transcriptsFileName = LoadTranscripts() 
-print(transcriptsFileName)
+InitilizeTranscripts(transcriptsFileName)
 bot = WebexBot(bot_token)
 
 bot.add_command(EmptySpace())
 bot.add_command(SummarAcross(transcriptsFileName))
+bot.add_command(SearchAcross(transcriptsFileName))
 
 
 bot.run() 
