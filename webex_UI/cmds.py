@@ -11,7 +11,7 @@ from webexteamssdk.models.cards import TextBlock, FontWeight, FontSize, Column, 
     Text, Image, HorizontalAlignment
 
 from webexteamssdk.models.cards.actions import OpenUrl
-from help import SummarizeTranscripts,SearchTranscripts
+from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts
 
 class EmptySpace(Command): 
     def __init__(self): 
@@ -24,18 +24,30 @@ class EmptySpace(Command):
     def execute(self, message, attachment_actions, query_info):
         return 
 
+class ListTranscripts(Command):
+    def __init__(self): 
+        super().__init__(
+            command_keyword="list",
+            help_message="list: List all meetings", 
+            card = None
+        )
+
+    def execute(self, message, attachment_actions, query_info):
+        res = ListMeetingTranscripts()
+        return f"{res}"
+
 
 class SummarAcross(Command): 
     def __init__(self, transcriptFileName): 
         super().__init__(
             command_keyword="summarize",
-            help_message="summarize: Summarize across all meeting transcripts", 
+            help_message="summarize [<meeting_id>,<meeting_id>,...] or all: Summarize across all meeting transcripts", 
             card = None
         )
         self.transcriptFileName = transcriptFileName 
 
     def execute(self, message, attachment_actions, query_info):
-        res = SummarizeTranscripts(self.transcriptFileName)
+        res = SummarizeTranscripts(self.transcriptFileName,message)
         return f"{res}"
 
 
