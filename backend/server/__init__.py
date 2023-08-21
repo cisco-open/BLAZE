@@ -91,7 +91,7 @@ def create_app(server_config,config_class=TestingConfig):
         
     if 'datasets' in server_config:
         server_config['dataset_objs'] = get_list_objects(
-            server_config['datasets'], server_config['function']['task'], 'datasets')
+            server_config['datasets'], 'common', 'datasets')
         server_config['processes'] = {}
 
     initial_server_config = copy.deepcopy(server_config)

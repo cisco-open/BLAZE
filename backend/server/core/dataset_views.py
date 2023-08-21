@@ -124,7 +124,7 @@ class DatasetFilesDetails(Resource):
 
         dataset_name = str(query_params['fileclass'])
 
-        if dataset_name == 'User':
+        if dataset_name == 'User' or dataset_name=="WebEx":
             filepaths = glob(
                 path.join(current_app.config.get("FILES_DIR"), '**', query_params['filename']), recursive=True)
 
@@ -144,11 +144,11 @@ class DatasetFilesDetails(Resource):
             dataset_obj = get_object_from_name(
                 dataset_name, current_app.config.get("server_config"), 'dataset')
             print(dataset_obj)
-            if dataset_obj._dataset_type == 'search':
+            if dataset_obj.functions_supported.includes("search"):
                 content = dataset_obj._get_title_story(str(query_params['filename']))
                 content = ' '.join(sentence for sentence in content)
                 size = "N/A"
-            elif dataset_obj._dataset_type == 'summarization':
+            elif (dataset_obj.functions_supported.includes("summarization") and not dataset_obj.functions_supported.includes("search")):
                 content = None
                 size = None
             else:
@@ -161,63 +161,11 @@ class DatasetFilesDetails(Resource):
         return response_data, 200
 
 
-class DownloadWebExMeetingTranscripts(Resource):
-
-    def get(self):
-        
-        webex_api_endpoint = "https://webexapis.com/v1"
-        headers = {"Authorization": f"Bearer " + current_app.config.get('WEBEX_ACCESS_TOKEN'), "Content-Type": "application/json", "Scope" : "meeting:recordings_read"}
-
-        meetings_url = f"{webex_api_endpoint}/meetingTranscripts"
-        response = requests.get(meetings_url, headers=headers)
-
-        print("Loaded in all transcripts...", json.loads(response.text))
-        self.meetings = json.loads(response.text)["items"]
-
-        self.transcripts = {}
-        self.names = {}
-        self.merged_text = ""
-        self.file_name = "webex_transcripts.json"
-
-        for meeting in self.meetings: 
-            id = meeting['id']
-            timestamped_text = {}
-
-            transcript_url = f"{webex_api_endpoint}/meetingTranscripts/{id}/download"
-            response = requests.get(transcript_url, headers=headers)
-            lines = response.text.split("\n\n")
-
-            lines = lines[1:]
-
-            for line in lines: 
-                split_again = line.split("\n")
-                timestamped_text[split_again[2]] = split_again[1]
-                self.merged_text = self.merged_text + split_again[2]
-                
-            
-            self.transcripts[id] = self.merged_text
-            self.merged_text = ""
-            self.names[id] = meeting['meetingId']
-        json_object = json.dumps(self.transcripts, indent=4)
-
-        filepath = path.join(current_app.config.get("FILES_DIR"), self.file_name)
-        with open(filepath,"w") as f:
-            f.write(json_object)
-
-        return {"response": "success","fileName":self.file_name}, 200
-
-
 class ListMeetingTranscripts(Resource):
-
     def get(self):
-        webex_api_endpoint = "https://webexapis.com/v1"
-        headers = {"Authorization": f"Bearer " + current_app.config.get('WEBEX_ACCESS_TOKEN'), "Content-Type": "application/json", "Scope" : "meeting:recordings_read"}
-
-        meetings_url = f"{webex_api_endpoint}/meetingTranscripts"
-        response = requests.get(meetings_url, headers=headers)
-
-        print("Loaded in all transcripts...", json.loads(response.text))
-        self.meetings = json.loads(response.text)["items"]
-        return {"response": self.meetings}, 200
+        dataset_obj = get_object_from_name("WebEx", current_app.config.get("server_config"), 'dataset')
+        if not dataset_obj:
+            return "That dataset doesn't exist", 404
+        return {"response": dataset_obj.list_meetings}, 200
 
 

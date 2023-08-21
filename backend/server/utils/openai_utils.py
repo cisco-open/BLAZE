@@ -36,7 +36,7 @@ def gpt_analysis(category, clean_info):
         message = f"{prompt}\n{clean_info}"
         print(message)
     elif category == "agenda": 
-        prompt = "Analyze the following meeting transcript and idetnify discussed topics as well as the duration they were discussed and return them in a list, separated by the '-' between time and label, and separated by the pipeline '|' character between each item. For example, 'XX:XX - XX:XX - Introductions' would be a valid entry in the returned list." 
+        prompt = "Analyze the following meeting transcript and idetnify discussed topics as well as the duration they were discussed and return them in a list, separated by the '-' between time and label, and separated by the pipeline '|' character between each item. For example, 'XX:XX - XX:XX - Introductions' may be a valid entry in the returned list." 
         message = f"{prompt}\n{clean_info}"
     else: 
         return None  
@@ -48,10 +48,10 @@ def gpt_analysis(category, clean_info):
         model="text-davinci-003",
         prompt=message,
         temperature=0.7,
-        # max_tokens=892,
-        # top_p=1,
-        # frequency_penalty=0,
-        # presence_penalty=0
+        max_tokens=892,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
 
     
