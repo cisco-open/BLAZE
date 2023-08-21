@@ -1,6 +1,6 @@
 from .views import Default,ResetServer,Models,Config
 from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary
-from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails, DownloadWebExMeetingTranscripts
+from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails, DownloadWebExMeetingTranscripts,ListMeetingTranscripts
 
 
 routes_dict = [
@@ -53,6 +53,10 @@ routes_dict = [
     {
         "endpoint": ['/download_webex_meeting_transcripts'],
         "resource":DownloadWebExMeetingTranscripts
+    },
+    {
+        "endpoint": ['/list_webex_meeting_transcripts'],
+        "resource":ListMeetingTranscripts
     },
 
 

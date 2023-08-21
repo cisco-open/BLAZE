@@ -38,7 +38,7 @@ Hello! Getting this webex bot up-and-running just requires a few steps:
 """
 
 from webex_bot.webex_bot import WebexBot
-from cmds import  SummarAcross,  EmptySpace, SearchAcross
+from cmds import  SummarAcross,  EmptySpace, SearchAcross, ListTranscripts
 from help import LoadTranscripts, InitilizeTranscripts
 from constants import CONSTANTS
 # THIS LINE WILL NEED TO CHANGE BASED ON YOUR WEBEX BOT!
@@ -51,6 +51,7 @@ InitilizeTranscripts(transcriptsFileName)
 bot = WebexBot(bot_token)
 
 bot.add_command(EmptySpace())
+bot.add_command(ListTranscripts())
 bot.add_command(SummarAcross(transcriptsFileName))
 bot.add_command(SearchAcross(transcriptsFileName))
 

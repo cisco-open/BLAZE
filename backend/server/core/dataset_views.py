@@ -7,6 +7,7 @@ from flask import current_app
 from backend.params.specifications import Specifications
 from backend.server.utils.helpers import get_object_from_name
 import requests
+import requests
 
 class DatasetsList(Resource):
     
@@ -129,8 +130,12 @@ class DatasetFilesDetails(Resource):
 
             if len(filepaths) > 0:
                 filepath = filepaths[0]
+               
                 with open(filepath, 'r') as f:
-                    content = f.read()
+                    if filepath.endswith(".json"):
+                        content = json.loads(f.read())
+                    else:
+                        content = f.read()
                     size = os.path.getsize(filepath) / 1000
             else:
                 return "That file doesn't exist", 404
@@ -172,7 +177,7 @@ class DownloadWebExMeetingTranscripts(Resource):
         self.transcripts = {}
         self.names = {}
         self.merged_text = ""
-        self.file_name = "webex_transcripts.txt"
+        self.file_name = "webex_transcripts.json"
 
         for meeting in self.meetings: 
             id = meeting['id']
@@ -190,18 +195,29 @@ class DownloadWebExMeetingTranscripts(Resource):
                 self.merged_text = self.merged_text + split_again[2]
                 
             
-            self.transcripts[id] = timestamped_text
+            self.transcripts[id] = self.merged_text
+            self.merged_text = ""
             self.names[id] = meeting['meetingId']
-    
+        json_object = json.dumps(self.transcripts, indent=4)
+
         filepath = path.join(current_app.config.get("FILES_DIR"), self.file_name)
         with open(filepath,"w") as f:
-            f.write(self.merged_text)
+            f.write(json_object)
 
         return {"response": "success","fileName":self.file_name}, 200
 
 
-class LoadWebExMeetingTranscripts(Resource):
+class ListMeetingTranscripts(Resource):
 
     def get(self):
-        pass
+        webex_api_endpoint = "https://webexapis.com/v1"
+        headers = {"Authorization": f"Bearer " + current_app.config.get('WEBEX_ACCESS_TOKEN'), "Content-Type": "application/json", "Scope" : "meeting:recordings_read"}
+
+        meetings_url = f"{webex_api_endpoint}/meetingTranscripts"
+        response = requests.get(meetings_url, headers=headers)
+
+        print("Loaded in all transcripts...", json.loads(response.text))
+        self.meetings = json.loads(response.text)["items"]
+        return {"response": self.meetings}, 200
+
 
