@@ -3,6 +3,7 @@ from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,Model
 from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails, ListMeetingTranscripts
 
 
+
 routes_dict = [
     {
         "endpoint": ['/'],
@@ -58,6 +59,10 @@ routes_dict = [
     {
         "endpoint": ['/dynamic_query'],
         "resource":TestDynamicApis
+    },
+    {
+        "endpoint": ['/list_webex_meeting_transcripts'],
+        "resource":ListMeetingTranscripts
     },
 
 ]
