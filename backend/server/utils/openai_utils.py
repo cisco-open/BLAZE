@@ -36,7 +36,7 @@ def gpt_analysis(category, clean_info):
         message = f"{prompt}\n{clean_info}"
         print(message)
     elif category == "agenda": 
-        prompt = "Analyze the following meeting transcript and idetnify discussed topics as well as the duration they were discussed and return them in a list, separated by the '-' between time and label, and separated by the pipeline '|' character between each item. For example, 'XX:XX - XX:XX - Introductions' would be a valid entry in the returned list." 
+        prompt = "Analyze the following meeting transcript and idetnify discussed topics as well as the duration they were discussed and return them in a list, separated by the '-' between time and label, and separated by the pipeline '|' character between each item. For example, 'XX:XX - Introductions' may be a valid entry in the returned list, if the meeting contained an introduction." 
         message = f"{prompt}\n{clean_info}"
     else: 
         return None  
