@@ -99,49 +99,10 @@ class TestDynamicApis(Resource):
         except Exception as e:
             return jsonify({"error": str(e)})
     
-    def invoke_function(self):
-        data = request.json
-        class_name = data.get('class_name',None)
-        module_name = data.get('module_name')
-        print(module)
-        method_type = data.get('method_type')
-        method_name = data.get('method_name')
-        args = data.get('args', [])
-        input_data = data.get('input_data', None)
-        try:
-            if method_type == "module_function":
-                module = self.loaded_modules[module_name]
-                if hasattr(module, method_name):
-                        method = getattr(module, method_name)
-                        if input_data is not None:
-                            result = method(*args, input_data=input_data)
-                        else:
-                            result = method(*args)
-                        return jsonify({"result": result})
-        except Exception as e:
-            return jsonify({"error": str(e)})
-
-        try:
-            if class_name in self.loaded_classes:
-                instance = self.loaded_classes[class_name]
-                if hasattr(instance, method_name):
-                    method = getattr(instance, method_name)
-                    if input_data is not None:
-                        result = method(*args, input_data=input_data)
-                    else:
-                        result = method(*args)
-                    return jsonify({"result": result})
-                else:
-                    return jsonify({"error": f"Method '{method_name}' not found in class '{class_name}'."})
-            else:
-                return jsonify({"error": f"Class '{class_name}' not found."})
-        except Exception as e:
-            return jsonify({"error": str(e)})
-
 
     def post(self):
         data = request.json
-        class_name = data.get('class_name')
+        class_name = data.get('class_name',None)
         module_name = data.get('module_name')
         method_type = data.get('method_type')
         method_name = data.get('method_name')
