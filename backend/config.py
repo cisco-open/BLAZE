@@ -41,6 +41,7 @@ class TestingConfig(Config):
     PREF_REST_API = "http://0.0.0.0:"
     DATABASE_URI = 'test'
     TESTING = True
-    WEBEX_BOT_TOKEN = " "
-    WEBEX_ACCESS_TOKEN = " "
+    WEBEX_BOT_TOKEN = ""
+    WEBEX_ACCESS_TOKEN = ""
 
+    OPENAPI_KEY = ""

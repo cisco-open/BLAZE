@@ -20,6 +20,7 @@ import multiprocessing as mp
 thread_event = Event()
 transcripts = mp.Queue()
 
+loaded_classes = {}
 
 # monkey.patch_all()
 def run_app_server(app,socketio, port=3000, ip='0.0.0.0'):
