@@ -46,7 +46,7 @@ bot_token = CONSTANTS.get("bot_token")
 
 
 
-transcriptsFileName = LoadTranscripts() 
+transcriptsFileName = "webex_transcripts.json"
 InitilizeTranscripts(transcriptsFileName)
 bot = WebexBot(bot_token)
 

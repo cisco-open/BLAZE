@@ -1,4 +1,4 @@
-Title: Solo Question Answering on Custom Text
+Title: Webex bot example
 function:
   task: search/summarization
   custom: true

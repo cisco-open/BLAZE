@@ -10,13 +10,8 @@ import json
 
 
 def LoadTranscripts():
-    webex_api_endpoint = CONSTANTS.get("webex_api_endpoint")
-    headers = {"Content-Type": "application/json"}
-    meetings_url = f"{webex_api_endpoint}/download_webex_meeting_transcripts"
-    response = requests.get(meetings_url, headers=headers)
-
-    print("Loaded in all transcripts...", json.loads(response.text))
-    transcriptFileName = json.loads(response.text)["fileName"]
+    
+    transcriptFileName = "webex_transcripts.json"
     return transcriptFileName
         
 """
@@ -61,7 +56,7 @@ def SummarizeTranscripts(transcriptFileName,message):
             'Content-Type': 'application/json'
         }
 
-        url = f"{webex_api_endpoint}/datasets/files/detail?filename={transcriptFileName}&fileclass=User"
+        url = f"{webex_api_endpoint}/datasets/files/detail?filename={webex_transcripts.json}&fileclass=User"
         response = requests.request("GET", url, headers=headers)
         file_content = json.loads(response.text)["content"]
         print(file_content)
@@ -83,6 +78,7 @@ def SummarizeTranscripts(transcriptFileName,message):
         
         return json.loads(response.text)['result']
 
+ 
 
 def SearchTranscripts(query):
      

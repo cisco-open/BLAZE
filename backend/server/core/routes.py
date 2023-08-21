@@ -60,9 +60,6 @@ routes_dict = [
         "endpoint": ['/dynamic_query'],
         "resource":TestDynamicApis
     },
-    {
-        "endpoint": ['/list_webex_meeting_transcripts'],
-        "resource":ListMeetingTranscripts
-    },
+ 
 
 ]

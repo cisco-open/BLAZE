@@ -166,6 +166,7 @@ class ListMeetingTranscripts(Resource):
         dataset_obj = get_object_from_name("WebEx", current_app.config.get("server_config"), 'dataset')
         if not dataset_obj:
             return "That dataset doesn't exist", 404
-        return {"response": dataset_obj.list_meetings}, 200
+        print(dataset_obj.list_meetings)
+        return {"response": dataset_obj.list_meetings()}, 200
 
 
