@@ -56,7 +56,7 @@ def SummarizeTranscripts(transcriptFileName,message):
             'Content-Type': 'application/json'
         }
 
-        url = f"{webex_api_endpoint}/datasets/files/detail?filename={webex_transcripts.json}&fileclass=User"
+        url = f"{webex_api_endpoint}/datasets/files/detail?filename=webex_transcripts.json&fileclass=User"
         response = requests.request("GET", url, headers=headers)
         file_content = json.loads(response.text)["content"]
         print(file_content)
