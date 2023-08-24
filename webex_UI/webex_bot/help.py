@@ -10,7 +10,6 @@ import json
 
 
 def LoadTranscripts():
-    
     transcriptFileName = "webex_transcripts.json"
     return transcriptFileName
         
