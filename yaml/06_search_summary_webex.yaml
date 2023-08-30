@@ -1,8 +1,10 @@
-Title: Solo Question Answering on Custom Text
+Title: Webex bot example
 function:
   task: search/summarization
   custom: true
 metrics: {}
+datasets:
+- WebEx
 models_search:
 - ElasticBERT
 models_summarization:

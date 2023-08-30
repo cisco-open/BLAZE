@@ -48,10 +48,10 @@ def gpt_analysis(category, clean_info):
         model="text-davinci-003",
         prompt=message,
         temperature=0.7,
-        # max_tokens=892,
-        # top_p=1,
-        # frequency_penalty=0,
-        # presence_penalty=0
+        max_tokens=892,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
 
     

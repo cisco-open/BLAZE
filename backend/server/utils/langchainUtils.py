@@ -3,10 +3,7 @@ from langchain import PromptTemplate
 import os
 
 openai_key = ""
-prompt_dict = {
-    "actionables":"Please provide a actionables of the following text",
-    "agenda":""
-}
+
 def summarize_basic(text):
     print(text)
     llm = OpenAI(temperature=0, openai_api_key=openai_key)

@@ -28,6 +28,7 @@ from backend.datasets.interfaces.hugging_face_dataset import HuggingFaceDataset
 
 class Squad(HuggingFaceDataset):
     
+    functions_supported = ["search","summarization","search_benchmark","search_comparison"]
 
     def __init__(self):
         super().__init__(
@@ -99,3 +100,5 @@ class Squad(HuggingFaceDataset):
         for entry in self._topic_content[title]:
             story.append(entry)
         return story
+    
+    
