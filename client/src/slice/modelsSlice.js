@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 
 
 const initialState = {
@@ -12,7 +11,6 @@ const initialState = {
     initialState,
     reducers: {
       modelSelect: (state,model) => {
-          console.log(model)
           state.selectedModel = model.payload.modelName
       }
     },

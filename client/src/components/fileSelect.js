@@ -36,7 +36,7 @@ export function FileSelectComponent(props) {
     
     Object.keys(files).map((value,i)=>{
         return files[value].map((file, index) => {
-            return <option value={file} data-fileclass={value}>{file}</option>;
+            return <option value={file} data-fileclass={value} defaultChecked>{file}</option>;
           })
       })
       
