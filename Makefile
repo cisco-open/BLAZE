@@ -1,3 +1,4 @@
+#!/bin/bash
 build:
 	echo "Building local development environment"
 	curl https://pyenv.run | bash
@@ -8,6 +9,7 @@ build:
 install:
 	echo "Installing dependencies"
 	pip install -r requirements.txt
+	cd /client && npm install
 
 test:
 	echo "Running unit tests"
@@ -15,10 +17,16 @@ test:
 	echo "Running linter"
 	flake8 --ignore=E501
 
-run_search:
-	echo "Running search model"
-	python run_backend.py yaml/01_search_custom.yaml
+frontend-a:
+	BUILD_TYPE = debug    
+	echo "Running frontend $(framework)"
+	ifeq ($(BUILD_TYPE), debug) 
+		CFLAGS := -g
+	else
+		CFLAGS := -O2
+	endif
+server:
+	echo "Running summarization model $(yaml)"
+	python run_backend.py $(yaml)
 
-run_summ:
-	echo "Running summarization model"
-	python run_backend.py yaml/05_summary_datasets.yaml
+
