@@ -23,7 +23,7 @@ frontend(){
 }
 
 server(){
-    echo "Running summarization model $yaml"
+    echo "Running $yaml"
     is_elastic=$(echo $(python parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
     if (($is_elastic >= 1 ))
     then
@@ -31,7 +31,15 @@ server(){
       # echo $is_elastic_service_running
       if (($is_elastic_service_running < 1))
       then
-         echo -e "\n\n\n\nPlease Run Elastic Search to run the backend\n\n\n\n"
+         echo -e "\n\n\nTrying to run elastic seach\n\n\n\n\n"
+         bash ../elasticsearch/bin/elasticsearch
+         sleep 10
+         is_elastic_service_running=$(echo $(curl http://localhost:9200/_cluster/health) | grep -c "elasticsearch")
+         if (($is_elastic_service_running < 1))
+         then
+            echo -e "\n\n\n\nPlease Run Elastic Search to run the backend\n\n\n\n"
+         else
+            python run_backend.py $yaml
       else
          python run_backend.py $yaml
       fi
@@ -64,6 +72,10 @@ case $1 in
   "server")
     server
     ;;
+   
+  "bot")
+    python webex_UI/webex_bot/main.py   
+  ;; 
 
   *)
     server &
