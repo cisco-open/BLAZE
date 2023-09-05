@@ -42,6 +42,14 @@ class TestingConfig(Config):
     DATABASE_URI = 'test'
     TESTING = True
     WEBEX_BOT_TOKEN = ""
-    WEBEX_ACCESS_TOKEN = ""
+    WEBEX_ACCESS_TOKEN = "ZmM3ZTlkOTMtM2IyMC00MmZjLWEzYjEtMDc5Y2RjZDI4MDRkOTBiZTMzOTAtOTRm_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10fZmM3ZTlkOTMtM2IyMC00MmZjLWEzYjEtMDc5Y2RjZDI4MDRkOTBiZTMzOTAtOTRm_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f"
 
     OPENAPI_KEY = ""
+
+    @classmethod
+    def public_config(self):
+        return {
+            "WEBEX_BOT_TOKEN": self.WEBEX_BOT_TOKEN,
+            "WEBEX_ACCESS_TOKEN":self.WEBEX_ACCESS_TOKEN,
+            "OPENAPI_KEY":self.OPENAPI_KEY
+        }

@@ -40,6 +40,7 @@ server(){
             echo -e "\n\n\n\nPlease Run Elastic Search to run the backend\n\n\n\n"
          else
             python run_backend.py $yaml
+         fi
       else
          python run_backend.py $yaml
       fi

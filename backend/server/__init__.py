@@ -76,6 +76,7 @@ def create_app(server_config,config_class=TestingConfig):
     api = Api(app)
     swagger = Swagger(app)
     frontend_config = copy.deepcopy(server_config)
+    frontend_config.update(config_class.public_config())
     tasks_list = server_config['function']['task'].split('/')
     server_config['model_objs'] = {}
     if 'profiling' in server_config['function']:
