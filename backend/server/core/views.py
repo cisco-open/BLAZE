@@ -81,14 +81,15 @@ from flask import jsonify
 class TestDynamicApis(Resource):
     loaded_classes = {}
     loaded_modules = {}
-
+    
     def load_module(self):
+        allowed_modules = current_app.config.get("allowed_modules")
         data = request.json
         module_name = data.get('module_name')
         class_name = data.get('class_name',None)
 
         try:
-            module = importlib.import_module(module_name)
+            module = importlib.import_module(allowed_modules[module_name])
             if class_name:
                 class_ = getattr(module, class_name)
                 instance = class_(data.get('init_data', {}))  # Initialize class with data
@@ -97,10 +98,12 @@ class TestDynamicApis(Resource):
                 self.loaded_modules[module_name] = module
             return jsonify({"message": f"Module '{module_name}' loaded and class '{class_name}' initialized."})
         except Exception as e:
+            print(e)
             return jsonify({"error": str(e)})
     
 
     def post(self):
+        allowed_modules = current_app.config.get("allowed_modules")
         data = request.json
         class_name = data.get('class_name',None)
         module_name = data.get('module_name')
@@ -108,6 +111,8 @@ class TestDynamicApis(Resource):
         method_name = data.get('method_name')
         args = data.get('args', [])
         input_data = data.get('input_data', None)
+        if module_name not in allowed_modules:
+            return jsonify({"error": "module not allowed"})
         self.load_module()
         print(self.loaded_modules)
         try:
@@ -136,4 +141,5 @@ class TestDynamicApis(Resource):
             else:
                 return jsonify({"error": f"Class '{class_name}' not found."})
         except Exception as e:
+            print(e)
             return jsonify({"error": str(e)})

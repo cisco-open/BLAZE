@@ -72,10 +72,12 @@ def create_app(server_config,config_class=TestingConfig):
     CORS(app) # This will enable CORS for all routes
     socketio = SocketIO(app,cors_allowed_origins="*") 
     app.config["transcriptsQueue"] = transcripts
+    app.config.update(allowed_modules=config_class.yaml_allowed_moduls(server_config["module"]))
     app.config.from_object(config_class)
     api = Api(app)
     swagger = Swagger(app)
     frontend_config = copy.deepcopy(server_config)
+    frontend_config.update(config_class.public_config())
     tasks_list = server_config['function']['task'].split('/')
     server_config['model_objs'] = {}
     if 'profiling' in server_config['function']:
@@ -97,7 +99,7 @@ def create_app(server_config,config_class=TestingConfig):
     initial_server_config = copy.deepcopy(server_config)
     print("(create_app) > Server config is ", server_config)
 
-    
+
     app.config.update(
         frontend_config=frontend_config,
         server_config=server_config  

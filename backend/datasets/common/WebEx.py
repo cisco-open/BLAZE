@@ -40,6 +40,7 @@ class WebEx:
         self.headers = {"Authorization": f"Bearer " + TestingConfig.WEBEX_ACCESS_TOKEN, "Content-Type": "application/json", "Scope" : "meeting:recordings_read"}
         self.meetings = {}
         self.transcripts = {}
+        self.recordings = {}
         self.names = {}
         self.merged_text = ""
         self.file_name = "webex_transcripts.json"
@@ -93,7 +94,7 @@ class WebEx:
         response = requests.get(meetings_url, headers=self.headers)
 
         print("Loaded in all transcripts...", json.loads(response.text))
-        self.meetings = json.loads(response.text)["items"]
+        self.meetings = json.loads(response.text).get("items",[])
        
     
     def list_meetings(self):
@@ -116,9 +117,16 @@ class WebEx:
                 self.merged_text = self.merged_text + split_again[2]
                 
             
-            self.transcripts[id] = self.merged_text
+            self.transcripts[meeting['meetingId']] = self.merged_text
             self.merged_text = ""
             self.names[id] = meeting['meetingId']
+
+        transcript_url = f"{self.webex_api_endpoint}/recordings/"
+        transcriptResponse = requests.get(transcript_url, headers=self.headers)
+        recordings = json.loads(transcriptResponse.text)["items"]
+        for record in recordings:
+            self.recordings[record["meetingId"]] = record
+
         json_object = json.dumps(self.transcripts, indent=4)
         print(json_object)
         filepath = path.join(TestingConfig.FILES_DIR, self.file_name)

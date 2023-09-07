@@ -167,6 +167,6 @@ class ListMeetingTranscripts(Resource):
         if not dataset_obj:
             return "That dataset doesn't exist", 404
         print(dataset_obj.list_meetings)
-        return {"response": dataset_obj.list_meetings()}, 200
+        return {"response": dataset_obj.list_meetings(),"recordings":dataset_obj.recordings}, 200
 
 

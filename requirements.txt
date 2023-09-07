@@ -30,3 +30,6 @@ Sphinx==5.0.2
 sphinx-rtd-theme==1.0.0
 gevent==22.10.2
 gevent==22.10.2
+webex-bot==0.4.0
+webexteamssdk==1.6.1
+openai==0.27.8
