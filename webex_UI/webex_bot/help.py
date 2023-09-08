@@ -141,5 +141,6 @@ def ActionablesTranscripts(transcriptFileName,message):
         }
 
         response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/dynamic_query", headers=headers, data=payload).json()
-        res = "".join(response["result"]["choices"][0]["text"].split("|"))
+        print(response)
+        res = "  \n ".join(response["result"]["choices"][0]["text"].split("|"))
         return res
