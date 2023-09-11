@@ -43,6 +43,9 @@ from help import LoadTranscripts, InitilizeTranscripts
 from constants import CONSTANTS
 import requests
 
+# THIS LINE WILL NEED TO CHANGE BASED ON YOUR URL SERVER HOSTED!
+config = requests.get('http://localhost:3000/config').json()
+bot_token = config.get("WEBEX_BOT_TOKEN")
 
 # THIS LINE WILL NEED TO CHANGE BASED ON YOUR URL SERVER HOSTED!
 config = requests.get('http://localhost:3000/config').json().get("response")
