@@ -1,4 +1,3 @@
 CONSTANTS = {
-    "bot_token":"",
-    "webex_api_endpoint" : "http://127.0.0.1:3000/"
+    "webex_api_endpoint":"http://localhost:3000/"
 }
