@@ -93,7 +93,7 @@ class WebEx:
         response = requests.get(meetings_url, headers=self.headers)
 
         print("Loaded in all transcripts...", json.loads(response.text))
-        self.meetings = json.loads(response.text)["items"]
+        self.meetings = json.loads(response.text).get("items",[])
        
     
     def list_meetings(self):

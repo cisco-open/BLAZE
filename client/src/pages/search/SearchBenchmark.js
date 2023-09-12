@@ -6,18 +6,24 @@ import { Layout } from "./../../layouts/Layout";
 import { ModelSelect } from "../../components/modelSelect";
 import { FileSelectComponent } from "../../components/fileSelect";
 // import { socket } from "../../socket";
-
+import {CONSTANTS} from "../../CONSTANTS"
 import { io } from "socket.io-client";
 
 export function BenchmarkPage() {
   // Declare a new state variable, which we'll call "count"
   const dispatch = useDispatch();
 
-  let serverUrl = "localhost:3000";
+  let serverUrl = CONSTANTS.socketURL;
   let socket = io(serverUrl);
 
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [benchmark, setBenchmark] = useState({});
+  const selectedFile = useSelector((state) => state.dataset.selectedFile);
+  const selectedFileDetails = useSelector(
+    (state) => state.dataset.selectedFileDetails
+  );
+  const modelState = useSelector((state) => state.models);
+
 
   React.useEffect(() => {
     dispatch(setConfig());
@@ -41,11 +47,13 @@ export function BenchmarkPage() {
   }, []);
 
   const handleClick = (e) => {
-    console.log("click");
-
-    socket.timeout(2000).emit("benchmark", { file: "Beyoncé" }, () => {
-      console.log("Emited");
-    });
+    console.log(selectedFileDetails);
+    if (modelState.selectedModel !== null && selectedFileDetails !== null) {
+      socket.timeout(2000).emit("benchmark", { file: selectedFile.filename }, () => {
+        console.log("Emited");
+      });
+    }
+    
   };
 
   const config = useSelector((state) => state.config.config);

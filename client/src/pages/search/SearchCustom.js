@@ -3,9 +3,9 @@ import { useSelector  } from "react-redux";
 import searchStyles from "./Search.module.css";
 import { FileSelectComponent } from "../../components/fileSelect";
 import axios from "axios";
+import {CONSTANTS} from '../../CONSTANTS'
 
-
-const baseURL = "http://localhost:3000/";
+const baseURL = CONSTANTS.baseURL;
 
 export function SearchCustom(props) {
 

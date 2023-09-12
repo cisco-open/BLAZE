@@ -43,9 +43,9 @@ export function BenchmarkPage() {
   const handleClick = (e) => {
     console.log("click");
 
-    socket.timeout(2000).emit("benchmark", { file: "Beyoncé" }, () => {
-      console.log("Emited");
-    });
+    // socket.timeout(2000).emit("benchmark", { file: "Beyoncé" }, () => {
+    //   console.log("Emited");
+    // });
   };
 
   const config = useSelector((state) => state.config.config);

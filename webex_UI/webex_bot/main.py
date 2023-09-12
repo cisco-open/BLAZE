@@ -41,9 +41,11 @@ from webex_bot.webex_bot import WebexBot
 from cmds import  SummarAcross,  EmptySpace, SearchAcross, ListTranscripts
 from help import LoadTranscripts, InitilizeTranscripts
 from constants import CONSTANTS
-# THIS LINE WILL NEED TO CHANGE BASED ON YOUR WEBEX BOT!
-bot_token = CONSTANTS.get("bot_token")
+import requests
 
+# THIS LINE WILL NEED TO CHANGE BASED ON YOUR URL SERVER HOSTED!
+config = requests.get('http://localhost:3000/config').json()
+bot_token = config.get("WEBEX_BOT_TOKEN")
 
 
 transcriptsFileName = "webex_transcripts.json"

@@ -9,8 +9,9 @@ import { DatasetSelect } from "../../components/datasetSelect";
 import axios from "axios";
 import { Sidebar } from "../../layouts/Sidebar";
 import { Layout } from "../../layouts/Layout";
+import {CONSTANTS} from '../../CONSTANTS'
 
-const baseURL = "http://localhost:3000/";
+const baseURL = CONSTANTS.baseURL;
 
 export function SummarizationPage(props) {
   // Declare a new state variable, which we'll call "count"

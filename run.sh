@@ -24,7 +24,7 @@ frontend(){
 
 server(){
     echo "Running summarization model $yaml"
-    is_elastic=$(echo $(python parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
+    is_elastic=$(echzo $(python parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
     if (($is_elastic >= 1 ))
     then
 		is_elastic_service_running=$(echo $(curl http://localhost:9200/_cluster/health) | grep -c "elasticsearch")
