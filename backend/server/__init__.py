@@ -72,7 +72,8 @@ def create_app(server_config,config_class=TestingConfig):
     CORS(app) # This will enable CORS for all routes
     socketio = SocketIO(app,cors_allowed_origins="*") 
     app.config["transcriptsQueue"] = transcripts
-    app.config.update(allowed_modules=config_class.yaml_allowed_moduls(server_config.get("module",None)))
+    if "module" in server_config:
+        app.config.update(allowed_modules=config_class.yaml_allowed_moduls(server_config.get("module",None)))
     app.config.from_object(config_class)
     api = Api(app)
     swagger = Swagger(app)
