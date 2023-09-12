@@ -55,10 +55,7 @@ export function BenchmarkPage() {
 
   return (
     <>
-      <Sidebar>
-        <ModelSelect config={config} />
-      </Sidebar>
-      <Layout>
+      
         <div className="row">
           <div className="col-4">
             <div
@@ -123,7 +120,7 @@ export function BenchmarkPage() {
            </div>
           </div>
         </div>
-      </Layout>
+  
     </>
   );
 }

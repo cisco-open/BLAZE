@@ -9,7 +9,7 @@ function summary() {
   // WARNING: For POST requests, body is set to null by browsers.
   console.log(transcript_final_result["transcript"])
   var data = JSON.stringify({
-    "module_name": "backend.server.utils.openai_utils",
+    "module_name": "openai",
     "method_type": "module_function",
     "method_name": "process_transcript",
     "args": [

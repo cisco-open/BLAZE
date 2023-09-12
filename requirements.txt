@@ -32,3 +32,4 @@ gevent==22.10.2
 gevent==22.10.2
 webex-bot==0.4.0
 webexteamssdk==1.6.1
+openai==0.27.8

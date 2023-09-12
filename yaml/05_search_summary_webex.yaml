@@ -1,4 +1,4 @@
-Title: Webex bot example
+Title: BLAZE Transcript Analysis
 function:
   task: search/summarization
   custom: true
@@ -9,3 +9,4 @@ models_search:
 - ElasticBERT
 models_summarization:
 - Bart
+module: ['openai']

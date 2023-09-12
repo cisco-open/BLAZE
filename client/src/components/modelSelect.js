@@ -22,6 +22,7 @@ export function ModelSelect(props) {
                   name="modelList"
                   value={item}
                   onChange={modelChange}
+                  defaultChecked
                 />
                 {item}
                 <label

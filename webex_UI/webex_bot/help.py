@@ -44,7 +44,7 @@ def ListMeetingTranscripts():
         meetings = json.loads(response.text)['response']
         for meeting in meetings:
               id = meeting['id']
-              response_string = response_string+ "".join(["ID:",meeting["id"],"\n","start_time:",meeting["startTime"],"\n","topic:",meeting["meetingTopic"],"\n\n\n"])
+              response_string = response_string+ "".join(["ID:",meeting["meetingId"],"\n","start_time:",meeting["startTime"],"\n","topic:",meeting["meetingTopic"],"\n\n\n"])
               
         return response_string
 
@@ -80,7 +80,7 @@ def SummarizeTranscripts(transcriptFileName,message):
  
 
 def SearchTranscripts(query):
-     
+        webex_api_endpoint = CONSTANTS.get("webex_api_endpoint")
         payload = json.dumps({
             "model": "ElasticBERT",
             "query": query
@@ -89,8 +89,58 @@ def SearchTranscripts(query):
             'Content-Type': 'application/json'
         }
 
-        response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/search", headers=headers, data=payload)
+        response = requests.request("POST", webex_api_endpoint+"/search", headers=headers, data=payload)
 
         print(response.text)
-        return json.loads(response.text)["result"][0]["res"]
+        answer = json.loads(response.text)["result"][0]["res"]
+
+        #Fetch recordings data
+        meetings_url = f"{webex_api_endpoint}/list_webex_meeting_transcripts"
+        response = requests.get(meetings_url, headers=headers)
+        recordings = json.loads(response.text)['recordings']      
+        
+        #Fetch and search answer in transcripts content and map to appropriate recording
+        url = f"{webex_api_endpoint}/datasets/files/detail?filename=webex_transcripts.json&fileclass=User"
+        response = requests.request("GET", url, headers=headers)
+        file_content = json.loads(response.text)["content"]
+
+        for key,value in file_content.items():
+              if answer in value:
+                    return answer, recordings[key]["playbackUrl"], recordings[key]["topic"]
+              
      
+def ActionablesTranscripts(transcriptFileName,message):
+        transcripts_content = ""
+        webex_api_endpoint = CONSTANTS.get("webex_api_endpoint")
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        url = f"{webex_api_endpoint}/datasets/files/detail?filename=webex_transcripts.json&fileclass=User"
+        response = requests.request("GET", url, headers=headers)
+        file_content = json.loads(response.text)["content"]
+        print(file_content)
+
+        if message.strip() == "all":
+              transcripts_content = "\n".join(file_content.values())
+        else:
+            meeting_ids = message.split(",")
+            for id in meeting_ids:
+                transcripts_content = transcripts_content + file_content[id.strip()]
+        
+        payload = json.dumps({
+            "module_name": "openai",
+            "method_type": "module_function",
+            "method_name": "gpt_analysis",
+            "args": [
+                  "actionables",transcripts_content
+            ]
+        })
+        headers = {
+        'Content-Type': 'application/json'
+        }
+
+        response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/dynamic_query", headers=headers, data=payload).json()
+        print(response)
+        res = "  \n ".join(response["result"]["choices"][0]["text"].split("|"))
+        return res

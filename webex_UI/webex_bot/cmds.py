@@ -11,7 +11,7 @@ from webexteamssdk.models.cards import TextBlock, FontWeight, FontSize, Column, 
     Text, Image, HorizontalAlignment
 
 from webexteamssdk.models.cards.actions import OpenUrl
-from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts
+from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts,ActionablesTranscripts
 
 class EmptySpace(Command): 
     def __init__(self): 
@@ -61,6 +61,43 @@ class SearchAcross(Command):
         self.transcriptFileName = transcriptFileName 
 
     def execute(self, message, attachment_actions, query_info):
-        res = SearchTranscripts(message)
-        return f"{res}"
+        res,link,topic = SearchTranscripts(message)
+        print(res)
 
+        textb = TextBlock(res, weight=FontWeight.BOLDER, size=FontSize.MEDIUM)
+
+
+        if not link: 
+            card = AdaptiveCard(
+                body=[ColumnSet(columns=[Column(items=[textb], width=2)])
+                ],
+                actions=[]
+            )
+            return response_from_adaptive_card(card)
+            
+
+        card = AdaptiveCard(
+            body=[ColumnSet(columns=[Column(items=[textb], width=2)])
+            ],
+            actions=[
+                OpenUrl(title=f"See Playback ({topic})",url=link)
+            ]
+        )
+
+        return response_from_adaptive_card(card) 
+
+
+
+
+class Actionables(Command):
+    def __init__(self, transcriptFileName): 
+        super().__init__(
+            command_keyword="actionables",
+            help_message="actionables [<meeting_id>,<meeting_id>,...] or all: Actionables across all meeting transcripts", 
+            card = None
+        )
+        self.transcriptFileName = transcriptFileName 
+
+    def execute(self, message, attachment_actions, query_info):
+        res = ActionablesTranscripts(self.transcriptFileName,message)
+        return f"{res}"

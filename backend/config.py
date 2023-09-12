@@ -45,6 +45,8 @@ class TestingConfig(Config):
     WEBEX_ACCESS_TOKEN = os.environ.get('WEBEX_ACCESS_TOKEN', "")
 
     OPENAPI_KEY = os.environ.get('OPENAPI_KEY', "")
+    all_modules = {"openai":"backend.server.utils.openai_utils"}
+    
 
     @classmethod
     def public_config(self):
@@ -53,4 +55,10 @@ class TestingConfig(Config):
             "WEBEX_ACCESS_TOKEN":self.WEBEX_ACCESS_TOKEN,
             "OPENAPI_KEY":self.OPENAPI_KEY
         }
-
+    @classmethod
+    def yaml_allowed_moduls(cls,yaml_defined_modules):
+        allowed_modules = {}
+        for module in yaml_defined_modules:
+            allowed_modules[module] = cls.all_modules.get(module)
+       
+        return allowed_modules
