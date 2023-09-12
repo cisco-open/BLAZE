@@ -161,7 +161,7 @@ class DatasetFilesDetails(Resource):
         return response_data, 200
 
 
-class ListMeetingTranscripclient/src/CONSTANTS.jsts(Resource):
+class ListMeetingTranscripclient(Resource):
     def get(self):
         dataset_obj = get_object_from_name("WebEx", current_app.config.get("server_config"), 'dataset')
         if not dataset_obj:
