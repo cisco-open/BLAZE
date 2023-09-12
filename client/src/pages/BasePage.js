@@ -3,11 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { setConfig } from "../slice/configLoadSlice";
 
-import axios from "axios";
 import { SearchPage } from "./search/Search";
 import { SummarizationPage } from "./summarization/Summarization";
 
-const baseURL = "http://localhost:3000/";
 
 export function BasePage() {
   const dispatch = useDispatch();

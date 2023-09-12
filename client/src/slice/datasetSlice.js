@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import {CONSTANTS} from '../CONSTANTS'
 
 const client = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: CONSTANTS.baseURL,
 });
 
 export const listFiles = createAsyncThunk("datasets/files", async (dataset) => {
