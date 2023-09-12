@@ -144,11 +144,11 @@ class DatasetFilesDetails(Resource):
             dataset_obj = get_object_from_name(
                 dataset_name, current_app.config.get("server_config"), 'dataset')
             print(dataset_obj)
-            if dataset_obj.functions_supported.includes("search"):
+            if 'search' in dataset_obj.functions_supported:
                 content = dataset_obj._get_title_story(str(query_params['filename']))
                 content = ' '.join(sentence for sentence in content)
                 size = "N/A"
-            elif (dataset_obj.functions_supported.includes("summarization") and not dataset_obj.functions_supported.includes("search")):
+            elif ("summarization" in dataset_obj.functions_supported) and ("search" not in dataset_obj):
                 content = None
                 size = None
             else:
