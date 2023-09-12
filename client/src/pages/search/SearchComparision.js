@@ -30,11 +30,9 @@ export function ComparisionPage() {
     dispatch(setConfig());
     socket.connect();
     const benchmarkListiner = (message) => {
-      console.log("coming here benchmark");
       setBenchmark(message);
     };
     const benchmarkListiner2 = (message) => {
-      console.log("coming here benchmark");
       setBenchmark2(message);
     };
 

@@ -27,7 +27,7 @@ This file will work if Elasticsearch is downloaded anywhere locally
 and is currently running. In order to start Elasticsearch, simply 
 type "./bin/elasticsearch" into your terminal and execute the cmd. 
 
-If on Windows, you will need to type ".\bin\elasticsearch.bat"
+If on Windows, you will need to type ".\bin\\elasticsearch.bat"
 
 """
 
