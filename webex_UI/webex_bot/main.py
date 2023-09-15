@@ -49,17 +49,19 @@ config = requests.get('http://localhost:3000/config').json().get("response")
 bot_token = config.get("WEBEX_BOT_TOKEN")
 print(bot_token)
 
-
 transcriptsFileName = "webex_transcripts.json"
 InitilizeTranscripts(transcriptsFileName)
 bot = WebexBot(bot_token)
+print(dir(bot))
+print(bot.device_info)
 
+print(bot.device_url)
+print(bot.on_message)
+print(bot.websocket)
 bot.add_command(EmptySpace())
 bot.add_command(ListTranscripts())
 bot.add_command(SummarAcross(transcriptsFileName))
 bot.add_command(SearchAcross(transcriptsFileName))
 bot.add_command(Actionables(transcriptsFileName))
-
-
 
 bot.run() 

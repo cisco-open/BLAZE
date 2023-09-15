@@ -1,5 +1,5 @@
 from .views import Default,ResetServer,Models,Config,TestDynamicApis
-from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary
+from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary, ModelActionables
 from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails, ListMeetingTranscripts
 
 
@@ -50,6 +50,10 @@ routes_dict = [
     {
         "endpoint": ['/summary'],
         "resource":ModelSummary
+    },
+    {
+        "endpoint": ['/actionables'],
+        "resource":ModelActionables
     },
  
     {

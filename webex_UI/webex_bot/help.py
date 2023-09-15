@@ -129,18 +129,15 @@ def ActionablesTranscripts(transcriptFileName,message):
                 transcripts_content = transcripts_content + file_content[id.strip()]
         
         payload = json.dumps({
-            "module_name": "openai",
-            "method_type": "module_function",
-            "method_name": "gpt_analysis",
-            "args": [
-                  "actionables",transcripts_content
-            ]
+            "model": "OpenAI",
+            "content": transcripts_content,
+            
         })
         headers = {
         'Content-Type': 'application/json'
         }
 
-        response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/dynamic_query", headers=headers, data=payload).json()
+        response = requests.request("POST", CONSTANTS.get("webex_api_endpoint")+"/actionables", headers=headers, data=payload).json()
         print(response)
-        res = "  \n ".join(response["result"]["choices"][0]["text"].split("|"))
+        res = "  \n ".join(response["result"].split("|"))
         return res

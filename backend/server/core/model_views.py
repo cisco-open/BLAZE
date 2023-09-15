@@ -70,7 +70,8 @@ class ModelDetail(Resource):
 
         model_name = str(query_params['model'])
         app_config = current_app.config.get("server_config")
-        for model in app_config['model_objs'][app_config["function"]["task"]]:
+        for task in app_config["function"]["task"]:
+          for model in app_config['model_objs'][task]:
             if model._info['class_name'] == model_name:
                 return {'model_info': model._info}, 200
 
@@ -189,9 +190,65 @@ class ModelSummary(Resource):
             
         model = get_model_object_from_name(
             model_name, 'summarization', current_app.config.get("server_config"))
+        print(model)
         summarized_text = model._summarize_text(text_to_summarize)
 
         return {'result': summarized_text}, 200
+    
+class ModelActionables(Resource):
+
+    def post(self):
+        """
+        Model Actionables
+        ---
+        tags:
+          - Model Endpoints
+        parameters:
+          - in: body
+            name: body
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                  example: OpenAI
+                content:
+                  type: string
+                  example: There was once a sweet little maid who lived with her father and mother in a pretty little cottage at the edge of the village. At the further end of the wood was another pretty cottage and in it lived her grandmother.
+        responses:
+          200:
+            description: successful operation
+            schema:
+              properties:
+                response:
+                  type: string
+                  
+        """
+
+        request_json = request.json
+      
+
+        model_name = request_json['model']
+        
+        if 'from_file' in request.json:
+            filepaths = glob(
+                path.join(current_app.config.get("FILES_DIR"), '**', request_json['from_file']), recursive=True)
+
+            if len(filepaths) > 0:
+                filepath = filepaths[0]
+                with open(filepath, 'r') as f:
+                    content = f.read()
+                    size = os.path.getsize(filepath) / 1000
+                processed_text = content
+        else:
+            processed_text = request_json['content']
+            
+        model = get_model_object_from_name(
+            model_name, 'actionables', current_app.config.get("server_config"))
+        print(model)
+        actionables = model.get_actionables(processed_text)
+
+        return {'result': actionables}, 200
 
 class ModelSearch(Resource):
 
