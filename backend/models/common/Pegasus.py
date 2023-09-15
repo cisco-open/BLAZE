@@ -54,7 +54,7 @@ def get_pegasus_info():
 class Pegasus(HuggingFaceModelSummarization):
     """Pegasus model from 'Pre-training with Extracted Gap-sentences for 
     Abstractive Summarization' paper"""
-
+    tasks_supported = ["summarization"]
     def __init__(self):
 
         super().__init__(

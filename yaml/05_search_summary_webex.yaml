@@ -1,6 +1,6 @@
 Title: BLAZE Transcript Analysis
 function:
-  task: search/summarization
+  task: ['search','summarization','actionables']
   custom: true
 metrics: {}
 datasets:
@@ -9,4 +9,7 @@ models_search:
 - ElasticBERT
 models_summarization:
 - Bart
+- OpenAI
+models_actionables:
+- OpenAI
 module: ['openai']

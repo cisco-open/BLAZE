@@ -59,7 +59,7 @@ def get_ElasticBERT_info():
 
 
 class ElasticBERT(ModelSearch):
-
+    tasks_supported = ["search"]
     def __init__(self):
         self._info = get_ElasticBERT_info()
 

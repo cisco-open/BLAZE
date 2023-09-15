@@ -67,7 +67,7 @@ def get_ColBERT_info():
 
 
 class ColBERT(ModelSearch):
-
+    tasks_supported = ["search"]
     def __init__(self):
         self._info = get_ColBERT_info()
 

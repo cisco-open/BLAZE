@@ -57,8 +57,9 @@ def get_list_objects(list_objects_str, task, object_type):
     """
 
     list_objects = []
-
+   
     for object_name in list_objects_str:
+        print(object_name)
         object_var = call_object_class_from_name(
             object_name, task, object_type)
 

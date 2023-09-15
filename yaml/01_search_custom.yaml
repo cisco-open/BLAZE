@@ -1,6 +1,6 @@
 Title: Solo Question Answering on Custom Text
 function:
-  task: search
+  task: ['search']
   custom: true
 datasets:
 - Squad 

@@ -3,7 +3,7 @@ datasets:
 - User
 function:
   custom: true
-  task: summarization
+  task: ['summarization']
 interface:
 - Web App
 metrics: {}

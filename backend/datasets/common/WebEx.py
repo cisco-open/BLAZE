@@ -123,7 +123,7 @@ class WebEx:
 
         transcript_url = f"{self.webex_api_endpoint}/recordings/"
         transcriptResponse = requests.get(transcript_url, headers=self.headers)
-        recordings = json.loads(transcriptResponse.text)["items"]
+        recordings = json.loads(transcriptResponse.text).get("items",[])
         for record in recordings:
             self.recordings[record["meetingId"]] = record
 

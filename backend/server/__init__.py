@@ -8,7 +8,7 @@ from flask_restful import Resource, Api
 from backend.server.core.views import Default, Models
 from backend.config import TestingConfig,ProductionConfig,DevelopmentConfig
 from backend.server.utils.helpers import get_list_objects
-from backend.models.search.ElasticBERT import ElasticBERT
+from backend.models.common.ElasticBERT import ElasticBERT
 from backend.models.interfaces.model_search import squad_benchmarkV2
 from backend.server.routes import routes
 from flasgger import Swagger
@@ -79,7 +79,7 @@ def create_app(server_config,config_class=TestingConfig):
     swagger = Swagger(app)
     frontend_config = copy.deepcopy(server_config)
     frontend_config.update(config_class.public_config())
-    tasks_list = server_config['function']['task'].split('/')
+    tasks_list = server_config['function']['task']
     server_config['model_objs'] = {}
     if 'profiling' in server_config['function']:
         os.environ['ASKI_PROFILING'] = str(
@@ -90,7 +90,7 @@ def create_app(server_config,config_class=TestingConfig):
 
     for task in tasks_list:
         server_config['model_objs'][task] = get_list_objects(
-            server_config['models_' + task], task, 'models')
+            server_config['models_' + task], 'common', 'models')
         
     if 'datasets' in server_config:
         server_config['dataset_objs'] = get_list_objects(

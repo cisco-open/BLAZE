@@ -56,6 +56,8 @@ class Bart(HuggingFaceModelSummarization):
     """BART model from 'Denoising Sequence-to-Sequence Pre-training for Natural 
     Language Generation, Translation, and Comprehension' paper"""
 
+    tasks_supported = ["summarization"]
+
     def __init__(self):
 
         super().__init__(

@@ -1,6 +1,6 @@
 Title: Benchmarking Semantic Search Implementations on Squad
 function: 
-  task: search 
+  task: ['search']
   custom: true  
   benchmarking: true 
   comparing: true  

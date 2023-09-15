@@ -55,7 +55,7 @@ def get_t5_info():
 class T5(HuggingFaceModelSummarization):
     """T5 model from 'Exploring the Limits of Transfer Learning with a Unified
      Text-to-Text Transformer' paper"""
-
+    tasks_supported = ["summarization"]
     def __init__(self):
 
         super().__init__(
