@@ -1,5 +1,26 @@
 import openai
 from flask import current_app
+import openai
+import os
+import inspect
+import re
+import json
+from dotenv import load_dotenv
+import requests
+#from algebra import add, sub, mul
+#from sqlmethods import get_top_k_entries, setup_database, prompt_append
+# from pylogic import create_problem, add_exact_position_constraint, \
+#     add_below_constraint, add_above_constraint, check_option
+from typing import Callable, Dict
+import datetime
+from collections import defaultdict
+
+# access_key = "2a797523-3934-4698-9975-af13de9e15ca"
+# secret_key = "kSN59Kje1AiOfFaTe+itdHiPUnFUIxC1bOs4gJ1kCnk="
+# date_format = '%Y%m%dT%H%M%SZ'
+# date_string = datetime.datetime.utcnow().strftime(date_format)
+# date = datetime.datetime.strptime(date_string, date_format)
+# openai_functions, swagger_data, tag_dict, classifier_tag = get_panoptica_data()
 
 def get_openAI_info():
     """ 
@@ -21,9 +42,11 @@ def get_openAI_info():
     return model_info
 
 class OpenAI():
-    tasks_supported = ["actionables","summarization"]
+    tasks_supported = ["actionables","summarization","chat"]
+    model = "gpt-3.5-turbo-0613"
 
     def __init__(self):
+       
         self._info = get_openAI_info()
     
     def _get_model_info(self):
@@ -78,3 +101,139 @@ class OpenAI():
     def get_actionables(self,text):
         response = self.gpt_analysis("actionables",text)
         return response['choices'][0]['text']
+    
+    def parse_docstring(self,function: Callable) -> Dict:
+        doc = inspect.getdoc(function)
+        
+        function_description = re.search(r'(.*?)Parameters', doc, re.DOTALL).group(1).strip()
+        parameters_description = re.findall(r'(\w+)\s*:\s*([\w\[\], ]+)\n(.*?)(?=\n\w+\s*:\s*|\nReturns|\nExample$)', doc, re.DOTALL)
+        
+        returns_description_match = re.search(r'Returns\n(.*?)(?=\n\w+\s*:\s*|$)', doc, re.DOTALL)
+        returns_description = returns_description_match.group(1).strip() if returns_description_match else None
+
+        example = re.search(r'Example\n(.*?)(?=\n\w+\s*:\s*|$)', doc, re.DOTALL)
+        example_description = example.group(1).strip() if example else None
+
+        signature_params = list(inspect.signature(function).parameters.keys())
+        properties = {}
+        required = []
+        for name, type, description in parameters_description:
+            name = name.strip()
+            type = type.strip()
+            description = description.strip()
+
+            required.append(name)
+            properties[name] = {
+                "type": type,
+                "description": description,
+            }
+        if len(signature_params) != len(required):
+            print(f'Signature params : {signature_params}, Required params : {required}')
+            raise ValueError(f"Number of parameters in function signature ({signature_params}) does not match the number of parameters in docstring ({required})")
+        for param in signature_params:
+            if param not in required:
+                raise ValueError(f"Parameter '{param}' in function signature is missing in the docstring")
+
+        parameters = {
+            "type": "object",
+            "properties": properties,
+            "required": required,
+        }
+        function_dict = {
+            "name": function.__name__,
+            "description": function_description,
+            "parameters": parameters,
+            "returns": returns_description,
+            # "example": example_description,
+        }
+
+        return function_dict
+
+
+    def run_with_functions(self,messages, function_dicts):
+        response = ''
+        print(f"within run_with_functions : {messages} and {function_dicts}")
+        messages[0]["role"] = "system"
+        response = openai.ChatCompletion.create(
+            model=self.model,
+            messages=messages,
+            functions=function_dicts,
+            temperature=0,
+        )
+
+        return response
+
+    def get_role_message_dict(role, content=None, fn_name=None, arguments=None, result=None):
+        message_dict = {"role":role}
+        if role == "user":
+            message_dict["content"] = content
+        elif role == "assistant":
+            message_dict["content"] = content
+            message_dict["function_call"] = {}
+            message_dict["function_call"]["name"] = fn_name
+            message_dict["function_call"]["arguments"] = arguments
+        elif role == "function":
+            message_dict["name"] = fn_name
+            message_dict["content"] = f'{{"result": {str(result)} }}'
+        return message_dict
+
+    
+    def translate_to_openai_functions(self,api_info):
+        openai_functions = []
+        tag_dict = defaultdict(list)
+        count = 0
+        for api in api_info:
+            if not api['description']:
+                print(api['name']+' does not have a description! and is using summary')
+                count += 1
+            function_info = {
+                'name': api['name'],
+                'description': api['description'] if api['description'] else api['summary'],
+                'parameters': api['parameters'],
+                'path': api['path'],
+            }
+            openai_functions.append(function_info)
+            
+            for tag in api['tags']:
+                tag_dict[tag].append(function_info)
+            
+        print(f'Total number of api endpoints without description is {count}')
+        return openai_functions, tag_dict
+    
+    def translate_swagger_data(self,swagger_dataset,description_text):
+        api_info = swagger_dataset.api_info
+        openai_functions, tag_dict = self.translate_to_openai_functions(api_info)
+
+            
+        description_text = description_text
+        for index, tmp_dict in enumerate(swagger_dataset.swagger_json['tags']):
+            description_text += f'{tmp_dict["name"]} is returned when the following description is satisfied {tmp_dict["description"]},'
+
+        description_text = description_text[:-1] + '.'
+
+        classifier_tag  = {
+                'name': "classifies_the_tag",
+                'description': description_text,
+                'method': 'get',
+                'path': '/',
+                'tags': 'classifier'
+            }
+        
+        openai_functions.append(classifier_tag)
+
+        return openai_functions, swagger_dataset.swagger_json, tag_dict, classifier_tag
+    
+    def run_with_functions(self,messages,function_dicts):
+        response = ''
+        print(f"within run_with_functions : {messages} and {function_dicts}")
+        # messages[0]["role"] = "system"
+        openai.api_key = current_app.config.get('OPENAPI_KEY')
+        response = openai.ChatCompletion.create(
+            model=self.model,
+            messages=messages,
+            functions=function_dicts,
+            temperature=0,
+        )
+        print(type(response))
+        print(response)
+        return response

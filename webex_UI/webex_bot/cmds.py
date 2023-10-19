@@ -11,7 +11,7 @@ from webexteamssdk.models.cards import TextBlock, FontWeight, FontSize, Column, 
     Text, Image, HorizontalAlignment
 
 from webexteamssdk.models.cards.actions import OpenUrl
-from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts,ActionablesTranscripts
+from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts,ActionablesTranscripts, RunFunction
 
 class EmptySpace(Command): 
     def __init__(self): 
@@ -101,3 +101,19 @@ class Actionables(Command):
     def execute(self, message, attachment_actions, query_info):
         res = ActionablesTranscripts(self.transcriptFileName,message)
         return f"{res}"
+    
+
+class Panoptica(Command):
+    def __init__(self, functions): 
+        super().__init__(
+            command_keyword="function",
+            help_message="function: write query with argument to run function", 
+            card = None
+        )
+        self.functions = functions 
+
+    def execute(self, message, attachment_actions, query_info):
+        res = RunFunction(message, self.functions)
+        return f"{res}"
+    
+    

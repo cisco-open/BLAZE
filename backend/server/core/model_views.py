@@ -6,7 +6,8 @@ import string
 from flask_restful import Resource, request
 from flask import current_app
 from backend.params.specifications import Specifications
-from backend.server.utils.helpers import get_model_object_from_name
+from backend.server.utils.helpers import get_model_object_from_name,get_object_from_name
+
 class ModelsList(Resource):
     
     def get(self):
@@ -298,3 +299,63 @@ class ModelSearch(Resource):
         res, latency = model.file_search(query)
 
         return {'result': res, 'latency': latency}, 200
+    
+
+class GetFunctionsFromSwaggerData(Resource):
+
+    def post(self):
+        print("gettiong callsed")
+        request_json = request.json
+        if any(param not in request_json for param in ['model', 'dataset', "description_text"]):
+            return "Malformed request", 400
+        
+        model_name = request_json['model']
+        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
+        dataset_name = request_json['dataset'] 
+        dataset_obj = get_object_from_name(dataset_name, current_app.config.get("server_config"), 'dataset')
+        description_text = request_json['description_text']
+        """Get by data"""
+        functions, swagger_data, tag_dict, classifier_tag = model.translate_swagger_data(dataset_obj,description_text)
+
+        response = {
+            "functions": functions,
+            "swagger_data": swagger_data,
+            "tag_dict": tag_dict,
+            "classifier_tag":classifier_tag
+        }
+
+        filepath = path.join(current_app.config.get("FILES_DIR"), "functions.json")
+        print(filepath)
+        with open(filepath, "w") as outfile:
+          json.dump(response, outfile)
+
+        return response
+    
+class RunWithFunctions(Resource):
+    
+    def post(self):
+        request_json = request.json
+        if any(param not in request_json for param in ['model']):
+            return "Malformed request", 400
+        filepath = open(path.join(current_app.config.get("FILES_DIR"), "functions.json"))
+        data = json.load(filepath)
+        model_name = request_json['model']
+        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
+        messages = request_json['messages']
+        response = model.run_with_functions(messages,data["functions"])
+        return response
+    
+class RunWithFunctions(Resource):
+    
+    def post(self):
+        request_json = request.json
+        if any(param not in request_json for param in ['model']):
+            return "Malformed request", 400
+        filepath = open(path.join(current_app.config.get("FILES_DIR"), "functions.json"))
+        data = json.load(filepath)
+        model_name = request_json['model']
+        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
+        messages = request_json['messages']
+        response = model.run_with_functions(messages,data["tag_dict"]['dashboard-controller'])
+        return response
+        
