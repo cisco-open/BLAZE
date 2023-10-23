@@ -7,20 +7,10 @@ import re
 import json
 from dotenv import load_dotenv
 import requests
-#from algebra import add, sub, mul
-#from sqlmethods import get_top_k_entries, setup_database, prompt_append
-# from pylogic import create_problem, add_exact_position_constraint, \
-#     add_below_constraint, add_above_constraint, check_option
 from typing import Callable, Dict
 import datetime
 from collections import defaultdict
 
-# access_key = "2a797523-3934-4698-9975-af13de9e15ca"
-# secret_key = "kSN59Kje1AiOfFaTe+itdHiPUnFUIxC1bOs4gJ1kCnk="
-# date_format = '%Y%m%dT%H%M%SZ'
-# date_string = datetime.datetime.utcnow().strftime(date_format)
-# date = datetime.datetime.strptime(date_string, date_format)
-# openai_functions, swagger_data, tag_dict, classifier_tag = get_panoptica_data()
 
 def get_openAI_info():
     """ 

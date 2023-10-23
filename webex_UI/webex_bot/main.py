@@ -53,12 +53,7 @@ transcriptsFileName = "webex_transcripts.json"
 InitilizeTranscripts(transcriptsFileName)
 functions = InitilizeSwaggerFunctions()
 bot = WebexBot(bot_token)
-print(dir(bot))
-print(bot.device_info)
 
-print(bot.device_url)
-print(bot.on_message)
-print(bot.websocket)
 bot.add_command(EmptySpace())
 bot.add_command(ListTranscripts())
 bot.add_command(SummarAcross(transcriptsFileName))
