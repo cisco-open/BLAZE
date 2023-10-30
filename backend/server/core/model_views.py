@@ -304,13 +304,13 @@ class ModelSearch(Resource):
 class GetFunctionsFromSwaggerData(Resource):
 
     def post(self):
-        print("gettiong callsed")
+        print("gettiong called")
         request_json = request.json
         if any(param not in request_json for param in ['model', 'dataset', "description_text"]):
             return "Malformed request", 400
         
         model_name = request_json['model']
-        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
+        model = get_model_object_from_name(model_name, 'functions', current_app.config.get("server_config"))
         dataset_name = request_json['dataset'] 
         dataset_obj = get_object_from_name(dataset_name, current_app.config.get("server_config"), 'dataset')
         description_text = request_json['description_text']
@@ -340,22 +340,9 @@ class RunWithFunctions(Resource):
         filepath = open(path.join(current_app.config.get("FILES_DIR"), "functions.json"))
         data = json.load(filepath)
         model_name = request_json['model']
-        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
-        messages = request_json['messages']
-        response = model.run_with_functions(messages,data["functions"])
-        return response
-    
-class RunWithFunctions(Resource):
-    
-    def post(self):
-        request_json = request.json
-        if any(param not in request_json for param in ['model']):
-            return "Malformed request", 400
-        filepath = open(path.join(current_app.config.get("FILES_DIR"), "functions.json"))
-        data = json.load(filepath)
-        model_name = request_json['model']
-        model = get_model_object_from_name(model_name, 'actionables', current_app.config.get("server_config"))
+        model = get_model_object_from_name(model_name, 'functions', current_app.config.get("server_config"))
         messages = request_json['messages']
         response = model.run_with_functions(messages,data["tag_dict"]['dashboard-controller'])
         return response
+    
         

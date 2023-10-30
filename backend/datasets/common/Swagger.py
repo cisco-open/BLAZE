@@ -24,8 +24,9 @@ class Swagger:
                                         'content-type': 'application/json'}
         self.auth=EscherRequestsAuth("global/services/portshift_request",
                                                         {'current_time': self.date},
-                                                        {'api_key': "", 'api_secret': ""})
+                                                        {'api_key': "2a797523-3934-4698-9975-af13de9e15ca", 'api_secret': "kSN59Kje1AiOfFaTe+itdHiPUnFUIxC1bOs4gJ1kCnk="})
         ##############
+        self.file_name = "functions.json"
         self.swagger_json = self.fetch_swagger_json()
         self.api_info = self.extract_api_information(self.swagger_json)
     

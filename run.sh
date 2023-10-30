@@ -24,7 +24,7 @@ frontend(){
 
 server(){
     echo "Running $yaml"
-    is_elastic=$(echo $(python parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
+    is_elastic=$(echo $(python3.9 parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
     if (($is_elastic >= 1 ))
     then
 		is_elastic_service_running=$(echo $(curl http://localhost:9200/_cluster/health) | grep -c "elasticsearch")

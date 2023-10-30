@@ -5,6 +5,6 @@ function:
 metrics: {}
 datasets:
 - Swagger
-models_actionables:
+models_functions:
 - OpenAI
 module: ['openai']

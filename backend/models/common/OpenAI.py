@@ -32,7 +32,7 @@ def get_openAI_info():
     return model_info
 
 class OpenAI():
-    tasks_supported = ["actionables","summarization","chat"]
+    tasks_supported = ["actionables","summarization","chat","functions"]
     model = "gpt-3.5-turbo-0613"
 
     def __init__(self):
@@ -144,6 +144,7 @@ class OpenAI():
         response = ''
         print(f"within run_with_functions : {messages} and {function_dicts}")
         messages[0]["role"] = "system"
+        openai.api_key = current_app.config.get('OPENAPI_KEY')
         response = openai.ChatCompletion.create(
             model=self.model,
             messages=messages,
@@ -213,17 +214,4 @@ class OpenAI():
 
         return openai_functions, swagger_dataset.swagger_json, tag_dict, classifier_tag
     
-    def run_with_functions(self,messages,function_dicts):
-        response = ''
-        print(f"within run_with_functions : {messages} and {function_dicts}")
-        # messages[0]["role"] = "system"
-        openai.api_key = current_app.config.get('OPENAPI_KEY')
-        response = openai.ChatCompletion.create(
-            model=self.model,
-            messages=messages,
-            functions=function_dicts,
-            temperature=0,
-        )
-        print(type(response))
-        print(response)
-        return response
+    
