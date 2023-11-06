@@ -34,6 +34,7 @@ class TestingConfig(Config):
 
     # /ASKI/aski/models
     MODELS_DIR = os.path.join(basedir, "backend/models/")
+    CONFIG_DIR = os.path.join(basedir)
 
     # /ASKI/aski/datasets 
     DATASETS_DIR = os.path.join(basedir, "backend/datasets/")

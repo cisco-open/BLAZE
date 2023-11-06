@@ -8,3 +8,9 @@ datasets:
 models_functions:
 - OpenAI
 module: ['openai']
+UI: ["webex_bot"]
+Swagger:
+  url: ''
+  host: ''
+  access_key: ''
+  access_secret: ''
