@@ -33,3 +33,9 @@ gevent==22.10.2
 webex-bot==0.4.0
 webexteamssdk==1.6.1
 openai==0.27.8
+slack-bolt==1.18.0
+slack-sdk==3.23.0
+slackbot==1.0.5
+slackclient==1.3.2
+slacker==0.14.0
+

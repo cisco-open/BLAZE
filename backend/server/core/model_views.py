@@ -7,6 +7,8 @@ from flask_restful import Resource, request
 from flask import current_app
 from backend.params.specifications import Specifications
 from backend.server.utils.helpers import get_model_object_from_name,get_object_from_name
+from backend.utils import make_request
+from backend.config import TestingConfig
 
 class ModelsList(Resource):
     
@@ -344,5 +346,23 @@ class RunWithFunctions(Resource):
         messages = request_json['messages']
         response = model.run_with_functions(messages,data["tag_dict"]['dashboard-controller'])
         return response
+    
+class CallFunction(Resource):
+    
+    def post(self):
+        request_json = request.json
+        yaml_config = TestingConfig.db.get(TestingConfig.DBConfig.type == 'yaml_config')
+        auth_type = yaml_config["config"]["Swagger"]["auth_type"]
+        request_type = request_json["request_type"]
+        url = request_json["url"]
+        config = yaml_config["config"]["Swagger"]
+        data = request_json.get("data",None)
+        params = request_json.get('params',None)
+
+        response = make_request(auth_type, request_type, url,config,params,data)
+        print(response.text)
+        return response.json()
+    
+       
     
         

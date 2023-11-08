@@ -3,7 +3,6 @@ import json
 import os.path as path
 import datetime
 from backend.config import TestingConfig
-from backend.datasets.common.escherauth import EscherRequestsAuth
 
 
 class SwaggerBase:
@@ -19,10 +18,9 @@ class SwaggerBase:
         self._class_name = 'Swagger'
         self._dataset_name = 'Swagger'
 
-        self.fetch_api_docs()
+        self.swagger_json = self.fetch_api_docs().json()
         
         self.file_name = "functions.json"
-        self.swagger_json = self.fetch_swagger_json()
         self.api_info = self.extract_api_information(self.swagger_json)
 
     def fetch_api_docs(self):
@@ -35,17 +33,6 @@ class SwaggerBase:
     def _get_dataset_name(self):
         return self._dataset_name
     
-    def fetch_swagger_json(self):
-        print(self.auth)
-        response = requests.get(self.swagger_url,
-                                headers=self.headers,
-                                auth=self.auth)
-
-        if response.status_code == 200:
-            return response.json()
-        else:
-            print(f"Failed to fetch Swagger JSON. Status code: {response.status_code}")
-            return None
     
     def dereference_schema(self,ref, definitions):
         """

@@ -4,9 +4,7 @@ from flask import current_app,request
 import importlib
 from flask import jsonify
 from tinydb import TinyDB, Query
-db = TinyDB("/home/vamsi/projects/Blaze/config.json")
-Config = Query()
-yaml_config = db.get(Config.type == 'yaml_config' )
+
 class Default(Resource):
     
     def get(self):
@@ -42,8 +40,8 @@ class SwaggerConfig(Resource):
     
     def get(self):
         
-        print(current_app.config)
-        return {'response': yaml_config}, 200
+        print(current_app)
+        return {"config": current_app.config.get('frontend_config') }, 200
 
 class ResetServer(Resource):
     def __init__(self,**kwargs):

@@ -14,7 +14,6 @@ import re
 from dotenv import load_dotenv
 from typing import Callable, Dict
 from collections import defaultdict
-from escherauth import EscherRequestsAuth
 
 
 base_url = "https://appsecurity.cisco.com/api"
@@ -73,23 +72,21 @@ def get_role_message_dict(role, content=None, fn_name=None, arguments=None, resu
 
 
 def panoptica_call_functions(full_url):
-    getKeys = GetAPIKeys()
-    access_key = getKeys["response"]["config"]["Swagger"]["access_key"]
-    secret_key = getKeys["response"]["config"]["Swagger"]["access_secret"]
-    date_format = '%Y%m%dT%H%M%SZ'
-    date_string = datetime.datetime.utcnow().strftime(date_format)
-    date = datetime.datetime.strptime(date_string, date_format)
-    print(f'the full url is {full_url}')
-    response = requests.get(full_url,
-                          headers={'X-Escher-Date': date_string,
-                                   'host': 'appsecurity.cisco.com',
-                                   'content-type': 'application/json'},
-                          auth=EscherRequestsAuth("global/services/portshift_request",
-                                                  {'current_time': date},
-                                                  {'api_key': access_key, 'api_secret': secret_key}))
+    url = CONSTANTS.get("webex_api_endpoint")+"/call_function"
+    payload = json.dumps({
+        "url": full_url,
+        "request_type":"GET",
+        "params": None,
+        "data":None
+     })
+    headers = {
+        'Content-Type': 'application/json'
+    }
 
-    print("response.status_code = " + str(response.status_code))
+    response = requests.request("POST", url, headers=headers, data=payload)
+    print(response.text)
     return response
+
 
 def parse_docstring(function: Callable) -> Dict:
     doc = inspect.getdoc(function)
@@ -139,7 +136,7 @@ def parse_docstring(function: Callable) -> Dict:
     return function_dict
 
 def run_with_functions(messages):
-    url = "http://127.0.0.1:3000//run_function"
+    url = CONSTANTS.get("webex_api_endpoint")+"/run_function"
 
     payload = json.dumps({
         "model": "OpenAI",
