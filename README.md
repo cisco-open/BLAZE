@@ -44,7 +44,7 @@ BLAZE currently supports the following building blocks and sample applications:
 
 > HF* - BLAZE's flexible design enables seamless integration of new components, many of which are underway!
 
-> Data(sets)* - Summarization datasets are currently being stabilized, but will be ready with a few tweaks! 
+> Datasets* - Summarization datasets are currently being stabilized, but will be ready with a few tweaks! 
 
 &nbsp;&nbsp;
 
