@@ -10,7 +10,7 @@ import requests
 from typing import Callable, Dict
 import datetime
 from collections import defaultdict
-
+import time
 
 def get_openAI_info():
     """ 
@@ -38,6 +38,9 @@ class OpenAI():
     def __init__(self):
        
         self._info = get_openAI_info()
+    
+    def load_model(self,backend/models/common/LLM.py*args):
+        openai.api_key = current_app.config.get('OPENAPI_KEY')
     
     def _get_model_info(self):
         pass
@@ -227,3 +230,22 @@ class OpenAI():
         print(type(response))
         print(response)
         return response
+
+    def file_search(self, search_term,context):
+        prompt = "You are a helpful assistant answering questions based on the context provided.Reply with value only, no other text."
+        message = f"{prompt}\n{context}\nQuestion:{search_term}"
+        t_s = time.time()
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=message,
+            temperature=0.7,
+            max_tokens=892,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+            )
+        res = response['choices'][0]['text']
+        t_e = time.time()
+        t_search = t_e - t_s
+
+        return res, t_search
