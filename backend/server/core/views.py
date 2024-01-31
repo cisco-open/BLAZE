@@ -3,7 +3,6 @@ from flask_restful import Resource, Api, fields, marshal_with
 from flask import current_app,request
 import importlib
 from flask import jsonify
-from tinydb import TinyDB, Query
 
 class Default(Resource):
     
