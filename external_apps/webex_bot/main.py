@@ -39,7 +39,9 @@ Hello! Getting this webex bot up-and-running just requires a few steps:
 
 from webex_bot.webex_bot import WebexBot
 from cmds import  SummarAcross,  EmptySpace, SearchAcross, ListTranscripts, Actionables, Panoptica
-from help import LoadTranscripts, InitilizeTranscripts, InitilizeSwaggerFunctions
+from help import LoadTranscripts, InitilizeTranscripts
+from external_apps.panoptica_utils.panoptica_utils import RunFunction, InitilizeSwaggerFunctions, GetAPIKeys
+
 from constants import CONSTANTS
 import requests
 

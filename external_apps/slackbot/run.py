@@ -4,8 +4,8 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 import os
 import json
 from dotenv import load_dotenv
-from slackbot_settings import SLACK_APP_TOKEN, SLACK_BOT_TOKEN
-from help import RunFunction, InitilizeSwaggerFunctions, GetAPIKeys
+from external_apps.panoptica_utils.panoptica_utils import RunFunction, InitilizeSwaggerFunctions, GetAPIKeys
+ 
 
 load_dotenv()
 functions = InitilizeSwaggerFunctions()

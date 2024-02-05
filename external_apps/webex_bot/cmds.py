@@ -11,7 +11,8 @@ from webexteamssdk.models.cards import TextBlock, FontWeight, FontSize, Column, 
     Text, Image, HorizontalAlignment
 
 from webexteamssdk.models.cards.actions import OpenUrl
-from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts,ActionablesTranscripts, RunFunction
+from help import SummarizeTranscripts,SearchTranscripts,ListMeetingTranscripts,ActionablesTranscripts
+from external_apps.panoptica_utils.panoptica_utils import RunFunction, InitilizeSwaggerFunctions, GetAPIKeys
 
 class EmptySpace(Command): 
     def __init__(self): 
