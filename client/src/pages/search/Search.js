@@ -14,10 +14,10 @@ import { BenchmarkPage } from "./SearchBenchmark";
 import { ComparisionPage } from "./SearchComparision";
 
 export function SearchPage(props) {
-  const dispatch = useDispatch();
-
   const config = useSelector((state) => state.config.config);
   const func = useSelector((state) => state.functions.AppFunction);
+  console.log(config);
+  console.log(func);
   if (config == null) {
     return <></>;
   }
