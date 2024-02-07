@@ -1,0 +1,16 @@
+Title: Panoptica Function call with WebEx Bot
+function:
+  task: ['functions']
+  custom: true
+metrics: {}
+datasets:
+- Swagger
+models_functions:
+- OpenAI
+module: ['openai']
+UI: ["webex_bot"]
+Swagger:
+  url: ''
+  host: ''
+  access_key: ''
+  access_secret: ''

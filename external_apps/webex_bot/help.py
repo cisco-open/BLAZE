@@ -7,7 +7,16 @@ This file implements the commands of the webex bot, via the underlying class `Pr
 from constants import CONSTANTS
 import requests
 import json
+import datetime
+import os
+import inspect
+import re
+from dotenv import load_dotenv
+from typing import Callable, Dict
+from collections import defaultdict
 
+
+base_url = "https://appsecurity.cisco.com/api"
 
 def LoadTranscripts():
     transcriptFileName = "webex_transcripts.json"
@@ -141,3 +150,5 @@ def ActionablesTranscripts(transcriptFileName,message):
         print(response)
         res = "  \n ".join(response["result"].split("|"))
         return res
+
+

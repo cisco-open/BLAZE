@@ -68,6 +68,7 @@ def create_server_config(data):
 
 
 def create_app(server_config,config_class=TestingConfig):
+    print(server_config)
     app = Flask(__name__)
     CORS(app) # This will enable CORS for all routes
     socketio = SocketIO(app,cors_allowed_origins="*") 

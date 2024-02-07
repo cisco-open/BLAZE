@@ -1,0 +1,18 @@
+Title: Panoptica Function call with Slack Bot
+function:
+  task: ['functions']
+  custom: true
+metrics: {}
+datasets:
+- Swagger
+models_functions:
+- OpenAI
+module: ['openai']
+UI: ["webex_bot"]
+Swagger:
+  auth_type: 'Escher'
+  url: ''
+  host: ''
+  api_key: ''
+  api_secret: ''
+  credential_scope: ''

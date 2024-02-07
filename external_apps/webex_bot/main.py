@@ -38,8 +38,10 @@ Hello! Getting this webex bot up-and-running just requires a few steps:
 """
 
 from webex_bot.webex_bot import WebexBot
-from cmds import  SummarAcross,  EmptySpace, SearchAcross, ListTranscripts, Actionables
+from cmds import  SummarAcross,  EmptySpace, SearchAcross, ListTranscripts, Actionables, Panoptica
 from help import LoadTranscripts, InitilizeTranscripts
+from external_apps.panoptica_utils.panoptica_utils import RunFunction, InitilizeSwaggerFunctions, GetAPIKeys
+
 from constants import CONSTANTS
 import requests
 
@@ -51,17 +53,15 @@ print(bot_token)
 
 transcriptsFileName = "webex_transcripts.json"
 InitilizeTranscripts(transcriptsFileName)
+functions = InitilizeSwaggerFunctions()
 bot = WebexBot(bot_token)
-print(dir(bot))
-print(bot.device_info)
 
-print(bot.device_url)
-print(bot.on_message)
-print(bot.websocket)
 bot.add_command(EmptySpace())
 bot.add_command(ListTranscripts())
 bot.add_command(SummarAcross(transcriptsFileName))
 bot.add_command(SearchAcross(transcriptsFileName))
 bot.add_command(Actionables(transcriptsFileName))
+bot.add_command(Panoptica(functions))
+
 
 bot.run() 

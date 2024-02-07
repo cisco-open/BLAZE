@@ -18,8 +18,19 @@
   
       <div style="color:whitesmoke; justify-content:center;align-items: center;text-align: center; font-family:Quicksand"> 
           <h1>BLAZE - WebEx Plugin</h1>
-          <p style="font-style:italic">Research edition of WebEx Plugin, powered by BLAZE. </p>
-          
+          <p style="font-style:italic">Research edition of WebEx Plugin, powered by BLAZE. <button type="button" class="btn btn-outline-info btn-sm" onClick="window.location.href=window.location.href">Click Here to reload</button> </p>
+          <div id="iniform" class="form-group " style="padding: 2%">
+            <input type="text" class="form-control" style="margin-bottom: 1%;" id="access-token" placeholder="Please enter WebEx Access Token Here">
+            <input type="text" class="form-control" style="margin-bottom: 1%;" id="bot-email-id" placeholder="Enter bot email id, to receive actionables to webex bot">
+            <input type="number" class="form-control" style="margin-bottom: 1%;" id="time-interval" placeholder="Set interval to receive messages to bot, Default: 1min">
+            <div class="row" style="margin-bottom: 0%">
+              
+              <div style="padding: 3%; margin-bottom: 0%">
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 0%" onclick="submitForm()">Submit</button>
+              </div>
+            </div>
+            <p style="margin-bottom: 0%; margin-top: 0%">Make sure to turn on WebEx Assistant prior to clicking Submit!</p>
+          </div>
       </div>
   
       <!-- Summary -->
