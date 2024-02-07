@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { setConfig } from "../slice/configLoadSlice";
-
 import { SearchPage } from "./search/Search";
 import { SummarizationPage } from "./summarization/Summarization";
 
@@ -12,21 +10,18 @@ export function BasePage() {
   React.useEffect(() => {
     dispatch(setConfig());
   }, []);
-  const config = useSelector((state) => state.config.config);
 
+  const config = useSelector((state) => state.config.config);
   if (config == null) {
     return <></>;
   }
 
-  if (config["function"]["task"]==="search") {
+  if (config["function"]["task"][0]==="search") {
    return <SearchPage config={config}/> 
   }
 
-  if (config["function"]["task"]==="summarization") {
+  if (config["function"]["task"][0]==="summarization") {
     return <SummarizationPage config={config}/> 
-   }
-
-
- 
+  }
 
 }

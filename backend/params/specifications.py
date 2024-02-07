@@ -88,12 +88,12 @@ class Specifications:
     def __init__(self, model_path='backend/models', datasets_path='backend/datasets'):
 
         self._list_datasets_summarization = parse_objects(
-            datasets_path, '/summarization/')
-        self._list_datasets_search = parse_objects(datasets_path, '/search/')
+            datasets_path, '/common/')
+        self._list_datasets_search = parse_objects(datasets_path, '/common/')
 
         self._list_models_summarization = parse_objects(
-            model_path, '/summarization/')
-        self._list_models_search = parse_objects(model_path, '/search/')
+            model_path, '/common/')
+        self._list_models_search = parse_objects(model_path, '/common/')
 
     def _specs_to_yaml(self, title, task, custom, benchmarking, comparing, yaml_path):
         """ 
