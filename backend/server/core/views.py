@@ -34,6 +34,13 @@ class Config(Resource):
         
         print(current_app.config)
         return {'response': current_app.config.get('frontend_config')}, 200
+    
+class SwaggerConfig(Resource):
+    
+    def get(self):
+        
+        print(current_app)
+        return {"config": current_app.config.get('frontend_config') }, 200
 
 class ResetServer(Resource):
     def __init__(self,**kwargs):

@@ -1,5 +1,4 @@
 
-
 # Copyright 2022 Cisco Systems, Inc. and its affiliates
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +14,3 @@
 # limitations under the License.
 #
 # SPDX-License-Identifier: Apache-2.0
-
-
-class LLMs():
-    pass

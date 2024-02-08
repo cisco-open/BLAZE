@@ -22,7 +22,6 @@ import os
 import json
 import time
 
-
 def profile(func):
     def wrap(*args, **kwargs):
         if "ASKI_PROFILING" in os.environ:

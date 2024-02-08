@@ -1,5 +1,5 @@
-from .views import Default,ResetServer,Models,Config,TestDynamicApis
-from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary, ModelActionables, GetFunctionsFromSwaggerData, RunWithFunctions
+from .views import Default,ResetServer,Models,Config,TestDynamicApis,SwaggerConfig
+from .model_views import ModelsList,ModelDetail,ModelInitilize,ModelSearch,ModelSummary, ModelActionables, GetFunctionsFromSwaggerData, RunWithFunctions, CallFunction
 from .dataset_views import DatasetsList,DatasetFilesList,DatasetFilesDetails, ListMeetingTranscripts
 
 
@@ -12,6 +12,10 @@ routes_dict = [
     {
         "endpoint": ['/config'],
         "resource":Config
+    },
+    {
+        "endpoint": ['/swagger_config'],
+        "resource":SwaggerConfig
     },
     {
         "endpoint": ['/get_model_checklist'],
@@ -63,7 +67,10 @@ routes_dict = [
         "endpoint": ['/run_function'],
         "resource":RunWithFunctions
     },
-
+    {
+        "endpoint": ['/call_function'],
+        "resource":CallFunction
+    },
     {
         "endpoint": ['/list_webex_meeting_transcripts'],
         "resource":ListMeetingTranscripts
@@ -73,5 +80,4 @@ routes_dict = [
         "resource":TestDynamicApis
     },
  
-
 ]

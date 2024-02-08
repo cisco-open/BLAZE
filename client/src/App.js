@@ -1,8 +1,4 @@
-
-import { SummarizationPage } from './pages/summarization/Summarization';
-import { SearchPage } from './pages/search/Search';
-import { BenchmarkPage } from './pages/benchmark/Benchmark';
-import { ComparisionPage } from './pages/benchmark/Comparision';
+import React, { Component }  from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 import { BasePage } from './pages/BasePage';

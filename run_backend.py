@@ -19,7 +19,7 @@
 import argparse
 from multiprocessing import Process
 import yaml
-
+from tinydb import TinyDB, Query
 from backend.server import create_app, run_app_server, create_server_config
 from frontend.app import run_client
 
@@ -29,6 +29,9 @@ if __name__ == "__main__":
     #     run_elastic_search_service = subprocess.Popen(
     #         ["./elasticsearch"], cwd="../elasticsearch/bin")
 
+    db = TinyDB('config.json')
+    db.drop_tables()
+    Config = Query()
     parser = argparse.ArgumentParser()
     parser.add_argument('yaml_file',
                         help='YAML file that describes the NLP pipeline',
@@ -41,6 +44,10 @@ if __name__ == "__main__":
     with open(args.yaml_file, mode="rt", encoding="utf-8") as file:
         data = yaml.safe_load(file)
 
+    db.insert({
+        "type":"yaml_config",
+        "config":data
+    })
     config = create_server_config(data)
     app,sockio = create_app(data)
     port = args.p

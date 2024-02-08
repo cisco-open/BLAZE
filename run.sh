@@ -24,7 +24,9 @@ frontend(){
 
 server(){
     echo "Running $yaml"
-    is_elastic=$(echo $(python parse_yaml.py $yaml models_search)| grep -c "ElasticBERT") 
+    is_elastic=$(echo $(python3.9 parse_yaml.py $yaml models_search)| grep -c "ElasticBERT")
+    is_webexBot=$(echo $(python3.9 parse_yaml.py $yaml UI)| grep -c "webex_bot")
+    is_slackBot=$(echo $(python3.9 parse_yaml.py $yaml UI)| grep -c "slack_bot") 
     if (($is_elastic >= 1 ))
     then
 		is_elastic_service_running=$(echo $(curl http://localhost:9200/_cluster/health) | grep -c "elasticsearch")
@@ -39,14 +41,24 @@ server(){
          then
             echo -e "\n\n\n\nPlease Run Elastic Search to run the backend\n\n\n\n"
          else
-            python run_backend.py $yaml
+            python run_backend.py $yaml & disown
          fi
       else
-         python run_backend.py $yaml
+         python run_backend.py $yaml & disown
       fi
     else
-      python run_backend.py $yaml
+      python run_backend.py $yaml & disown
 	 fi
+    if (($is_webexBot >= 1 ))
+    then
+      sleep 10
+      python external_apps/webex_bot/main.py 
+    fi
+    if (($is_slackBot >= 1 ))
+    then
+      sleep 10
+      python external_apps/slack_bot/run.py 
+    fi    
 }
 
 echo $1
@@ -75,7 +87,7 @@ case $1 in
     ;;
    
   "bot")
-    python webex_UI/webex_bot/main.py   
+    python external_apps/webex_bot/main.py   
   ;; 
 
   *)

@@ -32,14 +32,13 @@ def get_openAI_info():
     return model_info
 
 class OpenAI():
-    tasks_supported = ["actionables","summarization","chat"]
+    tasks_supported = ["actionables","summarization","chat","functions"]
     model = "gpt-3.5-turbo-0613"
 
     def __init__(self):
-       
         self._info = get_openAI_info()
     
-    def load_model(self,backend/models/common/LLM.py*args):
+    def load_model(self,*args):
         openai.api_key = current_app.config.get('OPENAPI_KEY')
     
     def _get_model_info(self):

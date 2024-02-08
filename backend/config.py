@@ -1,5 +1,6 @@
 import os
 import os.path as path
+from tinydb import TinyDB, Query
 basedir = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 
 
@@ -14,7 +15,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     # ASKI/user
     FILES_DIR = os.path.join(basedir, "user")
-
+    DB_CONFIG_FILE = os.path.join(basedir, "config.json")
     # /ASKI/aski/models
     MODELS_DIR = os.path.join(basedir, "backend/models/")
 
@@ -32,8 +33,13 @@ class TestingConfig(Config):
     # ASKI/user
     FILES_DIR = os.path.join(basedir, "user")
 
+    ############DB Config###############
+    DB_CONFIG_FILE = os.path.join(basedir, "config.json")
+    db = TinyDB(DB_CONFIG_FILE)
+    DBConfig = Query()
     # /ASKI/aski/models
     MODELS_DIR = os.path.join(basedir, "backend/models/")
+    CONFIG_DIR = os.path.join(basedir)
 
     # /ASKI/aski/datasets 
     DATASETS_DIR = os.path.join(basedir, "backend/datasets/")
@@ -47,6 +53,9 @@ class TestingConfig(Config):
     OPENAPI_KEY = os.environ.get('OPENAPI_KEY', "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")
     all_modules = {"openai":"backend.server.utils.openai_utils"}
     BOT_EMAIL = 'blazetranscriptionbot@webex.bot'
+
+    SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN', "")
+    SLACK_APP_TOKEN = os.environ.get('SLACK_APP_TOKEN', "")
     
 
     @classmethod
@@ -54,8 +63,11 @@ class TestingConfig(Config):
         return {
             "WEBEX_BOT_TOKEN": self.WEBEX_BOT_TOKEN,
             "WEBEX_ACCESS_TOKEN":self.WEBEX_ACCESS_TOKEN,
-            "OPENAPI_KEY":self.OPENAPI_KEY
+            "OPENAPI_KEY":self.OPENAPI_KEY,
+            "SLACK_APP_TOKEN": self.SLACK_APP_TOKEN,
+            "SLACK_BOT_TOKEN": self.SLACK_BOT_TOKEN
         }
+    
     @classmethod
     def yaml_allowed_moduls(cls,yaml_defined_modules):
         allowed_modules = {}
