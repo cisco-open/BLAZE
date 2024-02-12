@@ -2,12 +2,13 @@ import json
 import os
 import copy
 import yaml
+from backend.server_fastapi.core.views import dataset_views, model_views
 import backend.server_fastapi.state as state
 from fastapi import FastAPI
 import argparse
 from backend.server_fastapi.config import TestingConfig,ProductionConfig,DevelopmentConfig
 from backend.server.utils.helpers import get_list_objects
-from backend.server_fastapi.routers import dataset_views, model_views, ws_views
+from backend.server_fastapi.core.views import ws_views
 from werkzeug.utils import import_string
 
 def from_object(state, obj):

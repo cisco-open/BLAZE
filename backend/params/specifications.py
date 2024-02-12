@@ -85,7 +85,7 @@ def parse_objects(folder, task):
 
 class Specifications:
 
-    def __init__(self, model_path='backend/models', datasets_path='backend/datasets'):
+    def __init__(self, model_path:str ='backend/models', datasets_path:str ='backend/datasets'):
 
         self._list_datasets_summarization = parse_objects(
             datasets_path, '/common/')

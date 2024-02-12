@@ -87,8 +87,7 @@ class ElasticBERT(ModelSearch):
         hits = res['hits']['hits']
 
         for i in range(len(hits)):
-            c_d = hits[i]['_source']['tex            "context": "Beyonc\u00e9 attended St. Mary's Elementary School in Fredericksburg, Texas, where she enrolled in dance classes. Her singing talent was discovered when dance instructor Darlette Johnson began humming a song and she finished it, able to hit the high-pitched notes. Beyonc\u00e9's interest in music and performing continued after winning a school talent show at age seven, singing John Lennon's \"Imagine\" to beat 15/16-year-olds. In fall of 1990, Beyonc\u00e9 enrolled in Parker Elementary School, a music magnet school in Houston, where she would perform with the school's choir. She also attended the High School for the Performing and Visual Arts and later Alief Elsik High School. Beyonc\u00e9 was also a member of the choir at St. John's United Methodist Church as a soloist for two years."
-t']
+            c_d = hits[i]['_source']['text']
             r, start, end = answer_question(
                 search_term, c_d, self.model, self.tokenizer)
 

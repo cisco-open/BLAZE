@@ -2,7 +2,11 @@ import os
 import os.path as path
 from werkzeug.utils import import_string
 
-basedir = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+#fastapi
+basedir = os.path.normpath(os.path.join(os.path.dirname(__file__), "../.."))
+
+#flask
+# basedir = os.path.normpath(os.path.join(os.path.dirname(__file__), "../.."))
 
 
 class Config(object):

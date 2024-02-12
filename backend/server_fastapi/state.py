@@ -1,3 +1,2 @@
 state = {
-    "count":1
 }
