@@ -4,8 +4,8 @@ import backend.server_fastapi.state as state
 from backend.models.interfaces.model_search import squad_benchmarkV2
 import json
 import asyncio
+import time
 
-count = 0
 router = APIRouter(
     prefix="/ws",
     tags=["WebSockets"],
@@ -13,49 +13,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var ws = new WebSocket("ws://localhost:8000/ws/benchmark");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
 
-@router.get("/")
-async def get():
-    return HTMLResponse(html)
-
-def posCount(websocket):
-    count = count+1
-    websocket.send_text(f"Message text was: {count}")
-
-import time
 @router.websocket("/benchmark")
 async def benchmark(websocket: WebSocket):
     await websocket.accept()
