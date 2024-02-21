@@ -2,7 +2,8 @@ import os
 import os.path as path
 from tinydb import TinyDB, Query
 basedir = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-
+ 
+ 
 
 class Config(object):
     TESTING = False
