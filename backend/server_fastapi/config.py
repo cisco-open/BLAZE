@@ -49,10 +49,10 @@ class TestingConfig(Config):
     PREF_REST_API = "http://0.0.0.0:"
     DATABASE_URI = 'test'
     TESTING = True
-    WEBEX_BOT_TOKEN = os.environ.get('WEBEX_BOT_TOKEN', "NGM5N2U2MDgtMzc4YS00NjY1LWFjN2MtMjBhNTM4MTgzNzAyOWNkMmI3YTYtYjJk_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f")
-    WEBEX_ACCESS_TOKEN = os.environ.get('WEBEX_ACCESS_TOKEN', "YTAzMGJmYmQtY2I1Ni00MGRmLWJlNWYtNDJjNjY1NmFjZjljM2RjODhmY2QtY2M4_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f")
+    WEBEX_BOT_TOKEN = os.environ.get('WEBEX_BOT_TOKEN', "")
+    WEBEX_ACCESS_TOKEN = os.environ.get('WEBEX_ACCESS_TOKEN', "")
 
-    OPENAPI_KEY = os.environ.get('OPENAPI_KEY', "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")
+    OPENAPI_KEY = os.environ.get('OPENAPI_KEY', "")
     all_modules = {"openai":"backend.server.utils.openai_utils"}
     BOT_EMAIL = 'blazetranscriptionbot@webex.bot'
     
