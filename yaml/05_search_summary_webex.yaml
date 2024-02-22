@@ -4,11 +4,10 @@ function:
   custom: true
 metrics: {}
 datasets:
-- WebEx
+- Squad
 models_search:
-- ElasticBERT
+- LLAMA2
 models_summarization:
-- Bart
 - OpenAI
 models_actionables:
 - OpenAI

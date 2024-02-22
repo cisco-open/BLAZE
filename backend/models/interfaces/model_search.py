@@ -483,7 +483,7 @@ CONST_RESULTS = {
 }
 
 
-def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
+def squad_benchmarkV2(file_name,model_obj, websocket_response:bool):
     dataset = Squad.Squad()
     # Load all questions/files for associated dataset (SQUAD)
     # socketio.emit("response","emit is working here too")
@@ -525,6 +525,7 @@ def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
     # TODO: currently retriever has little work to do
 
     # Start iterating through all answerable questions
+    
     incorrect_d = []
     for question in questions:
         if(len(question["answers"]["text"])!=0):
@@ -538,15 +539,15 @@ def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
                     break
 
                 print(f"(squad_benchmark) > Question: {q_text}")
-                print(f"(squad_benchmark) > Valid ans: {q_ansl}")
+                # print(f"(squad_benchmark) > Valid ans: {q_ansl}")
 
-                res, time = model_obj.file_search(q_text)
-                m_ans = res[0]['res']
+                res, time = model_obj.file_search(q_text,question['context'])
+                m_ans = res
 
                 valid = was_correct(m_ans, q_ansl)
 
-                print(f"(squad_benchmark) > Time Taken: {time}")
-                print(f"(squad_benchmark) > Corect?: {valid}")
+                # print(f"(squad_benchmark) > Time Taken: {time}")
+                # print(f"(squad_benchmark) > Corect?: {valid}")
 
                 results["questions"]["tot_qs"] = results["questions"]["tot_qs"] + 1
                 results["times"]["all_ts"].append(time)
@@ -563,8 +564,8 @@ def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
                         "context":question['context']
                     })
                     
-                if sio:
-                    sio_response = {
+                if websocket_response:
+                    response = {
                         'percent_questions_correct':round(100 * np.mean(results["metrics"]["correct_arr"]), 2),
                         'number_of_questions_correct':results["metrics"]["correct_arr"].count(1),
                         'number_of_questions_total':results["questions"]["num_qs"],
@@ -572,9 +573,9 @@ def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
                         'progress':round(100.0 * results["metrics"]["correct_arr"].count(1) / (results["questions"]["num_qs"]+0.001), 2),
                         'incorrect':incorrect_d
                     }
-                    sio.emit(channel,sio_response)
-                    sio.sleep(1)
-            except:
+                    yield response
+            except Exception as e:
+                print(e)
                 print(f"(squad_benchmark) > Exited prematurely, skipping question.")
 
     results["times"]["avg_ts"] = np.mean(results["times"]["all_ts"])
@@ -583,14 +584,15 @@ def squad_benchmarkV2(file_name,model_obj,sio=None,channel=None):
     results["metrics"]["accuracy_prc"] = np.mean(
         results["metrics"]["correct_arr"])
 
-    if sio:
-        sio_response = {
+    if websocket_response:
+        response = {
                         'percent_questions_correct':round(100 * np.mean(results["metrics"]["correct_arr"]), 2),
                         'number_of_questions_correct':results["metrics"]["correct_arr"].count(1),
                         'number_of_questions_total':results["questions"]["num_qs"],
                         'average_time_per_question':round(np.mean(results["times"]["all_ts"])),
                         'progress':round(100.0 * results["metrics"]["correct_arr"].count(1) / (results["questions"]["num_qs"]+0.001), 2)
                     }
+        yield response
 
 
 

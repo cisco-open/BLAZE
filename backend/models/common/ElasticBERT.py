@@ -79,7 +79,7 @@ class ElasticBERT(ModelSearch):
         for doc in self.docs:
             index_into_elasticsearch(doc)
 
-    def file_search(self, search_term):
+    def file_search(self, search_term, context=None):
         result = sum_docs = orig_w_h = new_candidate_docs = []
 
         t_s = time.time()
@@ -100,8 +100,9 @@ class ElasticBERT(ModelSearch):
         sum_docs = ['']*len(new_candidate_docs)
         res = [{'res': r, 'sum': s, 'orig': o, 'orig_w_h': o_h}
                for r, s, o, o_h in zip(result, sum_docs, new_candidate_docs, orig_w_h)]
+        
 
         t_e = time.time()
         t_search = t_e - t_s
 
-        return res, t_search
+        return res[0]["res"], t_search

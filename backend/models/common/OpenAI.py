@@ -10,7 +10,7 @@ import requests
 from typing import Callable, Dict
 import datetime
 from collections import defaultdict
-
+import time
 
 def get_openAI_info():
     """ 
@@ -36,8 +36,10 @@ class OpenAI():
     model = "gpt-3.5-turbo-0613"
 
     def __init__(self):
-       
         self._info = get_openAI_info()
+    
+    def load_model(self,*args):
+        openai.api_key = current_app.config.get('OPENAPI_KEY')
     
     def _get_model_info(self):
         pass
@@ -144,7 +146,6 @@ class OpenAI():
         response = ''
         print(f"within run_with_functions : {messages} and {function_dicts}")
         messages[0]["role"] = "system"
-        openai.api_key = current_app.config.get('OPENAPI_KEY')
         response = openai.ChatCompletion.create(
             model=self.model,
             messages=messages,
@@ -214,4 +215,36 @@ class OpenAI():
 
         return openai_functions, swagger_dataset.swagger_json, tag_dict, classifier_tag
     
-    
+    def run_with_functions(self,messages,function_dicts):
+        response = ''
+        print(f"within run_with_functions : {messages} and {function_dicts}")
+        # messages[0]["role"] = "system"
+        openai.api_key = current_app.config.get('OPENAPI_KEY')
+        response = openai.ChatCompletion.create(
+            model=self.model,
+            messages=messages,
+            functions=function_dicts,
+            temperature=0,
+        )
+        print(type(response))
+        print(response)
+        return response
+
+    def file_search(self, search_term,context):
+        prompt = "You are a helpful assistant answering questions based on the context provided.Reply with value only, no other text."
+        message = f"{prompt}\n{context}\nQuestion:{search_term}"
+        t_s = time.time()
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=message,
+            temperature=0.7,
+            max_tokens=892,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+            )
+        res = response['choices'][0]['text']
+        t_e = time.time()
+        t_search = t_e - t_s
+
+        return res, t_search

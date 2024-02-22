@@ -306,7 +306,6 @@ class ModelSearch(Resource):
 class GetFunctionsFromSwaggerData(Resource):
 
     def post(self):
-        print("gettiong called")
         request_json = request.json
         if any(param not in request_json for param in ['model', 'dataset', "description_text"]):
             return "Malformed request", 400

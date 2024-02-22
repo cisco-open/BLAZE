@@ -42,6 +42,22 @@ def InitilizeTranscripts(transcriptFileName):
     response = requests.request("POST", url, headers=headers, data=payload)
     print(response.text)
 
+def InitilizeSwaggerFunctions():
+    url = CONSTANTS.get("webex_api_endpoint")+"/functions"
+
+    payload = json.dumps({
+        "model": "OpenAI",
+        "dataset":"Swagger",
+        "description_text":"Used when given a question about panoptica to identify the  tag of the api that needs to be referenced."
+    })
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    print(response.text)
+    return json.loads(response.text)
+
 
 def ListMeetingTranscripts():
         response_string = ""
