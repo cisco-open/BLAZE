@@ -104,7 +104,8 @@ def answer_question(question, answer_text, model, tokenizer):
     # There should be a segment_id for every input token.
     assert len(segment_ids) == len(input_ids)
 
-    outputs = model(torch.tensor([input_ids]),  # The tokens representing our input text.
+    with torch.inference_mode(): ## Run the model in inference mode
+        outputs = model(torch.tensor([input_ids]),  # The tokens representing our input text.
                     # The segment IDs to differentiate question from answer_text
                     token_type_ids=torch.tensor([segment_ids]),
                     return_dict=True)
